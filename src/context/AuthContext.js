@@ -54,7 +54,7 @@
 // src/context/AuthContext.js
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -64,6 +64,20 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState([]);
+
+  const clearAuth = () => {
+    setUser(null);
+    setCart([]);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      clearAuth();
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -76,25 +90,34 @@ export function AuthProvider({ children }) {
         const adminEmails = ["nevilkheni135@gmail.com"];
         const isAdmin = adminEmails.includes(currentUser.email);
 
-        // Get user's cart from Firestore
-        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
-        const userCart = userDoc.exists() ? userDoc.data().cart || [] : [];
-
-        setUser({
-          uid: currentUser.uid,
-          email: currentUser.email,
-          displayName: currentUser.displayName,
-          photoURL: currentUser.photoURL,
-          role: isAdmin ? "admin" : "user",
-        });
-        
-        setCart(userCart);
-      } else {
-        setUser(null);
+        // Clear previous cart data before loading new user's cart
         setCart([]);
+
+        // Get user's cart from Firestore
+        try {
+          const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+          const userCart = userDoc.exists() ? userDoc.data().cart || [] : [];
+
+          if (isMounted) {
+            setUser({
+              uid: currentUser.uid,
+              email: currentUser.email,
+              displayName: currentUser.displayName,
+              photoURL: currentUser.photoURL,
+              role: isAdmin ? "admin" : "user",
+            });
+            setCart(userCart);
+          }
+        } catch (error) {
+          console.error("Error loading user cart:", error);
+        }
+      } else {
+        clearAuth();
       }
 
-      setLoading(false);
+      if (isMounted) {
+        setLoading(false);
+      }
     });
 
     return () => {
@@ -109,16 +132,24 @@ export function AuthProvider({ children }) {
     setCart(newCart);
     
     try {
-      await setDoc(doc(db, "users", user.uid), {
-        cart: newCart
-      }, { merge: true });
+      await setDoc(
+        doc(db, "users", user.uid),
+        { cart: newCart },
+        { merge: true }
+      );
     } catch (error) {
       console.error("Error updating cart:", error);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, cart, updateCart }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      loading, 
+      cart, 
+      updateCart,
+      handleLogout 
+    }}>
       {children}
     </AuthContext.Provider>
   );
