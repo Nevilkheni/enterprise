@@ -3,13 +3,9 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./index.css";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-
-// Import components
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AdminHeader from "./components/AdminHeader";
-
-// Import pages
 import Home from "./pages/Homee";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -18,8 +14,6 @@ import Cart from "./pages/Cart";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Invoice from "./pages/Invoice";
-
-// Admin pages
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import HomeData from "./pages/Admin/HomeData";
 import ProductData from "./pages/Admin/Productdata";

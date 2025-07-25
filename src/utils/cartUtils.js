@@ -1,4 +1,3 @@
-// src/utils/cartUtils.js
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 

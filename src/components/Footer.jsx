@@ -1,16 +1,100 @@
 import React from "react";
+import { Mail, Phone, Instagram, Linkedin, Twitter } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-white mt-10 py-6">
-      <div className="container mx-auto text-center">
-        <p className="mb-2">📧 contact@techstore.com | 📞 +971-50-123-4567</p>
-        <div className="flex justify-center gap-4 text-sm">
-          <a href="https://instagram.com" className="hover:underline" target="_blank" rel="noopener noreferrer">Instagram</a>
-          <a href="https://linkedin.com" className="hover:underline" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-          <a href="https://twitter.com" className="hover:underline" target="_blank" rel="noopener noreferrer">Twitter</a>
+    <footer className="bg-gradient-to-r from-gray-800 to-gray-900 text-white pt-12 pb-6 px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+          <div className="space-y-4">
+            <h3 className="text-xl font-bold text-blue-400 mb-4">Contact Us</h3>
+            <div className="flex items-start space-x-3">
+              <Mail className="h-5 w-5 text-blue-400 mt-1 flex-shrink-0" />
+              <div>
+                <p className="font-medium">Email</p>
+                <p className="text-gray-300">contact@techstore.com</p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-3">
+              <Phone className="h-5 w-5 text-blue-400 mt-1 flex-shrink-0" />
+              <div>
+                <p className="font-medium">Phone</p>
+                <p className="text-gray-300">+971 50 123 4567</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="space-y-4">
+            <h3 className="text-xl font-bold text-blue-400 mb-4">Quick Links</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <a href="#" className="text-gray-300 hover:text-white transition">Home</a>
+              <a href="#" className="text-gray-300 hover:text-white transition">Products</a>
+              <a href="#" className="text-gray-300 hover:text-white transition">About Us</a>
+              <a href="#" className="text-gray-300 hover:text-white transition">Contact</a>
+              <a href="#" className="text-gray-300 hover:text-white transition">FAQs</a>
+              <a href="#" className="text-gray-300 hover:text-white transition">Privacy Policy</a>
+            </div>
+          </div>
+
+          {/* Social Media */}
+          <div className="space-y-4">
+            <h3 className="text-xl font-bold text-blue-400 mb-4">Follow Us</h3>
+            <div className="flex space-x-4">
+              <a 
+                href="https://instagram.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="bg-gray-700 hover:bg-pink-600 text-white p-3 rounded-full transition-all duration-300"
+                aria-label="Instagram"
+              >
+                <Instagram className="h-5 w-5" />
+              </a>
+              <a 
+                href="https://linkedin.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="bg-gray-700 hover:bg-blue-700 text-white p-3 rounded-full transition-all duration-300"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="h-5 w-5" />
+              </a>
+              <a 
+                href="https://twitter.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="bg-gray-700 hover:bg-blue-400 text-white p-3 rounded-full transition-all duration-300"
+                aria-label="Twitter"
+              >
+                <Twitter className="h-5 w-5" />
+              </a>
+            </div>
+            <p className="text-gray-400 mt-4">
+              Subscribe to our newsletter for the latest updates and offers.
+            </p>
+            {/* <div className="flex">
+              <input 
+                type="email" 
+                placeholder="Your email" 
+                className="px-4 py-2 w-full rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+              />
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg transition">
+                Subscribe
+              </button>
+            </div> */}
+          </div>
         </div>
-        <p className="mt-4 text-xs text-gray-400">&copy; 2025 Tech Store. All rights reserved.</p>
+
+        <div className="border-t border-gray-700 pt-6 flex flex-col md:flex-row justify-between items-center">
+          <p className="text-gray-400 text-sm">
+            &copy; 2025 Tech Store. All rights reserved.
+          </p>
+          <div className="flex space-x-4 mt-4 md:mt-0">
+            <a href="#" className="text-gray-400 hover:text-white text-sm transition">Terms of Service</a>
+            <a href="#" className="text-gray-400 hover:text-white text-sm transition">Privacy Policy</a>
+            <a href="#" className="text-gray-400 hover:text-white text-sm transition">Cookie Policy</a>
+          </div>
+        </div>
       </div>
     </footer>
   );
