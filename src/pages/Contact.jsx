@@ -19,7 +19,6 @@ const Contact = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate API call
     setTimeout(() => {
       setSubmitted(true);
       setIsLoading(false);

@@ -12,7 +12,6 @@ const ProductCard = ({ product, onAddToCart, index }) => {
     e.stopPropagation();
     setIsWishlisted(!isWishlisted);
   };
-  
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -40,7 +39,7 @@ const ProductCard = ({ product, onAddToCart, index }) => {
   }, []);
 
   return (
-    <div 
+    <div
       ref={cardRef}
       className={`bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 transform ${
         isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
@@ -55,12 +54,13 @@ const ProductCard = ({ product, onAddToCart, index }) => {
           alt={product.name || "Product Image"}
           className="w-full h-60 object-cover hover:scale-105 transition-transform duration-500"
         />
-        
+
+        {/* Wishlist button (optional) */}
         {/* <button
           onClick={handleAddToWishlist}
           className={`absolute top-3 right-3 p-2 rounded-full shadow-md transition-all ${
-            isWishlisted 
-              ? "bg-red-100 text-red-500" 
+            isWishlisted
+              ? "bg-red-100 text-red-500"
               : "bg-white text-gray-700 hover:text-red-500"
           }`}
           aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
@@ -72,13 +72,14 @@ const ProductCard = ({ product, onAddToCart, index }) => {
           )}
         </button> */}
 
+        {/* Hover button (only on sm and up) */}
         {isHovered && (
           <button
             onClick={(e) => {
               e.stopPropagation();
               onAddToCart(product);
             }}
-            className="absolute bottom-3 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition flex items-center whitespace-nowrap"
+            className="hidden sm:flex absolute bottom-3 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition items-center whitespace-nowrap"
           >
             <ShoppingBagIcon className="h-5 w-5 mr-2" />
             Add to Cart
@@ -133,6 +134,7 @@ const ProductCard = ({ product, onAddToCart, index }) => {
           )}
         </div>
 
+        {/* Mobile button (only on xs screens) */}
         <button
           onClick={() => onAddToCart(product)}
           className="mt-4 w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center justify-center sm:hidden"

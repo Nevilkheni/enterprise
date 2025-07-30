@@ -16,6 +16,8 @@ const Header = () => {
     { name: "Home", path: "/" },
     { name: "Products", path: "/products" },
     { name: "About", path: "/about" },
+    { name: "Shope", path: "/shop" },
+    { name: "Category", path: "/category" },
     { name: "Contact", path: "/contact" },
   ];
 
@@ -28,7 +30,6 @@ const Header = () => {
     }
   };
 
-  // Close user menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
@@ -95,7 +96,7 @@ const Header = () => {
 
             {user ? (
               <div className="relative" ref={userMenuRef}>
-                <button 
+                <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
                   className="flex items-center space-x-1 p-2 rounded-full hover:bg-gray-100 focus:outline-none"
                   aria-label="User menu"
@@ -106,7 +107,7 @@ const Header = () => {
                     {user.email.charAt(0).toUpperCase()}
                   </div>
                 </button>
-                <div 
+                <div
                   className={`absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 transition-all duration-200 ${
                     userMenuOpen
                       ? "opacity-100 translate-y-0 visible"
