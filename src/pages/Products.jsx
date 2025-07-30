@@ -31,7 +31,6 @@ const Products = ({ onAddToCart }) => {
   }, []);
 
   useEffect(() => {
-    // Count active filters
     let count = 0;
     if (searchTerm) count++;
     if (sortOption !== "featured") count++;
@@ -55,7 +54,7 @@ const Products = ({ onAddToCart }) => {
         case "newest":
           return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
         default:
-          return 0; // Keep original order for "featured"
+          return 0;
       }
     });
 
@@ -74,7 +73,6 @@ const Products = ({ onAddToCart }) => {
         </p>
       </div>
 
-      {/* Search and Filter Bar */}
       <div className="mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
         <div className="relative w-full md:w-96">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -155,7 +153,6 @@ const Products = ({ onAddToCart }) => {
         </div>
       )}
 
-      {/* Filter Panel */}
       {showFilters && (
         <div className="mb-6 p-4 bg-gray-50 rounded-lg shadow-inner">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -202,14 +199,12 @@ const Products = ({ onAddToCart }) => {
         </div>
       )}
 
-      {/* Loading State */}
       {loading && (
         <div className="flex justify-center items-center py-20">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
         </div>
       )}
 
-      {/* Empty State */}
       {!loading && filteredProducts.length === 0 && (
         <div className="text-center py-20">
           <svg
@@ -242,7 +237,6 @@ const Products = ({ onAddToCart }) => {
         </div>
       )}
 
-      {/* Product Grid */}
       {!loading && filteredProducts.length > 0 && (
         <>
           <div className="mb-4 flex justify-between items-center">

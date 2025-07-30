@@ -24,20 +24,18 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
           <div className="space-y-4">
             <h3 className="text-xl font-bold text-blue-400 mb-4">Quick Links</h3>
             <div className="grid grid-cols-2 gap-4">
-              <a href="#" className="text-gray-300 hover:text-white transition">Home</a>
-              <a href="#" className="text-gray-300 hover:text-white transition">Products</a>
-              <a href="#" className="text-gray-300 hover:text-white transition">About Us</a>
-              <a href="#" className="text-gray-300 hover:text-white transition">Contact</a>
-              <a href="#" className="text-gray-300 hover:text-white transition">FAQs</a>
-              <a href="#" className="text-gray-300 hover:text-white transition">Privacy Policy</a>
+              <a href="/home" className="text-gray-300 hover:text-white transition">Home</a>
+              <a href="/products" className="text-gray-300 hover:text-white transition">Products</a>
+              <a href="/about" className="text-gray-300 hover:text-white transition">About Us</a>
+              <a href="/contact" className="text-gray-300 hover:text-white transition">Contact</a>
+              <a href="/" className="text-gray-300 hover:text-white transition">FAQs</a>
+              <a href="/" className="text-gray-300 hover:text-white transition">Privacy Policy</a>
             </div>
           </div>
 
-          {/* Social Media */}
           <div className="space-y-4">
             <h3 className="text-xl font-bold text-blue-400 mb-4">Follow Us</h3>
             <div className="flex space-x-4">

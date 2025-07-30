@@ -170,7 +170,6 @@ const imageVariantsRight = {
 const About = () => {
   return (
     <div className="max-w-5xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-      {/* Header Section */}
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -194,7 +193,6 @@ const About = () => {
         </p>
       </motion.div>
 
-      {/* Introduction */}
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -225,9 +223,7 @@ const About = () => {
         </div>
       </motion.div>
 
-      {/* Timeline */}
       <div className="relative">
-        {/* Timeline line */}
         <div className="hidden md:block absolute left-1/2 h-full w-1 bg-gray-200 transform -translate-x-1/2"></div>
 
         {companyHistory.map((item, index) => (
@@ -241,19 +237,16 @@ const About = () => {
               index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
             } items-center justify-between`}
           >
-            {/* Year marker */}
             <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 top-1/2 w-16 h-16 bg-blue-600 rounded-full items-center justify-center z-10 shadow-lg">
               <span className="text-white font-bold text-lg">{item.year}</span>
             </div>
 
-            {/* Mobile year */}
             <div className="md:hidden mb-4">
               <span className="inline-block px-4 py-2 bg-blue-600 text-white font-bold rounded-full">
                 {item.year}
               </span>
             </div>
 
-            {/* Image */}
             <motion.div
               custom={index}
               variants={
@@ -274,7 +267,6 @@ const About = () => {
               </div>
             </motion.div>
 
-            {/* Content */}
             <div
               className={`w-full md:w-5/12 ${
                 item.imagePosition === "left" ? "md:text-right" : "md:text-left"
@@ -291,7 +283,6 @@ const About = () => {
         ))}
       </div>
 
-      {/* Mission Statement */}
       <motion.div
         initial="hidden"
         whileInView="visible"

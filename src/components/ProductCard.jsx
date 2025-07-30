@@ -134,7 +134,6 @@ const ProductCard = ({ product, onAddToCart, index }) => {
           )}
         </div>
 
-        {/* Mobile button (only on xs screens) */}
         <button
           onClick={() => onAddToCart(product)}
           className="mt-4 w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center justify-center sm:hidden"
