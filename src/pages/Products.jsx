@@ -1,9 +1,14 @@
+
+
+
 import React, { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import ProductCard from "../components/ProductCard";
-import { MagnifyingGlassIcon, FunnelIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { FunnelIcon as FunnelIconSolid } from "@heroicons/react/24/solid";
+import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
+
+// import { MagnifyingGlassIcon, FunnelIcon, XMarkIcon } from "@heroicons/react/24/outline";
+// import { FunnelIcon as FunnelIconSolid } from "@heroicons/react/24/solid";
 
 const Products = ({ onAddToCart }) => {
   const [products, setProducts] = useState([]);
@@ -11,7 +16,7 @@ const Products = ({ onAddToCart }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("featured");
   const [priceRange, setPriceRange] = useState([0, 10000]);
-  const [showFilters, setShowFilters] = useState(false);
+  // const [showFilters, setShowFilters] = useState(false);
   const [activeFilters, setActiveFilters] = useState(0);
 
   useEffect(() => {
@@ -42,8 +47,14 @@ const Products = ({ onAddToCart }) => {
     .filter((product) =>
       product.name?.toLowerCase().includes(searchTerm.toLowerCase())
     )
-    .filter((product) => product.price >= priceRange[0] && product.price <= priceRange[1])
+    .filter((product) => {
+      if (product.category === "product") return true;
+      return product.price >= priceRange[0] && product.price <= priceRange[1];
+    })
     .sort((a, b) => {
+      if (a.category === "product" && b.category !== "product") return -1;
+      if (a.category !== "product" && b.category === "product") return 1;
+      
       switch (sortOption) {
         case "price-low":
           return a.price - b.price;
@@ -87,7 +98,7 @@ const Products = ({ onAddToCart }) => {
           />
         </div>
 
-        <div className="flex gap-2 w-full md:w-auto">
+        {/* <div className="flex gap-2 w-full md:w-auto">
           <button
             onClick={() => setShowFilters(!showFilters)}
             className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition relative"
@@ -104,10 +115,9 @@ const Products = ({ onAddToCart }) => {
               </span>
             )}
           </button>
-        </div>
+        </div> */}
       </div>
 
-      {/* Active Filters */}
       {activeFilters > 0 && (
         <div className="mb-4 flex flex-wrap gap-2 items-center">
           <span className="text-sm text-gray-500">Active filters:</span>
@@ -153,7 +163,7 @@ const Products = ({ onAddToCart }) => {
         </div>
       )}
 
-      {showFilters && (
+      {/* {showFilters && (
         <div className="mb-6 p-4 bg-gray-50 rounded-lg shadow-inner">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
@@ -197,7 +207,7 @@ const Products = ({ onAddToCart }) => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
       {loading && (
         <div className="flex justify-center items-center py-20">
@@ -250,7 +260,8 @@ const Products = ({ onAddToCart }) => {
               <ProductCard
                 key={product.id}
                 product={product}
-                onAddToCart={onAddToCart}
+                onAddToCart={product.category === "product" ? null : onAddToCart}
+                showPrice={product.category !== "product"}
               />
             ))}
           </div>
