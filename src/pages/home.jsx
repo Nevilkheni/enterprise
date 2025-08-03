@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import image1 from "../assets/image/IMG20250731134150.jpg";
-import image2 from "../assets/image/IMG20250731134631.jpg";
-import image3 from "../assets/image/IMG20250731134157.jpg";
+import image2 from "../assets/image/IMG20250731134150.jpg";
+import image3 from "../assets/image/IMG20250731134150.jpg";
 import approachImg from "../assets/image/silver.jpg";
 import experienceImg from "../assets/image/silver.jpg";
 import clientsImg from "../assets/image/silver.jpg";

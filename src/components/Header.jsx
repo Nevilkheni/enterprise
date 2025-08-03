@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
+import compnylogo from "../assets/image/logo.png"; 
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -51,24 +52,13 @@ const Header = () => {
             className="flex-shrink-0 cursor-pointer flex items-center"
             onClick={() => navigate("/")}
           >
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-2 rounded-lg mr-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
-            </div>
+           <img
+              src ={compnylogo}
+              alt="Your Company"
+              className="h-8 w-auto"
+            />
             <span className="text-xl font-bold text-gray-900">
-              Tech<span className="text-blue-600">Enterprise</span>
+              Jyot<span className="text-blue-600">Enterprise</span>
             </span>
           </div>
 
