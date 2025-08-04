@@ -1,5 +1,5 @@
 import React from "react";
-import { Mail, Phone, Instagram, Linkedin, Twitter } from "lucide-react";
+import { Mail, Phone, Instagram, Youtube, Facebook } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -12,59 +12,86 @@ const Footer = () => {
               <Mail className="h-5 w-5 text-blue-400 mt-1 flex-shrink-0" />
               <div>
                 <p className="font-medium">Email</p>
-                <p className="text-gray-300">contact@techstore.com</p>
+                <p className="text-gray-300">jyotenterprise135@gmail.com</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">
               <Phone className="h-5 w-5 text-blue-400 mt-1 flex-shrink-0" />
               <div>
                 <p className="font-medium">Phone</p>
-                <p className="text-gray-300">+971 50 123 4567</p>
+                <p className="text-gray-300">+91 9426154135</p>
+                <p className="text-gray-300">+91 9375776364</p>
               </div>
             </div>
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-blue-400 mb-4">Quick Links</h3>
+            <h3 className="text-xl font-bold text-blue-400 mb-4">
+              Quick Links
+            </h3>
             <div className="grid grid-cols-2 gap-4">
-              <a href="/home" className="text-gray-300 hover:text-white transition">Home</a>
-              <a href="/products" className="text-gray-300 hover:text-white transition">Products</a>
-              <a href="/about" className="text-gray-300 hover:text-white transition">About Us</a>
-              <a href="/contact" className="text-gray-300 hover:text-white transition">Contact</a>
-              <a href="/" className="text-gray-300 hover:text-white transition">FAQs</a>
-              <a href="/" className="text-gray-300 hover:text-white transition">Privacy Policy</a>
+              <a
+                href="/home"
+                className="text-gray-300 hover:text-white transition"
+              >
+                Home
+              </a>
+              <a
+                href="/products"
+                className="text-gray-300 hover:text-white transition"
+              >
+                Products
+              </a>
+              <a
+                href="/about"
+                className="text-gray-300 hover:text-white transition"
+              >
+                About Us
+              </a>
+              <a
+                href="/contact"
+                className="text-gray-300 hover:text-white transition"
+              >
+                Contact
+              </a>
+              <a href="/" className="text-gray-300 hover:text-white transition">
+                FAQs
+              </a>
+              <a href="/" className="text-gray-300 hover:text-white transition">
+                Privacy Policy
+              </a>
             </div>
           </div>
 
           <div className="space-y-4">
             <h3 className="text-xl font-bold text-blue-400 mb-4">Follow Us</h3>
             <div className="flex space-x-4">
-              <a 
-                href="https://instagram.com" 
-                target="_blank" 
+              <a
+                href="https://instagram.com"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="bg-gray-700 hover:bg-pink-600 text-white p-3 rounded-full transition-all duration-300"
                 aria-label="Instagram"
               >
                 <Instagram className="h-5 w-5" />
               </a>
-              <a 
-                href="https://linkedin.com" 
-                target="_blank" 
+              <a
+                href="https://linkedin.com"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="bg-gray-700 hover:bg-blue-700 text-white p-3 rounded-full transition-all duration-300"
                 aria-label="LinkedIn"
               >
-                <Linkedin className="h-5 w-5" />
+                <Youtube className="h-5 w-5" />
               </a>
-              <a 
-                href="https://twitter.com" 
-                target="_blank" 
+              <a
+                href="https://facebook.com"
+                target="_blank"
                 rel="noopener noreferrer"
-                className="bg-gray-700 hover:bg-blue-400 text-white p-3 rounded-full transition-all duration-300"
-                aria-label="Twitter"
+                className="bg-gray-700 hover:bg-blue-600 text-white p-3 rounded-full transition-all duration-300"
+                aria-label="Facebook"
               >
-                <Twitter className="h-5 w-5" />
+                <Facebook className="h-5 w-5" />
               </a>
             </div>
             <p className="text-gray-400 mt-4">
@@ -88,9 +115,24 @@ const Footer = () => {
             &copy; 2025 Tech Store. All rights reserved.
           </p>
           <div className="flex space-x-4 mt-4 md:mt-0">
-            <a href="#" className="text-gray-400 hover:text-white text-sm transition">Terms of Service</a>
-            <a href="#" className="text-gray-400 hover:text-white text-sm transition">Privacy Policy</a>
-            <a href="#" className="text-gray-400 hover:text-white text-sm transition">Cookie Policy</a>
+            <a
+              href="/"
+              className="text-gray-400 hover:text-white text-sm transition"
+            >
+              Terms of Service
+            </a>
+            <a
+              href="/"
+              className="text-gray-400 hover:text-white text-sm transition"
+            >
+              Privacy Policy
+            </a>
+            <a
+              href="/"
+              className="text-gray-400 hover:text-white text-sm transition"
+            >
+              Cookie Policy
+            </a>
           </div>
         </div>
       </div>
