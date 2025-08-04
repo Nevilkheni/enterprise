@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import image1 from "../assets/image/IMG20250731134150.jpg";
-import image2 from "../assets/image/IMG20250731134150.jpg";
+import image1 from "../assets/image/img3.png";
+import image2 from "../assets/image/img2.png";
 import image3 from "../assets/image/IMG20250731134150.jpg";
 import approachImg from "../assets/image/silver.jpg";
 import experienceImg from "../assets/image/silver.jpg";
 import clientsImg from "../assets/image/silver.jpg";
 import officeImg from "../assets/image/silver.jpg";
 import middleSectionBg from "../assets/image/img.jpg";
-import submiddleSectionBg from "../assets/image/ss.png";
+import submiddleSectionBg from "../assets/image/logo2.png";
 
 const images = [image1, image2, image3];
 
@@ -143,16 +143,6 @@ function Home() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col lg:flex-row items-center gap-8 md:gap-12">
-            <div className="w-full lg:w-1/3 flex justify-center lg:justify-start">
-              <div className="relative w-64 h-64 sm:w-80 sm:h-80">
-                <img
-                  src={submiddleSectionBg}
-                  alt="Company Logo"
-                  className="w-full h-full object-contain"
-                />
-              </div>
-            </div>
-
             <div className="w-full lg:w-2/3 bg-black/70 backdrop-blur-lg rounded-xl p-8 shadow-lg">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-white">
                 Welcome to Our Company
@@ -178,6 +168,14 @@ function Home() {
               >
                 Discover More
               </button>
+            </div>
+
+            <div className="overflow-hidden rounded-full">
+              <img
+                src={submiddleSectionBg}
+                alt="Company Logo"
+                className="w-full h-full object-contain mt-6 animate-roll"
+              />
             </div>
           </div>
         </div>
@@ -284,8 +282,10 @@ function Home() {
         </div>
       )}
 
-      <div className="w-full py-16 md:py-24 bg-cover bg-center bg-no-repeat bg-fixed text-center"
-        style={{ backgroundImage: `url(${middleSectionBg})` }}>
+      <div
+        className="w-full py-16 md:py-24 bg-cover bg-center bg-no-repeat bg-fixed text-center"
+        style={{ backgroundImage: `url(${middleSectionBg})` }}
+      >
         <h2 className="text-3xl font-bold text-blue-600 mb-2">
           Feature Products
         </h2>
