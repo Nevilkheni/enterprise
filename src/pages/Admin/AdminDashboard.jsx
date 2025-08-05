@@ -1,681 +1,890 @@
+// import React, { useState, useEffect } from "react";
+// import { db, storage } from "../../firebase";
 
-  // import React, { useState, useEffect } from "react";
-  // import { db, storage } from "../../firebase";
-  // import {
-  //   collection,
-  //   addDoc,
-  //   getDocs,
-  //   deleteDoc,
-  //   doc,
-  //   updateDoc,
-  // } from "firebase/firestore";
-  // import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-  // import { v4 as uuidv4 } from "uuid";
+// import {
+//   collection,
+//   addDoc,
+//   getDocs,
+//   deleteDoc,
+//   doc,
+//   updateDoc,
+// } from "firebase/firestore";
+// import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+// import { v4 as uuidv4 } from "uuid";
 
-  // const AdminDashboard = () => {
-  //   const [formData, setFormData] = useState({
-  //     name: "",
-  //     price: "",
-  //     description: "",
-  //     category: "shop",
-  //     imageUrl: "",
-  //   });
-  //   const [imageFile, setImageFile] = useState(null);
-  //   const [uploading, setUploading] = useState(false);
-  //   const [products, setProducts] = useState([]);
-  //   const [modalCategory, setModalCategory] = useState(null);
-  //   const [editProduct, setEditProduct] = useState(null);
-  //   const [isLoading, setIsLoading] = useState(true);
+// const AdminDashboard = () => {
+//   // State for regular products
+//   const [formData, setFormData] = useState({
+//     name: "",
+//     price: "",
+//     description: "",
+//     category: "shop",
+//     imageUrl: "",
+//   });
+//   const [homeProductForm, setHomeProductForm] = useState({
+//     name: "",
+//     material: "",
+//     thickness: "",
+//     length: "",
+//     imageUrl: "",
+//   });
+//   const [showcaseForm, setShowcaseForm] = useState({
+//     title: "",
+//     shortDescription: "",
+//     longDescription: "",
+//     features: "",
+//     imageUrl: "",
+//   });
 
-  //   const handleChange = (e) => {
-  //     setFormData((prev) => ({
-  //       ...prev,
-  //       [e.target.name]: e.target.value,
-  //     }));
-  //   };
+//   // File states
+//   const [imageFile, setImageFile] = useState(null);
+//   const [homeProductImageFile, setHomeProductImageFile] = useState(null);
+//   const [showcaseImageFile, setShowcaseImageFile] = useState(null);
 
-  //   const handleFileChange = (e) => {
-  //     setImageFile(e.target.files[0]);
-  //   };
+//   // Other states
+//   const [products, setProducts] = useState([]);
+//   const [cards, setCards] = useState([]);
+//   const [modalCategory, setModalCategory] = useState(null);
+//   const [editProduct, setEditProduct] = useState(null);
+//   const [uploading, setUploading] = useState(false);
+//   const [isLoading, setIsLoading] = useState(true);
+//   const [setError] = useState("");
+//   const [modalOpen, setModalOpen] = useState(false);
+//   const [selectedCard, setSelectedCard] = useState(null);
+//   const [showHomeProductForm, setShowHomeProductForm] = useState(false);
 
-  //   const fetchProducts = async () => {
-  //     try {
-  //       setIsLoading(true);
-  //       const snap = await getDocs(collection(db, "products"));
-  //       const items = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-  //       setProducts(items);
-  //     } catch (err) {
-  //       console.error("Fetch error:", err);
-  //       alert("Failed to fetch products");
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
+//   // Fetch all products
+//   const fetchProducts = async () => {
+//     try {
+//       setIsLoading(true);
+//       const snap = await getDocs(collection(db, "products"));
+//       const showcaseSnap = await getDocs(collection(db, "showcaseCards"));
 
-  //   useEffect(() => {
-  //     fetchProducts();
-  //   }, []);
+//       const productItems = snap.docs.map((doc) => ({
+//         id: doc.id,
+//         ...doc.data(),
+//       }));
+//       const showcaseItems = showcaseSnap.docs.map((doc) => ({
+//         id: doc.id,
+//         ...doc.data(),
+//         category: "showcase", // Add category for filtering
+//       }));
 
-  //   const handleSubmit = async (e) => {
-  //     e.preventDefault();
-  //     try {
-  //       setUploading(true);
-  //       let imageUrl = "";
+//       setProducts([...productItems, ...showcaseItems]);
+//     } catch (err) {
+//       console.error("Fetch error:", err);
+//       alert("Failed to fetch products");
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
 
-  //       if (imageFile) {
-  //         const imageRef = ref(storage, `products/${uuidv4()}-${imageFile.name}`);
-  //         await uploadBytes(imageRef, imageFile);
-  //         imageUrl = await getDownloadURL(imageRef);
-  //       } else if (formData.imageUrl) {
-  //         imageUrl = formData.imageUrl;
-  //       } else {
-  //         alert("Please upload a file or paste a file URL.");
-  //         setUploading(false);
-  //         return;
-  //       }
+//   // Fetch all cards
+//   const fetchCards = async () => {
+//     try {
+//       setIsLoading(true);
+//       const querySnapshot = await getDocs(collection(db, "showcaseCards"));
+//       const cardsData = querySnapshot.docs.map((doc) => ({
+//         id: doc.id,
+//         ...doc.data(),
+//       }));
+//       setCards(cardsData);
+//     } catch (err) {
+//       setError("Failed to load cards");
+//       console.error(err);
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
 
-  //       const productData = {
-  //         name: formData.name,
-  //         description: formData.description,
-  //         category: formData.category,
-  //         image: imageUrl,
-  //         createdAt: new Date().toISOString(),
-  //       };
+//   useEffect(() => {
+//     fetchProducts();
+//     fetchCards();
+//   }, []);
 
-  //       if (formData.category !== "product") {
-  //         productData.price = Number(formData.price);
-  //       }
+//   // Modal functions
+//   const openModal = (card) => {
+//     setSelectedCard(card);
+//     setModalOpen(true);
+//   };
 
-  //       await addDoc(collection(db, "products"), productData);
+//   const closeModal = () => {
+//     setModalOpen(false);
+//     setSelectedCard(null);
+//   };
 
-  //       alert("Product added successfully!");
-  //       setFormData({
-  //         name: "",
-  //         price: "",
-  //         description: "",
-  //         category: "shop",
-  //         imageUrl: "",
-  //       });
-  //       setImageFile(null);
-  //       fetchProducts();
-  //     } catch (err) {
-  //       console.error("Add error:", err);
-  //       alert("Something went wrong! Check the console.");
-  //     } finally {
-  //       setUploading(false);
-  //     }
-  //   };
+//   // Handle changes for all forms
+//   const handleChange = (e) => {
+//     setFormData((prev) => ({
+//       ...prev,
+//       [e.target.name]: e.target.value,
+//     }));
+//   };
 
-  //   const handleDelete = async (id) => {
-  //     if (window.confirm("Are you sure you want to delete this product?")) {
-  //       try {
-  //         await deleteDoc(doc(db, "products", id));
-  //         fetchProducts();
-  //       } catch (err) {
-  //         console.error("Delete error:", err);
-  //         alert("Failed to delete product");
-  //       }
-  //     }
-  //   };
+//   const handleHomeProductChange = (e) => {
+//     setHomeProductForm((prev) => ({
+//       ...prev,
+//       [e.target.name]: e.target.value,
+//     }));
+//   };
 
-  //   const handleEditChange = (e) => {
-  //     setEditProduct((prev) => ({
-  //       ...prev,
-  //       [e.target.name]: e.target.value,
-  //     }));
-  //   };
+//   const handleShowcaseChange = (e) => {
+//     setShowcaseForm((prev) => ({
+//       ...prev,
+//       [e.target.name]: e.target.value,
+//     }));
+//   };
 
-  //   const handleEditImageChange = (e) => {
-  //     const file = e.target.files[0];
-  //     if (file) {
-  //       setEditProduct((prev) => ({
-  //         ...prev,
-  //         newImageFile: file,
-  //       }));
-  //     }
-  //   };
+//   // Handle file changes
+//   const handleFileChange = (e) => {
+//     setImageFile(e.target.files[0]);
+//   };
 
-  //   const handleEditSubmit = async () => {
-  //     try {
-  //       let imageUrl = editProduct.image;
+//   const handleHomeProductFileChange = (e) => {
+//     setHomeProductImageFile(e.target.files[0]);
+//   };
 
-  //       if (editProduct.newImageFile) {
-  //         const imageRef = ref(
-  //           storage,
-  //           `products/${uuidv4()}-${editProduct.newImageFile.name}`
-  //         );
-  //         await uploadBytes(imageRef, editProduct.newImageFile);
-  //         imageUrl = await getDownloadURL(imageRef);
-  //       }
+//   const handleShowcaseFileChange = (e) => {
+//     setShowcaseImageFile(e.target.files[0]);
+//   };
 
-  //       const updateData = {
-  //         name: editProduct.name,
-  //         description: editProduct.description,
-  //         image: imageUrl,
-  //         updatedAt: new Date().toISOString(),
-  //       };
+//   // Form submissions
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     try {
+//       setUploading(true);
+//       let imageUrl = "";
 
-  //       if (editProduct.category !== "product") {
-  //         updateData.price = Number(editProduct.price);
-  //       }
+//       if (imageFile) {
+//         const imageRef = ref(storage, `products/${uuidv4()}-${imageFile.name}`);
+//         await uploadBytes(imageRef, imageFile);
+//         imageUrl = await getDownloadURL(imageRef);
+//       } else if (formData.imageUrl) {
+//         imageUrl = formData.imageUrl;
+//       } else {
+//         alert("Please upload a file or paste a file URL.");
+//         setUploading(false);
+//         return;
+//       }
 
-  //       const refDoc = doc(db, "products", editProduct.id);
-  //       await updateDoc(refDoc, updateData);
+//       const productData = {
+//         name: formData.name,
+//         description: formData.description,
+//         category: formData.category,
+//         image: imageUrl,
+//         createdAt: new Date().toISOString(),
+//       };
 
-  //       setEditProduct(null);
-  //       fetchProducts();
-  //       alert("Product updated successfully!");
-  //     } catch (err) {
-  //       console.error("Error updating product:", err);
-  //       alert("Update failed");
-  //     }
-  //   };
+//       if (formData.category !== "product") {
+//         productData.price = Number(formData.price);
+//       }
 
-  //   const filteredProducts = products.filter((p) => p.category === modalCategory);
+//       await addDoc(collection(db, "products"), productData);
 
-  //   return (
-  //     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-  //       <div className="max-w-6xl mx-auto">
-  //         <div className="text-center mb-10">
-  //           <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-  //             Admin Dashboard
-  //           </h2>
-  //           <p className="mt-3 text-xl text-gray-500">
-  //             Manage your products and inventory
-  //           </p>
-  //         </div>
+//       alert("Product added successfully!");
+//       setFormData({
+//         name: "",
+//         price: "",
+//         description: "",
+//         category: "shop",
+//         imageUrl: "",
+//       });
+//       setImageFile(null);
+//       fetchProducts();
+//     } catch (err) {
+//       console.error("Add error:", err);
+//       alert("Something went wrong! Check the console.");
+//     } finally {
+//       setUploading(false);
+//     }
+//   };
 
-  //         <div className="bg-white shadow-xl rounded-lg overflow-hidden mb-10">
-  //           <div className="p-6 sm:p-8">
-  //             <h3 className="text-lg font-medium text-gray-900 mb-6 border-b pb-2">
-  //               Add New Product
-  //             </h3>
-  //             <form onSubmit={handleSubmit} className="space-y-6">
-  //               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-  //                 <div>
-  //                   <label
-  //                     htmlFor="name"
-  //                     className="block text-sm font-medium text-gray-700"
-  //                   >
-  //                     Product Name
-  //                   </label>
-  //                   <input
-  //                     type="text"
-  //                     name="name"
-  //                     id="name"
-  //                     placeholder="Enter product name"
-  //                     value={formData.name}
-  //                     onChange={handleChange}
-  //                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-  //                     required
-  //                   />
-  //                 </div>
+//   const handleHomeProductSubmit = async (e) => {
+//     e.preventDefault();
+//     setUploading(true);
 
-  //                 <div>
-  //                   <label
-  //                     htmlFor="price"
-  //                     className="block text-sm font-medium text-gray-700"
-  //                   >
-  //                     Price
-  //                   </label>
-  //                   <div className="mt-1 relative rounded-md shadow-sm">
-  //                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-  //                       <span className="text-gray-500 sm:text-sm">₹</span>
-  //                     </div>
-  //                     <input
-  //                       type="number"
-  //                       name="price"
-  //                       id="price"
-  //                       placeholder="0.00"
-  //                       value={formData.price}
-  //                       onChange={handleChange}
-  //                       disabled={formData.category === "product"}
-  //                       className={`focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md py-2 px-3 ${
-  //                         formData.category === "product" ? "bg-gray-100" : ""
-  //                       }`}
-  //                       required={formData.category !== "product"}
-  //                     />
-  //                   </div>
-  //                   {formData.category === "product" && (
-  //                     <p className="mt-1 text-xs text-gray-500">
-  //                       Price is automatically calculated for products
-  //                     </p>
-  //                   )}
-  //                 </div>
-  //               </div>
+//     try {
+//       let imageUrl = homeProductForm.imageUrl;
+//       if (!imageUrl && homeProductImageFile) {
+//         const imageRef = ref(
+//           storage,
+//           `showcaseImages/${homeProductImageFile.name}-${Date.now()}`
+//         );
+//         await uploadBytes(imageRef, homeProductImageFile);
+//         imageUrl = await getDownloadURL(imageRef);
+//       }
+//       await addDoc(collection(db, "showcaseCards"), {
+//         title: homeProductForm.name,
+//         shortDescription: homeProductForm.material,
+//         longDescription: `Thickness: ${homeProductForm.thickness}, Length: ${homeProductForm.length}`,
+//         image: imageUrl,
+//         features: [
+//           `Material: ${homeProductForm.material}`,
+//           `Thickness: ${homeProductForm.thickness}`,
+//           `Length: ${homeProductForm.length}`,
+//         ],
+//       });
 
-  //               <div>
-  //                 <label
-  //                   htmlFor="description"
-  //                   className="block text-sm font-medium text-gray-700"
-  //                 >
-  //                   Description
-  //                 </label>
-  //                 <textarea
-  //                   name="description"
-  //                   id="description"
-  //                   rows={3}
-  //                   placeholder="Enter product description"
-  //                   value={formData.description}
-  //                   onChange={handleChange}
-  //                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-  //                   required
-  //                 />
-  //               </div>
+//       setHomeProductForm({
+//         name: "",
+//         material: "",
+//         thickness: "",
+//         length: "",
+//         imageUrl: "",
+//       });
+//       setHomeProductImageFile(null);
+//       setShowHomeProductForm(false);
+//       alert("✅ Home Product added to showcaseCards!");
+//       fetchCards();
+//     } catch (error) {
+//       console.error("❌ Error adding product:", error);
+//       alert("Failed to add product.");
+//     }
 
-  //               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-  //                 <div>
-  //                   <label
-  //                     htmlFor="category"
-  //                     className="block text-sm font-medium text-gray-700"
-  //                   >
-  //                     Type
-  //                   </label>
-  //                   <select
-  //                     name="category"
-  //                     id="category"
-  //                     value={formData.category}
-  //                     onChange={handleChange}
-  //                     className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-  //                   >
-  //                     <option value="shop">Shop</option>
-  //                     <option value="product">Product</option>
-  //                   </select>
-  //                 </div>
+//     setUploading(false);
+//   };
 
-  //                 <div>
-  //                   <label
-  //                     htmlFor="imageUrl"
-  //                     className="block text-sm font-medium text-gray-700"
-  //                   >
-  //                     Image URL (optional)
-  //                   </label>
-  //                   <input
-  //                     type="text"
-  //                     name="imageUrl"
-  //                     id="imageUrl"
-  //                     placeholder="Paste image URL here"
-  //                     value={formData.imageUrl}
-  //                     onChange={handleChange}
-  //                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-  //                   />
-  //                 </div>
-  //               </div>
+//   const handleShowcaseSubmit = async (e) => {
+//     e.preventDefault();
+//     try {
+//       setUploading(true);
+//       let imageUrl = "";
 
-  //               <div>
-  //                 <label className="block text-sm font-medium text-gray-700">
-  //                   Product Image
-  //                 </label>
-  //                 <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-  //                   <div className="space-y-1 text-center">
-  //                     <div className="flex text-sm text-gray-600">
-  //                       <label
-  //                         htmlFor="file-upload"
-  //                         className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-  //                       >
-  //                         <span>Upload a file</span>
-  //                         <input
-  //                           id="file-upload"
-  //                           name="file-upload"
-  //                           type="file"
-  //                           className="sr-only"
-  //                           onChange={handleFileChange}
-  //                         />
-  //                       </label>
-  //                       <p className="pl-1">or drag and drop</p>
-  //                     </div>
-  //                     <p className="text-xs text-gray-500">
-  //                       PNG, JPG, GIF up to 10MB
-  //                     </p>
-  //                     {imageFile && (
-  //                       <p className="text-sm text-green-600">
-  //                         {imageFile.name} selected
-  //                       </p>
-  //                     )}
-  //                   </div>
-  //                 </div>
-  //               </div>
+//       if (showcaseImageFile) {
+//         const imageRef = ref(
+//           storage,
+//           `showcaseCards/${uuidv4()}-${showcaseImageFile.name}`
+//         );
+//         await uploadBytes(imageRef, showcaseImageFile);
+//         imageUrl = await getDownloadURL(imageRef);
+//       } else if (showcaseForm.imageUrl) {
+//         imageUrl = showcaseForm.imageUrl;
+//       } else {
+//         alert("Please upload a file or paste a file URL.");
+//         setUploading(false);
+//         return;
+//       }
 
-  //               <div className="flex justify-end">
-  //                 <button
-  //                   type="submit"
-  //                   disabled={uploading}
-  //                   className={`inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white ${
-  //                     uploading
-  //                       ? "bg-indigo-400"
-  //                       : "bg-indigo-600 hover:bg-indigo-700"
-  //                   } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
-  //                 >
-  //                   {uploading ? (
-  //                     <>
-  //                       <svg
-  //                         className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-  //                         xmlns="http://www.w3.org/2000/svg"
-  //                         fill="none"
-  //                         viewBox="0 0 24 24"
-  //                       >
-  //                         <circle
-  //                           className="opacity-25"
-  //                           cx="12"
-  //                           cy="12"
-  //                           r="10"
-  //                           stroke="currentColor"
-  //                           strokeWidth="4"
-  //                         ></circle>
-  //                         <path
-  //                           className="opacity-75"
-  //                           fill="currentColor"
-  //                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-  //                         ></path>
-  //                       </svg>
-  //                       Processing...
-  //                     </>
-  //                   ) : (
-  //                     "Add Product"
-  //                   )}
-  //                 </button>
-  //               </div>
-  //             </form>
-  //           </div>
-  //         </div>
+//       const cardData = {
+//         title: showcaseForm.title,
+//         shortDescription: showcaseForm.shortDescription,
+//         longDescription: showcaseForm.longDescription,
+//         image: imageUrl,
+//         features: showcaseForm.features
+//           .split(",")
+//           .map((f) => f.trim())
+//           .filter((f) => f),
+//         createdAt: new Date().toISOString(),
+//       };
 
-  //         <div className="bg-white shadow-xl rounded-lg overflow-hidden">
-  //           <div className="p-6 sm:p-8">
-  //             <h3 className="text-lg font-medium text-gray-900 mb-6 border-b pb-2">
-  //               Manage Products
-  //             </h3>
+//       await addDoc(collection(db, "showcaseCards"), cardData);
+//       alert("Showcase card added successfully!");
+//       setShowcaseForm({
+//         title: "",
+//         shortDescription: "",
+//         longDescription: "",
+//         features: "",
+//         imageUrl: "",
+//       });
+//       setShowcaseImageFile(null);
+//       fetchProducts();
+//     } catch (err) {
+//       console.error("Add error:", err);
+//       alert("Something went wrong! Check the console.");
+//     } finally {
+//       setUploading(false);
+//     }
+//   };
 
-  //             <div className="flex flex-wrap justify-center gap-4 mb-8">
-  //               <button
-  //                 onClick={() => setModalCategory("product")}
-  //                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-  //               >
-  //                 View Product List
-  //               </button>
-  //               <button
-  //                 onClick={() => setModalCategory("shop")}
-  //                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-  //               >
-  //                 View Shop Products
-  //               </button>
-  //             </div>
+//   // Delete product/card
+//   const handleDelete = async (id, collectionName = "products") => {
+//     if (window.confirm("Are you sure you want to delete this item?")) {
+//       try {
+//         await deleteDoc(doc(db, collectionName, id));
+//         fetchProducts();
+//       } catch (err) {
+//         console.error("Delete error:", err);
+//         alert("Failed to delete item");
+//       }
+//     }
+//   };
 
-  //             {isLoading ? (
-  //               <div className="flex justify-center items-center py-12">
-  //                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
-  //               </div>
-  //             ) : (
-  //               <div className="bg-gray-50 p-4 rounded-lg">
-  //                 <p className="text-center text-gray-500">
-  //                   Select a category above to view and manage products
-  //                 </p>
-  //               </div>
-  //             )}
-  //           </div>
-  //         </div>
-  //       </div>
+//   // Edit functionality (for products only)
+//   const handleEditChange = (e) => {
+//     setEditProduct((prev) => ({
+//       ...prev,
+//       [e.target.name]: e.target.value,
+//     }));
+//   };
 
-  //       {modalCategory && (
-  //         <div className="fixed inset-0 z-50 overflow-y-auto">
-  //           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-  //             <div
-  //               className="fixed inset-0 transition-opacity"
-  //               aria-hidden="true"
-  //             >
-  //               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-  //             </div>
+//   const handleEditImageChange = (e) => {
+//     const file = e.target.files[0];
+//     if (file) {
+//       setEditProduct((prev) => ({
+//         ...prev,
+//         newImageFile: file,
+//       }));
+//     }
+//   };
 
-  //             <span
-  //               className="hidden sm:inline-block sm:align-middle sm:h-screen"
-  //               aria-hidden="true"
-  //             >
-  //               &#8203;
-  //             </span>
+//   const handleEditSubmit = async () => {
+//     try {
+//       let imageUrl = editProduct.image;
 
-  //             <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
-  //               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-  //                 <div className="sm:flex sm:items-start">
-  //                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-  //                     <div className="flex justify-between items-center mb-4">
-  //                       <h3 className="text-lg leading-6 font-medium text-gray-900 capitalize">
-  //                         {modalCategory} Products
-  //                       </h3>
-  //                       <button
-  //                         onClick={() => {
-  //                           setModalCategory(null);
-  //                           setEditProduct(null);
-  //                         }}
-  //                         className="text-gray-400 hover:text-gray-500 focus:outline-none"
-  //                       >
-  //                         <span className="sr-only">Close</span>
-  //                         <svg
-  //                           className="h-6 w-6"
-  //                           xmlns="http://www.w3.org/2000/svg"
-  //                           fill="none"
-  //                           viewBox="0 0 24 24"
-  //                           stroke="currentColor"
-  //                           aria-hidden="true"
-  //                         >
-  //                           <path
-  //                             strokeLinecap="round"
-  //                             strokeLinejoin="round"
-  //                             strokeWidth="2"
-  //                             d="M6 18L18 6M6 6l12 12"
-  //                           />
-  //                         </svg>
-  //                       </button>
-  //                     </div>
+//       if (editProduct.newImageFile) {
+//         const imageRef = ref(
+//           storage,
+//           `products/${uuidv4()}-${editProduct.newImageFile.name}`
+//         );
+//         await uploadBytes(imageRef, editProduct.newImageFile);
+//         imageUrl = await getDownloadURL(imageRef);
+//       }
 
-  //                     {filteredProducts.length === 0 ? (
-  //                       <div className="bg-gray-50 p-8 rounded-lg text-center">
-  //                         <svg
-  //                           className="mx-auto h-12 w-12 text-gray-400"
-  //                           fill="none"
-  //                           viewBox="0 0 24 24"
-  //                           stroke="currentColor"
-  //                           aria-hidden="true"
-  //                         >
-  //                           <path
-  //                             strokeLinecap="round"
-  //                             strokeLinejoin="round"
-  //                             strokeWidth="2"
-  //                             d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-  //                           />
-  //                         </svg>
-  //                         <h3 className="mt-2 text-sm font-medium text-gray-900">
-  //                           No products found
-  //                         </h3>
-  //                         <p className="mt-1 text-sm text-gray-500">
-  //                           Add some products in the {modalCategory} category to
-  //                           get started.
-  //                         </p>
-  //                       </div>
-  //                     ) : (
-  //                       <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
-  //                         {filteredProducts.map((product) => (
-  //                           <div
-  //                             key={product.id}
-  //                             className="border rounded-lg p-4 hover:shadow-md transition-shadow duration-200"
-  //                           >
-  //                             {editProduct?.id === product.id ? (
-  //                               <div className="space-y-4">
-  //                                 <div className="flex flex-col md:flex-row gap-4">
-  //                                   <div className="flex-shrink-0">
-  //                                     <img
-  //                                       src={
-  //                                         editProduct.newImageFile
-  //                                           ? URL.createObjectURL(
-  //                                               editProduct.newImageFile
-  //                                             )
-  //                                           : product.image
-  //                                       }
-  //                                       alt={product.name}
-  //                                       className="w-32 h-32 object-cover rounded-lg border"
-  //                                     />
-  //                                     <label className="block mt-2">
-  //                                       <span className="sr-only">
-  //                                         Choose product photo
-  //                                       </span>
-  //                                       <input
-  //                                         type="file"
-  //                                         onChange={handleEditImageChange}
-  //                                         className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
-  //                                       />
-  //                                     </label>
-  //                                   </div>
-  //                                   <div className="flex-1 space-y-3">
-  //                                     <div>
-  //                                       <label
-  //                                         htmlFor="edit-name"
-  //                                         className="block text-sm font-medium text-gray-700"
-  //                                       >
-  //                                         Name
-  //                                       </label>
-  //                                       <input
-  //                                         type="text"
-  //                                         name="name"
-  //                                         id="edit-name"
-  //                                         value={editProduct.name}
-  //                                         onChange={handleEditChange}
-  //                                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-  //                                       />
-  //                                     </div>
-  //                                     <div>
-  //                                       <label
-  //                                         htmlFor="edit-price"
-  //                                         className="block text-sm font-medium text-gray-700"
-  //                                       >
-  //                                         Price
-  //                                       </label>
-  //                                       <input
-  //                                         type="number"
-  //                                         name="price"
-  //                                         id="edit-price"
-  //                                         value={editProduct.price}
-  //                                         onChange={handleEditChange}
-  //                                         disabled={
-  //                                           editProduct.category === "product"
-  //                                         }
-  //                                         className={`mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
-  //                                           editProduct.category === "product"
-  //                                             ? "bg-gray-100"
-  //                                             : ""
-  //                                         }`}
-  //                                       />
-  //                                       {editProduct.category === "product" && (
-  //                                         <p className="mt-1 text-xs text-gray-500">
-  //                                           Price is automatically calculated for
-  //                                           products
-  //                                         </p>
-  //                                       )}
-  //                                     </div>
-  //                                     <div>
-  //                                       <label
-  //                                         htmlFor="edit-description"
-  //                                         className="block text-sm font-medium text-gray-700"
-  //                                       >
-  //                                         Description
-  //                                       </label>
-  //                                       <textarea
-  //                                         name="description"
-  //                                         id="edit-description"
-  //                                         rows={2}
-  //                                         value={editProduct.description}
-  //                                         onChange={handleEditChange}
-  //                                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-  //                                       />
-  //                                     </div>
-  //                                   </div>
-  //                                 </div>
-  //                                 <div className="flex justify-end space-x-3 pt-2 border-t">
-  //                                   <button
-  //                                     onClick={() => setEditProduct(null)}
-  //                                     className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-  //                                   >
-  //                                     Cancel
-  //                                   </button>
-  //                                   <button
-  //                                     onClick={handleEditSubmit}
-  //                                     className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-  //                                   >
-  //                                     Save Changes
-  //                                   </button>
-  //                                 </div>
-  //                               </div>
-  //                             ) : (
-  //                               <div className="flex flex-col md:flex-row gap-4">
-  //                                 <div className="flex-shrink-0">
-  //                                   <img
-  //                                     src={product.image}
-  //                                     alt={product.name}
-  //                                     className="w-32 h-32 object-cover rounded-lg border"
-  //                                   />
-  //                                 </div>
-  //                                 <div className="flex-1">
-  //                                   <h4 className="text-lg font-semibold text-gray-900">
-  //                                     {product.name}
-  //                                   </h4>
-  //                                   <p className="text-lg font-medium text-indigo-600">
-  //                                     ₹{product.price}
-  //                                   </p>
-  //                                   <p className="mt-1 text-sm text-gray-600">
-  //                                     {product.description}
-  //                                   </p>
-  //                                   {product.createdAt && (
-  //                                     <p className="mt-2 text-xs text-gray-500">
-  //                                       Added:{" "}
-  //                                       {new Date(
-  //                                         product.createdAt
-  //                                       ).toLocaleDateString()}
-  //                                     </p>
-  //                                   )}
-  //                                 </div>
-  //                                 <div className="flex flex-col sm:flex-row md:flex-col gap-2 justify-center">
-  //                                   <button
-  //                                     onClick={() => setEditProduct(product)}
-  //                                     className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-  //                                   >
-  //                                     Edit
-  //                                   </button>
-  //                                   <button
-  //                                     onClick={() => handleDelete(product.id)}
-  //                                     className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-  //                                   >
-  //                                     Delete
-  //                                   </button>
-  //                                 </div>
-  //                               </div>
-  //                             )}
-  //                           </div>
-  //                         ))}
-  //                       </div>
-  //                     )}
-  //                   </div>
-  //                 </div>
-  //               </div>
-  //               <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-  //                 <button
-  //                   type="button"
-  //                   onClick={() => {
-  //                     setModalCategory(null);
-  //                     setEditProduct(null);
-  //                   }}
-  //                   className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
-  //                 >
-  //                   Close
-  //                 </button>
-  //               </div>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       )}
-  //     </div>
-  //   );
-  // };
+//       const updateData = {
+//         name: editProduct.name,
+//         description: editProduct.description,
+//         image: imageUrl,
+//         updatedAt: new Date().toISOString(),
+//       };
 
-  // export default AdminDashboard;
+//       if (editProduct.category === "home") {
+//         updateData.material = editProduct.material;
+//         updateData.thickness = editProduct.thickness;
+//         updateData.length = editProduct.length;
+//       } else if (editProduct.category !== "product") {
+//         updateData.price = Number(editProduct.price);
+//       }
 
+//       const refDoc = doc(db, "products", editProduct.id);
+//       await updateDoc(refDoc, updateData);
 
+//       setEditProduct(null);
+//       fetchProducts();
+//       alert("Product updated successfully!");
+//     } catch (err) {
+//       console.error("Error updating product:", err);
+//       alert("Update failed");
+//     }
+//   };
+
+//   const filteredProducts = products.filter((p) => p.category === modalCategory);
+
+//   return (
+//     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+//       <div className="max-w-6xl mx-auto">
+//         <div className="text-center mb-10">
+//           <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+//             Admin Dashboard
+//           </h2>
+//           <p className="mt-3 text-xl text-gray-500">
+//             Manage your products and showcase cards
+//           </p>
+//         </div>
+//         {/* Button to toggle Home Product Form */}
+//         <div className="flex justify-center mb-8">
+//           <button
+//             onClick={() => setShowHomeProductForm(!showHomeProductForm)}
+//             className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition-colors"
+//           >
+//             {showHomeProductForm
+//               ? "Hide Home Product Form"
+//               : "Add Home Product"}
+//           </button>
+//         </div>
+//         {/* Add New Home Product Form - Only shown when toggled */}
+//         {showHomeProductForm && (
+//           <div className="bg-white shadow-xl rounded-lg overflow-hidden mb-10">
+//             <div className="p-6 sm:p-8">
+//               <h3 className="text-lg font-medium text-gray-900 mb-6 border-b pb-2">
+//                 Upload Home Product to Showcase
+//               </h3>
+//               <form onSubmit={handleHomeProductSubmit} className="space-y-4">
+//                 <input
+//                   type="text"
+//                   name="name"
+//                   placeholder="Name"
+//                   value={homeProductForm.name}
+//                   onChange={handleHomeProductChange}
+//                   className="w-full border px-3 py-2 rounded"
+//                   required
+//                 />
+//                 <input
+//                   type="text"
+//                   name="material"
+//                   placeholder="Material"
+//                   value={homeProductForm.material}
+//                   onChange={handleHomeProductChange}
+//                   className="w-full border px-3 py-2 rounded"
+//                   required
+//                 />
+//                 <input
+//                   type="text"
+//                   name="thickness"
+//                   placeholder="Thickness"
+//                   value={homeProductForm.thickness}
+//                   onChange={handleHomeProductChange}
+//                   className="w-full border px-3 py-2 rounded"
+//                   required
+//                 />
+//                 <input
+//                   type="text"
+//                   name="length"
+//                   placeholder="Length"
+//                   value={homeProductForm.length}
+//                   onChange={handleHomeProductChange}
+//                   className="w-full border px-3 py-2 rounded"
+//                   required
+//                 />
+//                 <input
+//                   type="text"
+//                   name="imageUrl"
+//                   placeholder="Image URL (optional)"
+//                   value={homeProductForm.imageUrl || ""}
+//                   onChange={handleHomeProductChange}
+//                   className="w-full border px-3 py-2 rounded"
+//                 />
+//                 <input
+//                   type="file"
+//                   accept="image/*"
+//                   onChange={handleHomeProductFileChange}
+//                   className="w-full border px-3 py-2 rounded"
+//                 />
+//                 <button
+//                   type="submit"
+//                   className="bg-blue-600 text-white px-4 py-2 rounded"
+//                   disabled={uploading}
+//                 >
+//                   {uploading ? "Uploading..." : "Add to Showcase"}
+//                 </button>
+//               </form>
+//             </div>
+//           </div>
+//         )}
+//         {/* Showcase cards */}
+//         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-10">
+//           {cards.map((card) => (
+//             <div
+//               key={card.id}
+//               className="bg-white rounded-xl shadow-lg cursor-pointer transition hover:scale-105"
+//               onClick={() => openModal(card)}
+//             >
+//               <img
+//                 src={card.image || "/default.jpg"}
+//                 alt={card.title}
+//                 className="h-48 w-full object-cover rounded-t-xl"
+//               />
+//               <div className="p-4">
+//                 <h2 className="text-lg font-semibold">{card.title}</h2>
+//                 <p className="text-sm text-gray-600">{card.shortDescription}</p>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//         {modalOpen && selectedCard && (
+//           <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
+//             <div className="bg-white p-6 rounded-lg max-w-lg w-full relative">
+//               <button
+//                 onClick={closeModal}
+//                 className="absolute top-2 right-2 text-gray-500 text-xl"
+//               >
+//                 ✕
+//               </button>
+//               <img
+//                 src={selectedCard.image}
+//                 alt={selectedCard.title}
+//                 className="w-full h-56 object-cover rounded mb-4"
+//               />
+//               <h2 className="text-xl font-bold mb-2">{selectedCard.title}</h2>
+//               <p className="text-sm text-gray-600 mb-2">
+//                 {selectedCard.shortDescription}
+//               </p>
+//               <p className="text-sm mb-4">{selectedCard.longDescription}</p>
+//               <ul className="list-disc list-inside text-sm text-gray-700">
+//                 {selectedCard.features?.map((f, i) => (
+//                   <li key={i}>{f}</li>
+//                 ))}
+//               </ul>
+//             </div>
+//           </div>
+//         )}
+
+     
+//         {/* Original Add New Product Form */}
+//         <div className="bg-white shadow-xl rounded-lg overflow-hidden mb-10">
+//           <div className="p-6 sm:p-8">
+//             <h3 className="text-lg font-medium text-gray-900 mb-6 border-b pb-2">
+//               Add New Product
+//             </h3>
+//             <form onSubmit={handleSubmit} className="space-y-6">
+//               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+//                 <div>
+//                   <label
+//                     htmlFor="product-name"
+//                     className="block text-sm font-medium text-gray-700"
+//                   >
+//                     Product Name
+//                   </label>
+//                   <input
+//                     type="text"
+//                     name="name"
+//                     id="product-name"
+//                     value={formData.name}
+//                     onChange={handleChange}
+//                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+//                     required
+//                   />
+//                 </div>
+
+//                 <div>
+//                   <label
+//                     htmlFor="product-category"
+//                     className="block text-sm font-medium text-gray-700"
+//                   >
+//                     Category
+//                   </label>
+//                   <select
+//                     name="category"
+//                     id="product-category"
+//                     value={formData.category}
+//                     onChange={handleChange}
+//                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+//                     required
+//                   >
+//                     <option value="product">Product</option>
+//                     <option value="shop">Shop</option>
+//                   </select>
+//                 </div>
+//               </div>
+
+//               {formData.category !== "product" && (
+//                 <div>
+//                   <label
+//                     htmlFor="product-price"
+//                     className="block text-sm font-medium text-gray-700"
+//                   >
+//                     Price
+//                   </label>
+//                   <input
+//                     type="number"
+//                     name="price"
+//                     id="product-price"
+//                     value={formData.price}
+//                     onChange={handleChange}
+//                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+//                     required={formData.category !== "product"}
+//                   />
+//                 </div>
+//               )}
+
+//               <div>
+//                 <label
+//                   htmlFor="product-description"
+//                   className="block text-sm font-medium text-gray-700"
+//                 >
+//                   Description
+//                 </label>
+//                 <textarea
+//                   name="description"
+//                   id="product-description"
+//                   rows={3}
+//                   value={formData.description}
+//                   onChange={handleChange}
+//                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+//                   required
+//                 />
+//               </div>
+
+//               {/* Rest of the form remains the same */}
+//               <div>
+//                 <label
+//                   htmlFor="product-imageUrl"
+//                   className="block text-sm font-medium text-gray-700"
+//                 >
+//                   Image URL (optional)
+//                 </label>
+//                 <input
+//                   type="text"
+//                   name="imageUrl"
+//                   id="product-imageUrl"
+//                   value={formData.imageUrl}
+//                   onChange={handleChange}
+//                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+//                 />
+//               </div>
+
+//               <div>
+//                 <label className="block text-sm font-medium text-gray-700">
+//                   Product Image
+//                 </label>
+//                 <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+//                   <div className="space-y-1 text-center">
+//                     <div className="flex text-sm text-gray-600">
+//                       <label
+//                         htmlFor="product-file-upload"
+//                         className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+//                       >
+//                         <span>Upload a file</span>
+//                         <input
+//                           id="product-file-upload"
+//                           name="file-upload"
+//                           type="file"
+//                           className="sr-only"
+//                           onChange={handleFileChange}
+//                         />
+//                       </label>
+//                       <p className="pl-1">or drag and drop</p>
+//                     </div>
+//                     <p className="text-xs text-gray-500">
+//                       PNG, JPG, GIF up to 10MB
+//                     </p>
+//                     {imageFile && (
+//                       <p className="text-sm text-green-600">
+//                         {imageFile.name} selected
+//                       </p>
+//                     )}
+//                   </div>
+//                 </div>
+//               </div>
+
+//               <div className="flex justify-end">
+//                 <button
+//                   type="submit"
+//                   disabled={uploading}
+//                   className={`inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white ${
+//                     uploading
+//                       ? "bg-indigo-400"
+//                       : "bg-indigo-600 hover:bg-indigo-700"
+//                   } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+//                 >
+//                   {uploading ? "Processing..." : "Add Product"}
+//                 </button>
+//               </div>
+//             </form>
+//           </div>
+//         </div>
+//         <div className="bg-white shadow-xl rounded-lg overflow-hidden">
+//           <div className="p-6 sm:p-8">
+//             <h3 className="text-lg font-medium text-gray-900 mb-6 border-b pb-2">
+//               Manage Items
+//             </h3>
+
+//             <div className="flex flex-wrap justify-center gap-4 mb-8">
+//               <button
+//                 onClick={() => setModalCategory("product")}
+//                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+//               >
+//                 View Product List
+//               </button>
+//               <button
+//                 onClick={() => setModalCategory("shop")}
+//                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+//               >
+//                 View Shop Products
+//               </button>
+//               <button
+//                 onClick={() => setModalCategory("showcase")}
+//                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+//               >
+//                 View Showcase Cards
+//               </button>
+//             </div>
+
+//             {isLoading ? (
+//               <div className="flex justify-center items-center py-12">
+//                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+//               </div>
+//             ) : (
+//               <div className="bg-gray-50 p-4 rounded-lg">
+//                 <p className="text-center text-gray-500">
+//                   Select a category above to view and manage items
+//                 </p>
+//               </div>
+//             )}
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Modal for viewing items */}
+//       {modalCategory && (
+//         <div className="fixed inset-0 z-50 overflow-y-auto">
+//           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+//             <div
+//               className="fixed inset-0 transition-opacity"
+//               aria-hidden="true"
+//             >
+//               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+//             </div>
+
+//             <span
+//               className="hidden sm:inline-block sm:align-middle sm:h-screen"
+//               aria-hidden="true"
+//             >
+//               &#8203;
+//             </span>
+
+//             <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+//               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+//                 <div className="sm:flex sm:items-start">
+//                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+//                     <div className="flex justify-between items-center mb-4">
+//                       <h3 className="text-lg leading-6 font-medium text-gray-900 capitalize">
+//                         {modalCategory === "showcase"
+//                           ? "Showcase Cards"
+//                           : `${modalCategory} Products`}
+//                       </h3>
+//                       <button
+//                         onClick={() => {
+//                           setModalCategory(null);
+//                           setEditProduct(null);
+//                         }}
+//                         className="text-gray-400 hover:text-gray-500 focus:outline-none"
+//                       >
+//                         <span className="sr-only">Close</span>
+//                         <svg
+//                           className="h-6 w-6"
+//                           xmlns="http://www.w3.org/2000/svg"
+//                           fill="none"
+//                           viewBox="0 0 24 24"
+//                           stroke="currentColor"
+//                         >
+//                           <path
+//                             strokeLinecap="round"
+//                             strokeLinejoin="round"
+//                             strokeWidth="2"
+//                             d="M6 18L18 6M6 6l12 12"
+//                           />
+//                         </svg>
+//                       </button>
+//                     </div>
+
+//                     {filteredProducts.length === 0 ? (
+//                       <div className="bg-gray-50 p-8 rounded-lg text-center">
+//                         <svg
+//                           className="mx-auto h-12 w-12 text-gray-400"
+//                           fill="none"
+//                           viewBox="0 0 24 24"
+//                           stroke="currentColor"
+//                         >
+//                           <path
+//                             strokeLinecap="round"
+//                             strokeLinejoin="round"
+//                             strokeWidth="2"
+//                             d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+//                           />
+//                         </svg>
+//                         <h3 className="mt-2 text-sm font-medium text-gray-900">
+//                           No items found
+//                         </h3>
+//                         <p className="mt-1 text-sm text-gray-500">
+//                           Add some{" "}
+//                           {modalCategory === "showcase"
+//                             ? "showcase cards"
+//                             : "products"}{" "}
+//                           to get started.
+//                         </p>
+//                       </div>
+//                     ) : (
+//                       <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+//                         {filteredProducts.map((item) => (
+//                           <div
+//                             key={item.id}
+//                             className="border rounded-lg p-4 hover:shadow-md transition-shadow duration-200"
+//                           >
+//                             {modalCategory === "showcase" ? (
+//                               // Showcase card display
+//                               <div className="flex flex-col md:flex-row gap-4">
+//                                 <div className="flex-shrink-0">
+//                                   <img
+//                                     src={item.image}
+//                                     alt={item.title}
+//                                     className="w-32 h-32 object-cover rounded-lg border"
+//                                   />
+//                                 </div>
+//                                 <div className="flex-1">
+//                                   <h4 className="text-lg font-semibold text-gray-900">
+//                                     {item.title}
+//                                   </h4>
+//                                   <p className="text-sm text-gray-600">
+//                                     {item.shortDescription}
+//                                   </p>
+//                                   {item.createdAt && (
+//                                     <p className="mt-2 text-xs text-gray-500">
+//                                       Added:{" "}
+//                                       {new Date(
+//                                         item.createdAt
+//                                       ).toLocaleDateString()}
+//                                     </p>
+//                                   )}
+//                                 </div>
+//                                 <div className="flex flex-col sm:flex-row md:flex-col gap-2 justify-center">
+//                                   <button
+//                                     onClick={() =>
+//                                       handleDelete(item.id, "showcaseCards")
+//                                     }
+//                                     className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+//                                   >
+//                                     Delete
+//                                   </button>
+//                                 </div>
+//                               </div>
+//                             ) : (
+//                               // Product display
+//                               <div>
+//                                 <h4 className="text-lg font-semibold text-gray-900">
+//                                   {item.name}
+//                                 </h4>
+//                                 <p className="text-sm text-gray-600">
+//                                   {item.description}
+//                                 </p>
+//                                 <p className="mt-2 text-xs text-gray-500">
+//                                   Price: ${item.price}
+//                                 </p>
+//                                 <div className="flex flex-col sm:flex-row md:flex-col gap-2 justify-center">
+//                                   <button
+//                                     onClick={() => handleDelete(item.id)}
+//                                     className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+//                                   >
+//                                     Delete
+//                                   </button>
+//                                   <button
+//                                     onClick={() => {
+//                                       setEditProduct(item);
+//                                     }}
+//                                     className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+//                                   >
+//                                     Edit
+//                                   </button>
+//                                 </div>
+//                               </div>
+//                             )}
+//                           </div>
+//                         ))}
+//                       </div>
+//                     )}
+//                   </div>
+//                 </div>
+//               </div>
+//               <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+//                 <button
+//                   type="button"
+//                   onClick={() => {
+//                     setModalCategory(null);
+//                     setEditProduct(null);
+//                   }}
+//                   className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
+//                 >
+//                   Close
+//                 </button>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default AdminDashboard;
 import React, { useState, useEffect } from "react";
 import { db, storage } from "../../firebase";
 import {
@@ -720,29 +929,37 @@ const AdminDashboard = () => {
 
   // Other states
   const [products, setProducts] = useState([]);
+  const [cards, setCards] = useState([]);
   const [modalCategory, setModalCategory] = useState(null);
   const [editProduct, setEditProduct] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [activeForm, setActiveForm] = useState("product"); // 'product' or 'homeProduct'
 
   // Fetch all products
   const fetchProducts = async () => {
     try {
       setIsLoading(true);
-      const snap = await getDocs(collection(db, "products"));
+      const productsSnap = await getDocs(collection(db, "products"));
       const showcaseSnap = await getDocs(collection(db, "showcaseCards"));
-      
-      const productItems = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      const showcaseItems = showcaseSnap.docs.map((doc) => ({ 
-        id: doc.id, 
+
+      const productItems = productsSnap.docs.map((doc) => ({
+        id: doc.id,
         ...doc.data(),
-        category: "showcase" // Add category for filtering
       }));
-      
-      setProducts([...productItems, ...showcaseItems]);
+      const showcaseItems = showcaseSnap.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setProducts(productItems);
+      setCards(showcaseItems);
     } catch (err) {
       console.error("Fetch error:", err);
-      alert("Failed to fetch products");
+      setError("Failed to fetch products");
     } finally {
       setIsLoading(false);
     }
@@ -751,6 +968,17 @@ const AdminDashboard = () => {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  // Modal functions
+  const openModal = (card) => {
+    setSelectedCard(card);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedCard(null);
+  };
 
   // Handle changes for all forms
   const handleChange = (e) => {
@@ -832,7 +1060,7 @@ const AdminDashboard = () => {
       fetchProducts();
     } catch (err) {
       console.error("Add error:", err);
-      alert("Something went wrong! Check the console.");
+      setError("Something went wrong! Check the console.");
     } finally {
       setUploading(false);
     }
@@ -840,35 +1068,32 @@ const AdminDashboard = () => {
 
   const handleHomeProductSubmit = async (e) => {
     e.preventDefault();
-    try {
-      setUploading(true);
-      let imageUrl = "";
+    setUploading(true);
 
-      if (homeProductImageFile) {
-        const imageRef = ref(storage, `homeProducts/${uuidv4()}-${homeProductImageFile.name}`);
+    try {
+      let imageUrl = homeProductForm.imageUrl;
+      if (!imageUrl && homeProductImageFile) {
+        const imageRef = ref(
+          storage,
+          `showcaseImages/${homeProductImageFile.name}-${Date.now()}`
+        );
         await uploadBytes(imageRef, homeProductImageFile);
         imageUrl = await getDownloadURL(imageRef);
-      } else if (homeProductForm.imageUrl) {
-        imageUrl = homeProductForm.imageUrl;
-      } else {
-        alert("Please upload a file or paste a file URL.");
-        setUploading(false);
-        return;
       }
-
-      const homeProductData = {
-        name: homeProductForm.name,
-        material: homeProductForm.material,
-        thickness: homeProductForm.thickness,
-        length: homeProductForm.length,
+      
+      await addDoc(collection(db, "showcaseCards"), {
+        title: homeProductForm.name,
+        shortDescription: homeProductForm.material,
+        longDescription: `Thickness: ${homeProductForm.thickness}, Length: ${homeProductForm.length}`,
         image: imageUrl,
+        features: [
+          `Material: ${homeProductForm.material}`,
+          `Thickness: ${homeProductForm.thickness}`,
+          `Length: ${homeProductForm.length}`,
+        ],
         createdAt: new Date().toISOString(),
-        category: "home",
-      };
+      });
 
-      await addDoc(collection(db, "products"), homeProductData);
-
-      alert("Home product added successfully!");
       setHomeProductForm({
         name: "",
         material: "",
@@ -877,60 +1102,14 @@ const AdminDashboard = () => {
         imageUrl: "",
       });
       setHomeProductImageFile(null);
+      alert("✅ Home Product added to showcaseCards!");
       fetchProducts();
-    } catch (err) {
-      console.error("Add error:", err);
-      alert("Something went wrong! Check the console.");
-    } finally {
-      setUploading(false);
+    } catch (error) {
+      console.error("❌ Error adding product:", error);
+      setError("Failed to add product.");
     }
-  };
 
-  const handleShowcaseSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      setUploading(true);
-      let imageUrl = "";
-
-      if (showcaseImageFile) {
-        const imageRef = ref(storage, `showcaseCards/${uuidv4()}-${showcaseImageFile.name}`);
-        await uploadBytes(imageRef, showcaseImageFile);
-        imageUrl = await getDownloadURL(imageRef);
-      } else if (showcaseForm.imageUrl) {
-        imageUrl = showcaseForm.imageUrl;
-      } else {
-        alert("Please upload a file or paste a file URL.");
-        setUploading(false);
-        return;
-      }
-
-      const cardData = {
-        title: showcaseForm.title,
-        shortDescription: showcaseForm.shortDescription,
-        longDescription: showcaseForm.longDescription,
-        image: imageUrl,
-        features: showcaseForm.features.split(',').map(f => f.trim()).filter(f => f),
-        createdAt: new Date().toISOString(),
-      };
-
-      await addDoc(collection(db, "showcaseCards"), cardData);
-
-      alert("Showcase card added successfully!");
-      setShowcaseForm({
-        title: "",
-        shortDescription: "",
-        longDescription: "",
-        features: "",
-        imageUrl: "",
-      });
-      setShowcaseImageFile(null);
-      fetchProducts();
-    } catch (err) {
-      console.error("Add error:", err);
-      alert("Something went wrong! Check the console.");
-    } finally {
-      setUploading(false);
-    }
+    setUploading(false);
   };
 
   // Delete product/card
@@ -941,12 +1120,12 @@ const AdminDashboard = () => {
         fetchProducts();
       } catch (err) {
         console.error("Delete error:", err);
-        alert("Failed to delete item");
+        setError("Failed to delete item");
       }
     }
   };
 
-  // Edit functionality (for products only)
+  // Edit functionality
   const handleEditChange = (e) => {
     setEditProduct((prev) => ({
       ...prev,
@@ -966,6 +1145,7 @@ const AdminDashboard = () => {
 
   const handleEditSubmit = async () => {
     try {
+      setUploading(true);
       let imageUrl = editProduct.image;
 
       if (editProduct.newImageFile) {
@@ -984,31 +1164,42 @@ const AdminDashboard = () => {
         updatedAt: new Date().toISOString(),
       };
 
-      if (editProduct.category === "home") {
-        updateData.material = editProduct.material;
-        updateData.thickness = editProduct.thickness;
-        updateData.length = editProduct.length;
-      } else if (editProduct.category !== "product") {
+      if (editProduct.category !== "product") {
         updateData.price = Number(editProduct.price);
       }
 
-      const refDoc = doc(db, "products", editProduct.id);
-      await updateDoc(refDoc, updateData);
+      await updateDoc(doc(db, "products", editProduct.id), updateData);
 
       setEditProduct(null);
       fetchProducts();
       alert("Product updated successfully!");
     } catch (err) {
       console.error("Error updating product:", err);
-      alert("Update failed");
+      setError("Update failed");
+    } finally {
+      setUploading(false);
     }
   };
 
-  const filteredProducts = products.filter((p) => p.category === modalCategory);
+  const filteredProducts = modalCategory === "showcase" 
+    ? cards 
+    : products.filter(p => modalCategory ? p.category === modalCategory : true);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            {error}
+            <button 
+              onClick={() => setError("")} 
+              className="absolute top-0 right-0 px-2 py-1"
+            >
+              ×
+            </button>
+          </div>
+        )}
+
         <div className="text-center mb-10">
           <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
             Admin Dashboard
@@ -1018,160 +1209,235 @@ const AdminDashboard = () => {
           </p>
         </div>
 
-        {/* Add New Showcase Card Form */}
-        <div className="bg-white shadow-xl rounded-lg overflow-hidden mb-10">
-          <div className="p-6 sm:p-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-6 border-b pb-2">
-              Add New Showcase Card
-            </h3>
-            <form onSubmit={handleShowcaseSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="showcase-title" className="block text-sm font-medium text-gray-700">
-                    Card Title
-                  </label>
-                  <input
-                    type="text"
-                    name="title"
-                    id="showcase-title"
-                    value={showcaseForm.title}
-                    onChange={handleShowcaseChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    required
-                  />
+        {/* Form Selection Buttons */}
+        <div className="flex justify-center mb-8 gap-4">
+          <button
+            onClick={() => setActiveForm("product")}
+            className={`px-6 py-3 rounded-lg shadow transition-colors ${
+              activeForm === "product" 
+                ? "bg-blue-600 text-white" 
+                : "bg-gray-200 text-gray-700"
+            }`}
+          >
+            Add Product
+          </button>
+          <button
+            onClick={() => setActiveForm("homeProduct")}
+            className={`px-6 py-3 rounded-lg shadow transition-colors ${
+              activeForm === "homeProduct" 
+                ? "bg-blue-600 text-white" 
+                : "bg-gray-200 text-gray-700"
+            }`}
+          >
+            Add Home Product
+          </button>
+        </div>
+
+        {/* Add Product Form */}
+        {activeForm === "product" && (
+          <div className="bg-white shadow-xl rounded-lg overflow-hidden mb-10">
+            <div className="p-6 sm:p-8">
+              <h3 className="text-lg font-medium text-gray-900 mb-6 border-b pb-2">
+                Add New Product
+              </h3>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Product Name
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Category
+                    </label>
+                    <select
+                      name="category"
+                      value={formData.category}
+                      onChange={handleChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      required
+                    >
+                      <option value="product">Product</option>
+                      <option value="shop">Shop</option>
+                    </select>
+                  </div>
                 </div>
 
-                <div>
-                  <label htmlFor="showcase-shortDesc" className="block text-sm font-medium text-gray-700">
-                    Short Description
-                  </label>
-                  <input
-                    type="text"
-                    name="shortDescription"
-                    id="showcase-shortDesc"
-                    value={showcaseForm.shortDescription}
-                    onChange={handleShowcaseChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    required
-                  />
-                </div>
-              </div>
+                {formData.category !== "product" && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Price
+                    </label>
+                    <input
+                      type="number"
+                      name="price"
+                      value={formData.price}
+                      onChange={handleChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      required
+                    />
+                  </div>
+                )}
 
-              <div>
-                <label htmlFor="showcase-longDesc" className="block text-sm font-medium text-gray-700">
-                  Long Description
-                </label>
-                <textarea
-                  name="longDescription"
-                  id="showcase-longDesc"
-                  rows={3}
-                  value={showcaseForm.longDescription}
-                  onChange={handleShowcaseChange}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="showcase-features" className="block text-sm font-medium text-gray-700">
-                    Features (comma separated)
+                  <label className="block text-sm font-medium text-gray-700">
+                    Description
                   </label>
                   <textarea
-                    name="features"
-                    id="showcase-features"
-                    rows={2}
-                    placeholder="Feature 1, Feature 2, Feature 3"
-                    value={showcaseForm.features}
-                    onChange={handleShowcaseChange}
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    rows={3}
+                    required
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="showcase-imageUrl" className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700">
                     Image URL (optional)
                   </label>
                   <input
                     type="text"
                     name="imageUrl"
-                    id="showcase-imageUrl"
-                    value={showcaseForm.imageUrl}
-                    onChange={handleShowcaseChange}
+                    value={formData.imageUrl}
+                    onChange={handleChange}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Card Image
-                </label>
-                <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                  <div className="space-y-1 text-center">
-                    <div className="flex text-sm text-gray-600">
-                      <label
-                        htmlFor="showcase-file-upload"
-                        className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                      >
-                        <span>Upload a file</span>
-                        <input
-                          id="showcase-file-upload"
-                          name="file-upload"
-                          type="file"
-                          className="sr-only"
-                          onChange={handleShowcaseFileChange}
-                        />
-                      </label>
-                      <p className="pl-1">or drag and drop</p>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Product Image
+                  </label>
+                  <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                    <div className="space-y-1 text-center">
+                      <div className="flex text-sm text-gray-600">
+                        <label
+                          htmlFor="product-file-upload"
+                          className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                        >
+                          <span>Upload a file</span>
+                          <input
+                            id="product-file-upload"
+                            type="file"
+                            className="sr-only"
+                            onChange={handleFileChange}
+                          />
+                        </label>
+                        <p className="pl-1">or drag and drop</p>
+                      </div>
+                      <p className="text-xs text-gray-500">
+                        PNG, JPG, GIF up to 10MB
+                      </p>
+                      {imageFile && (
+                        <p className="text-sm text-green-600">
+                          {imageFile.name} selected
+                        </p>
+                      )}
                     </div>
-                    <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
-                    {showcaseImageFile && (
-                      <p className="text-sm text-green-600">{showcaseImageFile.name} selected</p>
-                    )}
                   </div>
                 </div>
-              </div>
 
-              <div className="flex justify-end">
+                <div className="flex justify-end">
+                  <button
+                    type="submit"
+                    disabled={uploading}
+                    className={`inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white ${
+                      uploading
+                        ? "bg-indigo-400"
+                        : "bg-indigo-600 hover:bg-indigo-700"
+                    } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+                  >
+                    {uploading ? "Processing..." : "Add Product"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Add Home Product Form */}
+        {activeForm === "homeProduct" && (
+          <div className="bg-white shadow-xl rounded-lg overflow-hidden mb-10">
+            <div className="p-6 sm:p-8">
+              <h3 className="text-lg font-medium text-gray-900 mb-6 border-b pb-2">
+                Add Home Product
+              </h3>
+              <form onSubmit={handleHomeProductSubmit} className="space-y-4">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  value={homeProductForm.name}
+                  onChange={handleHomeProductChange}
+                  className="w-full border px-3 py-2 rounded"
+                  required
+                />
+                <input
+                  type="text"
+                  name="material"
+                  placeholder="Material"
+                  value={homeProductForm.material}
+                  onChange={handleHomeProductChange}
+                  className="w-full border px-3 py-2 rounded"
+                  required
+                />
+                <input
+                  type="text"
+                  name="thickness"
+                  placeholder="Thickness"
+                  value={homeProductForm.thickness}
+                  onChange={handleHomeProductChange}
+                  className="w-full border px-3 py-2 rounded"
+                  required
+                />
+                <input
+                  type="text"
+                  name="length"
+                  placeholder="Length"
+                  value={homeProductForm.length}
+                  onChange={handleHomeProductChange}
+                  className="w-full border px-3 py-2 rounded"
+                  required
+                />
+                <input
+                  type="text"
+                  name="imageUrl"
+                  placeholder="Image URL (optional)"
+                  value={homeProductForm.imageUrl || ""}
+                  onChange={handleHomeProductChange}
+                  className="w-full border px-3 py-2 rounded"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleHomeProductFileChange}
+                  className="w-full border px-3 py-2 rounded"
+                />
                 <button
                   type="submit"
+                  className="bg-blue-600 text-white px-4 py-2 rounded"
                   disabled={uploading}
-                  className={`inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white ${
-                    uploading ? "bg-indigo-400" : "bg-indigo-600 hover:bg-indigo-700"
-                  } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
                 >
-                  {uploading ? "Processing..." : "Add Showcase Card"}
+                  {uploading ? "Uploading..." : "Add Home Product"}
                 </button>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Add New Home Product Form */}
-        <div className="bg-white shadow-xl rounded-lg overflow-hidden mb-10">
-          <div className="p-6 sm:p-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-6 border-b pb-2">
-              Add New Home Product
-            </h3>
-            <form onSubmit={handleHomeProductSubmit} className="space-y-6">
-              {/* ... (keep your existing home product form fields) ... */}
-            </form>
-          </div>
-        </div>
-
-        {/* Original Add New Product Form */}
-        <div className="bg-white shadow-xl rounded-lg overflow-hidden mb-10">
-          <div className="p-6 sm:p-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-6 border-b pb-2">
-              Add New Product
-            </h3>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* ... (keep your existing product form fields) ... */}
-            </form>
-          </div>
-        </div>
-
+        {/* Manage Items Section */}
         <div className="bg-white shadow-xl rounded-lg overflow-hidden">
           <div className="p-6 sm:p-8">
             <h3 className="text-lg font-medium text-gray-900 mb-6 border-b pb-2">
@@ -1183,19 +1449,13 @@ const AdminDashboard = () => {
                 onClick={() => setModalCategory("product")}
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
-                View Product List
+                View Products
               </button>
               <button
                 onClick={() => setModalCategory("shop")}
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                View Shop Products
-              </button>
-              <button
-                onClick={() => setModalCategory("home")}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-              >
-                View Home Products
+                View Shop Items
               </button>
               <button
                 onClick={() => setModalCategory("showcase")}
@@ -1209,6 +1469,96 @@ const AdminDashboard = () => {
               <div className="flex justify-center items-center py-12">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
               </div>
+            ) : modalCategory ? (
+              <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+                {filteredProducts.length === 0 ? (
+                  <div className="bg-gray-50 p-8 rounded-lg text-center">
+                    <svg
+                      className="mx-auto h-12 w-12 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <h3 className="mt-2 text-sm font-medium text-gray-900">
+                      No items found
+                    </h3>
+                    <p className="mt-1 text-sm text-gray-500">
+                      Add some{" "}
+                      {modalCategory === "showcase"
+                        ? "showcase cards"
+                        : "products"}{" "}
+                      to get started.
+                    </p>
+                  </div>
+                ) : (
+                  filteredProducts.map((item) => (
+                    <div
+                      key={item.id}
+                      className="border rounded-lg p-4 hover:shadow-md transition-shadow duration-200"
+                    >
+                      <div className="flex flex-col md:flex-row gap-4">
+                        <div className="flex-shrink-0">
+                          <img
+                            src={item.image || "/default.jpg"}
+                            alt={item.name || item.title}
+                            className="w-32 h-32 object-cover rounded-lg border"
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-lg font-semibold text-gray-900">
+                            {item.name || item.title}
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            {item.description || item.shortDescription}
+                          </p>
+                          {item.price && (
+                            <p className="mt-2 text-sm text-gray-500">
+                              Price: ${item.price}
+                            </p>
+                          )}
+                          {item.createdAt && (
+                            <p className="mt-2 text-xs text-gray-500">
+                              Added:{" "}
+                              {new Date(item.createdAt).toLocaleDateString()}
+                            </p>
+                          )}
+                        </div>
+                        <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                          <button
+                            onClick={() => handleDelete(
+                              item.id, 
+                              modalCategory === "showcase" ? "showcaseCards" : "products"
+                            )}
+                            className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                          >
+                            Delete
+                          </button>
+                          {modalCategory !== "showcase" && (
+                            <button
+                              onClick={() => {
+                                setEditProduct({
+                                  ...item,
+                                  category: modalCategory
+                                });
+                              }}
+                              className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            >
+                              Edit
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
             ) : (
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-center text-gray-500">
@@ -1220,104 +1570,98 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* Modal for viewing items */}
-      {modalCategory && (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-
-            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
-              &#8203;
-            </span>
-
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div className="sm:flex sm:items-start">
-                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                    <div className="flex justify-between items-center mb-4">
-                      <h3 className="text-lg leading-6 font-medium text-gray-900 capitalize">
-                        {modalCategory === "showcase" ? "Showcase Cards" : `${modalCategory} Products`}
-                      </h3>
-                      <button
-                        onClick={() => {
-                          setModalCategory(null);
-                          setEditProduct(null);
-                        }}
-                        className="text-gray-400 hover:text-gray-500 focus:outline-none"
-                      >
-                        <span className="sr-only">Close</span>
-                        <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    </div>
-
-                    {filteredProducts.length === 0 ? (
-                      <div className="bg-gray-50 p-8 rounded-lg text-center">
-                        <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <h3 className="mt-2 text-sm font-medium text-gray-900">No items found</h3>
-                        <p className="mt-1 text-sm text-gray-500">
-                          Add some {modalCategory === "showcase" ? "showcase cards" : "products"} to get started.
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
-                        {filteredProducts.map((item) => (
-                          <div key={item.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow duration-200">
-                            {modalCategory === "showcase" ? (
-                              // Showcase card display
-                              <div className="flex flex-col md:flex-row gap-4">
-                                <div className="flex-shrink-0">
-                                  <img src={item.image} alt={item.title} className="w-32 h-32 object-cover rounded-lg border" />
-                                </div>
-                                <div className="flex-1">
-                                  <h4 className="text-lg font-semibold text-gray-900">{item.title}</h4>
-                                  <p className="text-sm text-gray-600">{item.shortDescription}</p>
-                                  {item.createdAt && (
-                                    <p className="mt-2 text-xs text-gray-500">
-                                      Added: {new Date(item.createdAt).toLocaleDateString()}
-                                    </p>
-                                  )}
-                                </div>
-                                <div className="flex flex-col sm:flex-row md:flex-col gap-2 justify-center">
-                                  <button
-                                    onClick={() => handleDelete(item.id, "showcaseCards")}
-                                    className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                                  >
-                                    Delete
-                                  </button>
-                                </div>
-                              </div>
-                            ) : (
-                              // Product display (your existing product display logic)
-                              <div>
-                                {/* ... (keep your existing product display logic) ... */}
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
+      {/* Edit Product Modal */}
+      {editProduct && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">Edit Product</h2>
+            <div className="space-y-4">
+              <input
+                type="text"
+                name="name"
+                placeholder="Name"
+                value={editProduct.name}
+                onChange={handleEditChange}
+                className="w-full border p-2 rounded"
+              />
+              {editProduct.category !== "product" && (
+                <input
+                  type="number"
+                  name="price"
+                  placeholder="Price"
+                  value={editProduct.price}
+                  onChange={handleEditChange}
+                  className="w-full border p-2 rounded"
+                />
+              )}
+              <textarea
+                name="description"
+                placeholder="Description"
+                value={editProduct.description}
+                onChange={handleEditChange}
+                className="w-full border p-2 rounded"
+                rows={3}
+              />
+              <div className="flex items-center gap-4">
+                <img 
+                  src={editProduct.image} 
+                  alt="Current product" 
+                  className="w-20 h-20 object-cover rounded border"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleEditImageChange}
+                  className="w-full border p-2 rounded"
+                />
               </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+              <div className="flex justify-between">
                 <button
-                  type="button"
-                  onClick={() => {
-                    setModalCategory(null);
-                    setEditProduct(null);
-                  }}
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
+                  onClick={() => setEditProduct(null)}
+                  className="bg-gray-500 text-white px-4 py-2 rounded"
                 >
-                  Close
+                  Cancel
+                </button>
+                <button
+                  onClick={handleEditSubmit}
+                  disabled={uploading}
+                  className={`bg-blue-600 text-white px-4 py-2 rounded ${
+                    uploading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                >
+                  {uploading ? "Saving..." : "Save Changes"}
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Showcase Card Details Modal */}
+      {modalOpen && selectedCard && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg max-w-lg w-full relative">
+            <button
+              onClick={closeModal}
+              className="absolute top-2 right-2 text-gray-500 text-xl"
+            >
+              ✕
+            </button>
+            <img
+              src={selectedCard.image}
+              alt={selectedCard.title}
+              className="w-full h-56 object-cover rounded mb-4"
+            />
+            <h2 className="text-xl font-bold mb-2">{selectedCard.title}</h2>
+            <p className="text-sm text-gray-600 mb-2">
+              {selectedCard.shortDescription}
+            </p>
+            <p className="text-sm mb-4">{selectedCard.longDescription}</p>
+            <ul className="list-disc list-inside text-sm text-gray-700">
+              {selectedCard.features?.map((f, i) => (
+                <li key={i}>{f}</li>
+              ))}
+            </ul>
           </div>
         </div>
       )}
