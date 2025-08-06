@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import "./index.css";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Header from "./components/Header";
@@ -21,7 +21,9 @@ import WhatsAppButton from "./components/WhatsAppButton";
 
 function AppContent() {
   const { user, cart, updateCart } = useAuth();
-
+  const location = useLocation();
+  const hideFooterRoutes = ["/login", "/register"];
+  const shouldHideFooter = hideFooterRoutes.includes(location.pathname);
   const handleAddToCart = async (product) => {
     if (!user) {
       alert("Please login to add products to cart!");
@@ -57,7 +59,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
-      <Header />
+      {!shouldHideFooter &&<Header />}
       <Routes>
         <Route path="/" element={<Home cart={cart} onAddToCart={handleAddToCart} />} />
         <Route path="/shop" element={<Shop onAddToCart={handleAddToCart} />} />
@@ -105,7 +107,7 @@ function AppContent() {
           }
         />
       </Routes>
-      <Footer />
+      {!shouldHideFooter && <Footer />}
       <WhatsAppButton />
     </div>
   );
