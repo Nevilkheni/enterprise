@@ -17,6 +17,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import Category from "./pages/category";
 import Shop from "./pages/shop";
 import Home from "./pages/home";
+import WhatsAppButton from "./components/WhatsAppButton";
 
 function AppContent() {
   const { user, cart, updateCart } = useAuth();
@@ -105,6 +106,7 @@ function AppContent() {
         />
       </Routes>
       <Footer />
+      <WhatsAppButton />
     </div>
   );
 }

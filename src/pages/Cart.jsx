@@ -12,7 +12,9 @@ function Cart({ cart, onRemoveFromCart, onUpdateQuantity }) {
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 flex flex-col items-center py-10 px-4">
       <div className="w-full max-w-6xl">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Your Shopping Cart</h1>
+          <h1 className="text-3xl font-bold text-gray-800">
+            Your Shopping Cart
+          </h1>
           <span className="bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full font-medium">
             {cart.length} {cart.length === 1 ? "Item" : "Items"}
           </span>
@@ -36,8 +38,12 @@ function Cart({ cart, onRemoveFromCart, onUpdateQuantity }) {
                 />
               </svg>
             </div>
-            <h3 className="text-2xl font-bold text-gray-700 mb-2">Your cart is empty</h3>
-            <p className="text-gray-500 mb-6">Looks like you haven't added anything to your cart yet</p>
+            <h3 className="text-2xl font-bold text-gray-700 mb-2">
+              Your cart is empty
+            </h3>
+            <p className="text-gray-500 mb-6">
+              Looks like you haven't added anything to your cart yet
+            </p>
             <button
               onClick={() => navigate("/")}
               className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition duration-300 shadow-md hover:shadow-lg"
@@ -51,16 +57,29 @@ function Cart({ cart, onRemoveFromCart, onUpdateQuantity }) {
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr className="border-b">
-                    <th className="py-4 px-6 text-left font-semibold text-gray-700">Product</th>
-                    <th className="py-4 px-6 text-center font-semibold text-gray-700">Price</th>
-                    <th className="py-4 px-6 text-center font-semibold text-gray-700">Quantity</th>
-                    <th className="py-4 px-6 text-center font-semibold text-gray-700">Total</th>
-                    <th className="py-4 px-6 text-center font-semibold text-gray-700">Action</th>
+                    <th className="py-4 px-6 text-left font-semibold text-gray-700">
+                      Product
+                    </th>
+                    <th className="py-4 px-6 text-center font-semibold text-gray-700">
+                      Price
+                    </th>
+                    <th className="py-4 px-6 text-center font-semibold text-gray-700">
+                      Quantity
+                    </th>
+                    <th className="py-4 px-6 text-center font-semibold text-gray-700">
+                      Total
+                    </th>
+                    <th className="py-4 px-6 text-center font-semibold text-gray-700">
+                      Action
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {cart.map((item, idx) => (
-                    <tr key={idx} className="border-b hover:bg-gray-50 transition duration-150">
+                    <tr
+                      key={idx}
+                      className="border-b hover:bg-gray-50 transition duration-150"
+                    >
                       <td className="py-6 px-6">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-20 w-20 rounded-lg overflow-hidden border border-gray-200">
@@ -71,8 +90,12 @@ function Cart({ cart, onRemoveFromCart, onUpdateQuantity }) {
                             />
                           </div>
                           <div className="ml-4">
-                            <h3 className="text-lg font-medium text-gray-800">{item.name}</h3>
-                            <p className="text-sm text-gray-500">SKU: {idx + 1000}</p>
+                            <h3 className="text-lg font-medium text-gray-800">
+                              {item.name}
+                            </h3>
+                            <p className="text-sm text-gray-500">
+                              SKU: {idx + 1000}
+                            </p>
                           </div>
                         </div>
                       </td>
@@ -88,7 +111,9 @@ function Cart({ cart, onRemoveFromCart, onUpdateQuantity }) {
                         <div className="flex items-center justify-center">
                           <button
                             className="text-gray-500 hover:text-indigo-600 p-1 rounded-full hover:bg-gray-100"
-                            onClick={() => onUpdateQuantity(idx, item.quantity - 1)}
+                            onClick={() =>
+                              onUpdateQuantity(idx, item.quantity - 1)
+                            }
                             disabled={item.quantity <= 1}
                           >
                             <svg
@@ -106,10 +131,14 @@ function Cart({ cart, onRemoveFromCart, onUpdateQuantity }) {
                               />
                             </svg>
                           </button>
-                          <span className="mx-3 text-gray-700 font-medium">{item.quantity}</span>
+                          <span className="mx-3 text-gray-700 font-medium">
+                            {item.quantity}
+                          </span>
                           <button
                             className="text-gray-500 hover:text-indigo-600 p-1 rounded-full hover:bg-gray-100"
-                            onClick={() => onUpdateQuantity(idx, item.quantity + 1)}
+                            onClick={() =>
+                              onUpdateQuantity(idx, item.quantity + 1)
+                            }
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -130,10 +159,13 @@ function Cart({ cart, onRemoveFromCart, onUpdateQuantity }) {
                       </td>
                       <td className="py-6 px-6 text-center">
                         <span className="font-bold text-indigo-600">
-                          {(item.price * item.quantity).toLocaleString("en-IN", {
-                            style: "currency",
-                            currency: "INR",
-                          })}
+                          {(item.price * item.quantity).toLocaleString(
+                            "en-IN",
+                            {
+                              style: "currency",
+                              currency: "INR",
+                            }
+                          )}
                         </span>
                       </td>
                       <td className="py-6 px-6 text-center">
@@ -179,7 +211,9 @@ function Cart({ cart, onRemoveFromCart, onUpdateQuantity }) {
                         />
                       </div>
                       <div className="ml-4 flex-1">
-                        <h3 className="text-lg font-medium text-gray-800">{item.name}</h3>
+                        <h3 className="text-lg font-medium text-gray-800">
+                          {item.name}
+                        </h3>
                         <p className="text-indigo-600 font-semibold mt-1">
                           {item.price.toLocaleString("en-IN", {
                             style: "currency",
@@ -191,7 +225,9 @@ function Cart({ cart, onRemoveFromCart, onUpdateQuantity }) {
                           <div className="flex items-center border rounded-lg overflow-hidden">
                             <button
                               className="px-3 py-1 bg-gray-100 text-gray-600 hover:bg-gray-200"
-                              onClick={() => onUpdateQuantity(idx, item.quantity - 1)}
+                              onClick={() =>
+                                onUpdateQuantity(idx, item.quantity - 1)
+                              }
                               disabled={item.quantity <= 1}
                             >
                               -
@@ -201,7 +237,9 @@ function Cart({ cart, onRemoveFromCart, onUpdateQuantity }) {
                             </span>
                             <button
                               className="px-3 py-1 bg-gray-100 text-gray-600 hover:bg-gray-200"
-                              onClick={() => onUpdateQuantity(idx, item.quantity + 1)}
+                              onClick={() =>
+                                onUpdateQuantity(idx, item.quantity + 1)
+                              }
                             >
                               +
                             </button>
@@ -246,7 +284,9 @@ function Cart({ cart, onRemoveFromCart, onUpdateQuantity }) {
             </div>
 
             <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-              <h3 className="text-xl font-bold text-gray-800 mb-6">Order Summary</h3>
+              <h3 className="text-xl font-bold text-gray-800 mb-6">
+                Order Summary
+              </h3>
               <div className="space-y-4">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Subtotal</span>
@@ -262,7 +302,9 @@ function Cart({ cart, onRemoveFromCart, onUpdateQuantity }) {
                   {/* <span className="font-medium text-green-600">FREE</span> */}
                 </div>
                 <div className="flex justify-between pt-4 border-t border-gray-200">
-                  <span className="text-lg font-bold text-gray-800">Grand Total</span>
+                  <span className="text-lg font-bold text-gray-800">
+                    Grand Total
+                  </span>
                   <span className="text-xl font-bold text-indigo-600">
                     {grandTotal.toLocaleString("en-IN", {
                       style: "currency",

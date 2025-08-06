@@ -53,8 +53,8 @@ function Home() {
 
   return (
     <div>
-      {/* HERO CAROUSEL */}
-      <div className="relative w-full h-[30vh] sm:h-[55vh] md:h-[70vh] overflow-hidden">
+      
+      <div className="relative w-full h-[30vh] sm:h-[40vh] md:h-[50vh] overflow-hidden">
         <div
           className="w-full h-full bg-cover bg-center transition-all duration-1000"
           style={{ backgroundImage: `url(${images[currentIndex]})` }}
@@ -74,7 +74,6 @@ function Home() {
         </div>
       </div>
 
-      {/* COMPANY INFO SECTION */}
       <div className="w-full py-16 md:py-24 bg-cover bg-center bg-no-repeat bg-fixed" style={{ backgroundImage: `url(${middleSectionBg2})` }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col lg:flex-row items-center gap-8 md:gap-12">
@@ -94,13 +93,11 @@ function Home() {
         </div>
       </div>
 
-      {/* CARD GRID */}
 
 
       <CardShowcase />
 
 
-      {/* FEATURED PRODUCTS */}
       <div className="w-full py-16 md:py-24 bg-cover bg-center bg-no-repeat bg-fixed text-center" style={{ backgroundImage: `url(${middleSectionBg})` }}>
         <h2 className="text-3xl font-bold text-red-400 mb-2">Feature Products</h2>
         <div className="w-16 h-1 bg-red-400 mx-auto mb-10 rounded-full" />
@@ -114,7 +111,6 @@ function Home() {
         </div>
       </div>
 
-      {/* WHY CHOOSE US */}
       <div className="bg-transparent m-auto py-12 px-6 text-center">
         <h2 className="text-3xl font-bold text-red-400 mb-2">Why Choose Us</h2>
         <div className="w-16 h-1 bg-red-400 mx-auto mb-10 rounded-full" />

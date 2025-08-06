@@ -59,7 +59,6 @@ const categories = [
   },
 ];
 
-// Animation variants
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -90,7 +89,6 @@ const Category = () => {
       variants={containerVariants}
       className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8"
     >
-      {/* Header */}
       <motion.div 
         variants={itemVariants}
         className="text-center mb-12"
@@ -101,7 +99,6 @@ const Category = () => {
         </p>
       </motion.div>
 
-      {/* Categories Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {categories.map((category) => (
           <motion.div
@@ -111,7 +108,6 @@ const Category = () => {
             className="group relative overflow-hidden rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
           >
             <Link to={`/category/${category.id}`} className="block">
-              {/* Category Image */}
               <div className="h-48 overflow-hidden">
                 <img
                   src={category.image}
@@ -120,7 +116,6 @@ const Category = () => {
                 />
               </div>
 
-              {/* Category Info */}
               <div className={`p-6 ${category.color}`}>
                 <div className="flex justify-between items-start">
                   <div>
@@ -134,7 +129,6 @@ const Category = () => {
                   </span>
                 </div>
 
-                {/* View Button */}
                 <div className="mt-4">
                   <span className={`inline-flex items-center ${category.textColor} font-medium group-hover:underline`}>
                     View all

@@ -13,13 +13,16 @@ const Header = () => {
   const { user } = useAuth();
   const userMenuRef = useRef(null);
 
-  const navItems = [
+  const leftNavItems = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
-    { name: "Products", path: "/products" },
-    { name: "Shope", path: "/shop" },
-    { name: "Category", path: "/category" },
     { name: "Contact", path: "/contact" },
+  ];
+
+  const rightNavItems = [
+    { name: "Shope", path: "/shop" },
+    { name: "Products", path: "/products" },
+    { name: "Category", path: "/category" },
   ];
 
   const handleLogout = async () => {
@@ -48,42 +51,7 @@ const Header = () => {
     <header className="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div
-            className="flex-shrink-0 cursor-pointer flex items-center"
-            onClick={() => navigate("/")}
-          >
-           <img
-              src ={compnylogo}
-              alt="Your Company"
-              className="h-8 w-auto"
-            />
-            <span className="text-xl font-bold text-blue-600">
-              Jyot<span className="text-gray-900">Enterprise</span>
-            </span>
-          </div>
-
-          <nav className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <button
-                key={item.name}
-                onClick={() => navigate(item.path)}
-                className="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 relative group"
-              >
-                {item.name}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
-              </button>
-            ))}
-          </nav>
-
-          <div className="hidden md:flex items-center space-x-4">
-            <button
-              onClick={() => navigate("/cart")}
-              className="p-2 rounded-full text-gray-600 hover:text-blue-600 hover:bg-blue-50 relative"
-              aria-label="Cart"
-            >
-              <ShoppingCart className="h-5 w-5" />
-            </button>
-
+          <div className="hidden md:flex items-center">
             {user ? (
               <div className="relative" ref={userMenuRef}>
                 <button
@@ -98,7 +66,7 @@ const Header = () => {
                   </div>
                 </button>
                 <div
-                  className={`absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 transition-all duration-200 ${
+                  className={`absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 transition-all duration-200 ${
                     userMenuOpen
                       ? "opacity-100 translate-y-0 visible"
                       : "opacity-0 -translate-y-2 invisible"
@@ -124,19 +92,69 @@ const Header = () => {
             )}
           </div>
 
-          <div className="md:hidden flex items-center">
+          <nav className="hidden md:flex items-center space-x-8">
+            {leftNavItems.map((item) => (
+              <button
+                key={item.name}
+                onClick={() => navigate(item.path)}
+                className="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 relative group"
+              >
+                {item.name}
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+              </button>
+            ))}
+          </nav>
+
+          <div
+            className="flex-shrink-0 cursor-pointer flex items-center"
+            onClick={() => navigate("/")}
+          >
+            <img
+              src={compnylogo}
+              alt="Your Company"
+              className="h-8 w-auto"
+            />
+            <span className="text-xl font-bold text-blue-600">
+              Jyot<span className="text-gray-900">Enterprise</span>
+            </span>
+          </div>
+
+          <nav className="hidden md:flex items-center space-x-8">
+            {rightNavItems.map((item) => (
+              <button
+                key={item.name}
+                onClick={() => navigate(item.path)}
+                className="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 relative group"
+              >
+                {item.name}
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+              </button>
+            ))}
+          </nav>
+
+          <div className="flex items-center space-x-4">
             <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none transition"
-              aria-expanded={menuOpen}
+              onClick={() => navigate("/cart")}
+              className="p-2 rounded-full text-gray-600 hover:text-blue-600 hover:bg-blue-50 relative"
+              aria-label="Cart"
             >
-              <span className="sr-only">Open main menu</span>
-              {menuOpen ? (
-                <X className="block h-6 w-6" />
-              ) : (
-                <Menu className="block h-6 w-6" />
-              )}
+              <ShoppingCart className="h-5 w-5" />
             </button>
+
+            <div className="md:hidden flex items-center">
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none transition"
+                aria-expanded={menuOpen}
+              >
+                <span className="sr-only">Open main menu</span>
+                {menuOpen ? (
+                  <X className="block h-6 w-6" />
+                ) : (
+                  <Menu className="block h-6 w-6" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -144,7 +162,7 @@ const Header = () => {
       {menuOpen && (
         <div className="md:hidden bg-white border-t border-gray-200">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            {navItems.map((item) => (
+            {[...leftNavItems, ...rightNavItems].map((item) => (
               <button
                 key={item.name}
                 onClick={() => {
