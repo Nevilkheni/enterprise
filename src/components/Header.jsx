@@ -114,8 +114,8 @@ const Header = () => {
               alt="Your Company"
               className="h-8 w-auto"
             />
-            <span className="text-xl font-bold text-blue-600">
-              Jyot<span className="text-gray-900">Enterprise</span>
+            <span className="text-xl font-bold text-blue-600">Jyot
+              <span className="text-gray-900">Enterprise</span>
             </span>
           </div>
 
