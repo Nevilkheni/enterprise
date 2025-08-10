@@ -1,3 +1,5 @@
+
+
 // import React, { useState, useEffect } from "react";
 // import { db, storage } from "../../firebase";
 // import {
@@ -33,6 +35,8 @@
 
 //   const [products, setProducts] = useState([]);
 //   const [cards, setCards] = useState([]);
+//   const [originalProducts, setOriginalProducts] = useState([]);
+//   const [originalCards, setOriginalCards] = useState([]);
 //   const [modalCategory, setModalCategory] = useState(null);
 //   const [editProduct, setEditProduct] = useState(null);
 //   const [editCard, setEditCard] = useState(null);
@@ -42,6 +46,7 @@
 //   const [modalOpen, setModalOpen] = useState(false);
 //   const [selectedCard, setSelectedCard] = useState(null);
 //   const [activeForm, setActiveForm] = useState("product"); 
+//   const [searchTerm, setSearchTerm] = useState("");
 
 //   const fetchProducts = async () => {
 //     try {
@@ -60,6 +65,8 @@
 
 //       setProducts(productItems);
 //       setCards(showcaseItems);
+//       setOriginalProducts(productItems);
+//       setOriginalCards(showcaseItems);
 //     } catch (err) {
 //       console.error("Fetch error:", err);
 //       setError("Failed to fetch products");
@@ -71,6 +78,37 @@
 //   useEffect(() => {
 //     fetchProducts();
 //   }, []);
+
+//   const handleSearch = (e) => {
+//     const term = e.target.value.toLowerCase();
+//     setSearchTerm(term);
+
+//     if (modalCategory === "showcase") {
+//       if (term === "") {
+//         setCards(originalCards);
+//       } else {
+//         const filtered = originalCards.filter(
+//           (card) =>
+//             card.title?.toLowerCase().includes(term) ||
+//             card.shortDescription?.toLowerCase().includes(term) ||
+//             card.longDescription?.toLowerCase().includes(term)
+//         );
+//         setCards(filtered);
+//       }
+//     } else if (modalCategory) {
+//       if (term === "") {
+//         setProducts(originalProducts.filter(p => modalCategory ? p.category === modalCategory : true));
+//       } else {
+//         const filtered = originalProducts.filter(
+//           (product) =>
+//             (product.name?.toLowerCase().includes(term) ||
+//             product.description?.toLowerCase().includes(term)) &&
+//             (modalCategory ? product.category === modalCategory : true)
+//         );
+//         setProducts(filtered);
+//       }
+//     }
+//   };
 
 //   const openModal = (card) => {
 //     setSelectedCard(card);
@@ -694,6 +732,26 @@
 //               </button>
 //             </div>
 
+//             {/* Search Bar */}
+//             {modalCategory && (
+//               <div className="mb-6 w-full max-w-md mx-auto">
+//                 <div className="relative">
+//                   <input
+//                     type="text"
+//                     placeholder={`Search ${modalCategory === 'showcase' ? 'showcase cards' : 'products'}...`}
+//                     className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+//                     value={searchTerm}
+//                     onChange={handleSearch}
+//                   />
+//                   <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500">
+//                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+//                       <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+//                     </svg>
+//                   </button>
+//                 </div>
+//               </div>
+//             )}
+
 //             {isLoading ? (
 //               <div className="flex justify-center items-center py-12">
 //                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
@@ -719,11 +777,8 @@
 //                       No items found
 //                     </h3>
 //                     <p className="mt-1 text-sm text-gray-500">
-//                       Add some{" "}
-//                       {modalCategory === "showcase"
-//                         ? "showcase cards"
-//                         : "products"}{" "}
-//                       to get started.
+//                       {searchTerm ? "No matching items found" : 
+//                         `Add some ${modalCategory === "showcase" ? "showcase cards" : "products"} to get started.`}
 //                     </p>
 //                   </div>
 //                 ) : (
@@ -1014,6 +1069,7 @@
 // export default AdminDashboard;
 
 
+
 import React, { useState, useEffect } from "react";
 import { db, storage } from "../../firebase";
 import {
@@ -1043,17 +1099,27 @@ const AdminDashboard = () => {
     imageUrl: "",
     position: "1", 
   });
+  const [allProductForm, setAllProductForm] = useState({
+    name: "",
+    description: "",
+    imageUrl: "",
+    category: "all",
+  });
 
   const [imageFile, setImageFile] = useState(null);
   const [homeProductImageFile, setHomeProductImageFile] = useState(null);
+  const [allProductImageFile, setAllProductImageFile] = useState(null);
 
   const [products, setProducts] = useState([]);
   const [cards, setCards] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
   const [originalProducts, setOriginalProducts] = useState([]);
   const [originalCards, setOriginalCards] = useState([]);
+  const [originalAllProducts, setOriginalAllProducts] = useState([]);
   const [modalCategory, setModalCategory] = useState(null);
   const [editProduct, setEditProduct] = useState(null);
   const [editCard, setEditCard] = useState(null);
+  const [editAllProduct, setEditAllProduct] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -1067,6 +1133,7 @@ const AdminDashboard = () => {
       setIsLoading(true);
       const productsSnap = await getDocs(collection(db, "products"));
       const showcaseSnap = await getDocs(collection(db, "showcaseCards"));
+      const allProductsSnap = await getDocs(collection(db, "allProducts"));
 
       const productItems = productsSnap.docs.map((doc) => ({
         id: doc.id,
@@ -1076,11 +1143,17 @@ const AdminDashboard = () => {
         id: doc.id,
         ...doc.data(),
       }));
+      const allProductItems = allProductsSnap.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
       setProducts(productItems);
       setCards(showcaseItems);
+      setAllProducts(allProductItems);
       setOriginalProducts(productItems);
       setOriginalCards(showcaseItems);
+      setOriginalAllProducts(allProductItems);
     } catch (err) {
       console.error("Fetch error:", err);
       setError("Failed to fetch products");
@@ -1092,37 +1165,6 @@ const AdminDashboard = () => {
   useEffect(() => {
     fetchProducts();
   }, []);
-
-  const handleSearch = (e) => {
-    const term = e.target.value.toLowerCase();
-    setSearchTerm(term);
-
-    if (modalCategory === "showcase") {
-      if (term === "") {
-        setCards(originalCards);
-      } else {
-        const filtered = originalCards.filter(
-          (card) =>
-            card.title?.toLowerCase().includes(term) ||
-            card.shortDescription?.toLowerCase().includes(term) ||
-            card.longDescription?.toLowerCase().includes(term)
-        );
-        setCards(filtered);
-      }
-    } else if (modalCategory) {
-      if (term === "") {
-        setProducts(originalProducts.filter(p => modalCategory ? p.category === modalCategory : true));
-      } else {
-        const filtered = originalProducts.filter(
-          (product) =>
-            (product.name?.toLowerCase().includes(term) ||
-            product.description?.toLowerCase().includes(term)) &&
-            (modalCategory ? product.category === modalCategory : true)
-        );
-        setProducts(filtered);
-      }
-    }
-  };
 
   const openModal = (card) => {
     setSelectedCard(card);
@@ -1148,12 +1190,65 @@ const AdminDashboard = () => {
     }));
   };
 
+  const handleAllProductChange = (e) => {
+    setAllProductForm((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
   const handleFileChange = (e) => {
     setImageFile(e.target.files[0]);
   };
 
   const handleHomeProductFileChange = (e) => {
     setHomeProductImageFile(e.target.files[0]);
+  };
+
+  const handleAllProductFileChange = (e) => {
+    setAllProductImageFile(e.target.files[0]);
+  };
+
+  const handleSearch = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+
+    if (modalCategory === "showcase") {
+      if (term === "") {
+        setCards(originalCards);
+      } else {
+        const filtered = originalCards.filter(
+          (card) =>
+            card.title?.toLowerCase().includes(term) ||
+            card.shortDescription?.toLowerCase().includes(term) ||
+            card.longDescription?.toLowerCase().includes(term)
+        );
+        setCards(filtered);
+      }
+    } else if (modalCategory === "all") {
+      if (term === "") {
+        setAllProducts(originalAllProducts);
+      } else {
+        const filtered = originalAllProducts.filter(
+          (product) =>
+            product.name?.toLowerCase().includes(term) ||
+            product.description?.toLowerCase().includes(term)
+        );
+        setAllProducts(filtered);
+      }
+    } else if (modalCategory) {
+      if (term === "") {
+        setProducts(originalProducts.filter(p => modalCategory ? p.category === modalCategory : true));
+      } else {
+        const filtered = originalProducts.filter(
+          (product) =>
+            (product.name?.toLowerCase().includes(term) ||
+            product.description?.toLowerCase().includes(term)) &&
+            (modalCategory ? product.category === modalCategory : true)
+        );
+        setProducts(filtered);
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -1270,6 +1365,49 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error("❌ Error adding product:", error);
       setError("Failed to add product.");
+      setUploading(false);
+    }
+  };
+
+  const handleAllProductSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setUploading(true);
+      let imageUrl = allProductForm.imageUrl;
+
+      if (allProductImageFile) {
+        const imageRef = ref(storage, `allProducts/${uuidv4()}-${allProductImageFile.name}`);
+        await uploadBytes(imageRef, allProductImageFile);
+        imageUrl = await getDownloadURL(imageRef);
+      } else if (!imageUrl) {
+        alert("Please upload a file or paste a file URL.");
+        setUploading(false);
+        return;
+      }
+
+      const productData = {
+        name: allProductForm.name,
+        description: allProductForm.description,
+        image: imageUrl,
+        category: "all",
+        createdAt: new Date().toISOString(),
+      };
+
+      await addDoc(collection(db, "allProducts"), productData);
+
+      alert("Product added successfully!");
+      setAllProductForm({
+        name: "",
+        description: "",
+        imageUrl: "",
+        category: "all",
+      });
+      setAllProductImageFile(null);
+      fetchProducts();
+    } catch (err) {
+      console.error("Add error:", err);
+      setError("Something went wrong! Check the console.");
+    } finally {
       setUploading(false);
     }
   };
@@ -1411,9 +1549,62 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleEditAllProductChange = (e) => {
+    setEditAllProduct((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleEditAllProductImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setEditAllProduct((prev) => ({
+        ...prev,
+        newImageFile: file,
+      }));
+    }
+  };
+
+  const handleEditAllProductSubmit = async () => {
+    try {
+      setUploading(true);
+      let imageUrl = editAllProduct.image;
+
+      if (editAllProduct.newImageFile) {
+        const imageRef = ref(
+          storage,
+          `allProducts/${uuidv4()}-${editAllProduct.newImageFile.name}`
+        );
+        await uploadBytes(imageRef, editAllProduct.newImageFile);
+        imageUrl = await getDownloadURL(imageRef);
+      }
+
+      const updateData = {
+        name: editAllProduct.name,
+        description: editAllProduct.description,
+        image: imageUrl,
+        updatedAt: new Date().toISOString(),
+      };
+
+      await updateDoc(doc(db, "allProducts", editAllProduct.id), updateData);
+
+      setEditAllProduct(null);
+      fetchProducts();
+      alert("Product updated successfully!");
+    } catch (err) {
+      console.error("Error updating product:", err);
+      setError("Update failed");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const filteredProducts = modalCategory === "showcase" 
     ? cards 
-    : products.filter(p => modalCategory ? p.category === modalCategory : true);
+    : modalCategory === "all" 
+      ? allProducts 
+      : products.filter(p => modalCategory ? p.category === modalCategory : true);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
@@ -1439,7 +1630,7 @@ const AdminDashboard = () => {
           </p>
         </div>
 
-        <div className="flex justify-center mb-8 gap-4">
+        <div className="flex justify-center mb-8 gap-4 flex-wrap">
           <button
             onClick={() => setActiveForm("product")}
             className={`px-6 py-3 rounded-lg shadow transition-colors ${
@@ -1459,6 +1650,16 @@ const AdminDashboard = () => {
             }`}
           >
             Add Home Product
+          </button>
+          <button
+            onClick={() => setActiveForm("allProduct")}
+            className={`px-6 py-3 rounded-lg shadow transition-colors ${
+              activeForm === "allProduct" 
+                ? "bg-blue-600 text-white" 
+                : "bg-gray-200 text-gray-700"
+            }`}
+          >
+            Add All Product
           </button>
         </div>
 
@@ -1719,6 +1920,105 @@ const AdminDashboard = () => {
           </div>
         )}
 
+        {activeForm === "allProduct" && (
+          <div className="bg-white shadow-xl rounded-lg overflow-hidden mb-10">
+            <div className="p-6 sm:p-8">
+              <h3 className="text-lg font-medium text-gray-900 mb-6 border-b pb-2">
+                Add All Product
+              </h3>
+              <form onSubmit={handleAllProductSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Product Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={allProductForm.name}
+                    onChange={handleAllProductChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Description
+                  </label>
+                  <textarea
+                    name="description"
+                    value={allProductForm.description}
+                    onChange={handleAllProductChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    rows={3}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Image URL (optional)
+                  </label>
+                  <input
+                    type="text"
+                    name="imageUrl"
+                    value={allProductForm.imageUrl}
+                    onChange={handleAllProductChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Product Image
+                  </label>
+                  <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                    <div className="space-y-1 text-center">
+                      <div className="flex text-sm text-gray-600">
+                        <label
+                          htmlFor="all-product-file-upload"
+                          className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                        >
+                          <span>Upload a file</span>
+                          <input
+                            id="all-product-file-upload"
+                            type="file"
+                            className="sr-only"
+                            onChange={handleAllProductFileChange}
+                          />
+                        </label>
+                        <p className="pl-1">or drag and drop</p>
+                      </div>
+                      <p className="text-xs text-gray-500">
+                        PNG, JPG, GIF up to 10MB
+                      </p>
+                      {allProductImageFile && (
+                        <p className="text-sm text-green-600">
+                          {allProductImageFile.name} selected
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex justify-end">
+                  <button
+                    type="submit"
+                    disabled={uploading}
+                    className={`inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white ${
+                      uploading
+                        ? "bg-indigo-400"
+                        : "bg-indigo-600 hover:bg-indigo-700"
+                    } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+                  >
+                    {uploading ? "Processing..." : "Add Product"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
         <div className="bg-white shadow-xl rounded-lg overflow-hidden">
           <div className="p-6 sm:p-8">
             <h3 className="text-lg font-medium text-gray-900 mb-6 border-b pb-2">
@@ -1744,6 +2044,12 @@ const AdminDashboard = () => {
               >
                 View Showcase Cards
               </button>
+              <button
+                onClick={() => setModalCategory("all")}
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+              >
+                View All Products
+              </button>
             </div>
 
             {/* Search Bar */}
@@ -1752,7 +2058,10 @@ const AdminDashboard = () => {
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder={`Search ${modalCategory === 'showcase' ? 'showcase cards' : 'products'}...`}
+                    placeholder={`Search ${
+                      modalCategory === 'showcase' ? 'showcase cards' : 
+                      modalCategory === 'all' ? 'all products' : 'products'
+                    }...`}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     value={searchTerm}
                     onChange={handleSearch}
@@ -1792,7 +2101,10 @@ const AdminDashboard = () => {
                     </h3>
                     <p className="mt-1 text-sm text-gray-500">
                       {searchTerm ? "No matching items found" : 
-                        `Add some ${modalCategory === "showcase" ? "showcase cards" : "products"} to get started.`}
+                        `Add some ${
+                          modalCategory === "showcase" ? "showcase cards" : 
+                          modalCategory === "all" ? "all products" : "products"
+                        } to get started.`}
                     </p>
                   </div>
                 ) : (
@@ -1839,7 +2151,8 @@ const AdminDashboard = () => {
                           <button
                             onClick={() => handleDelete(
                               item.id, 
-                              modalCategory === "showcase" ? "showcaseCards" : "products"
+                              modalCategory === "showcase" ? "showcaseCards" : 
+                              modalCategory === "all" ? "allProducts" : "products"
                             )}
                             className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                           >
@@ -1859,6 +2172,13 @@ const AdminDashboard = () => {
                                   length: lengthMatch ? lengthMatch[1] : '',
                                   image: item.image,
                                   position: item.position,
+                                });
+                              } else if (modalCategory === "all") {
+                                setEditAllProduct({
+                                  id: item.id,
+                                  name: item.name,
+                                  description: item.description,
+                                  image: item.image,
                                 });
                               } else {
                                 setEditProduct({
@@ -2031,6 +2351,62 @@ const AdminDashboard = () => {
                 </button>
                 <button
                   onClick={handleEditCardSubmit}
+                  disabled={uploading}
+                  className={`bg-blue-600 text-white px-4 py-2 rounded ${
+                    uploading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                >
+                  {uploading ? "Saving..." : "Save Changes"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {editAllProduct && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">Edit Product</h2>
+            <div className="space-y-4">
+              <input
+                type="text"
+                name="name"
+                placeholder="Name"
+                value={editAllProduct.name}
+                onChange={handleEditAllProductChange}
+                className="w-full border p-2 rounded"
+              />
+              <textarea
+                name="description"
+                placeholder="Description"
+                value={editAllProduct.description}
+                onChange={handleEditAllProductChange}
+                className="w-full border p-2 rounded"
+                rows={3}
+              />
+              <div className="flex items-center gap-4">
+                <img 
+                  src={editAllProduct.image} 
+                  alt="Current product" 
+                  className="w-20 h-20 object-cover rounded border"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleEditAllProductImageChange}
+                  className="w-full border p-2 rounded"
+                />
+              </div>
+              <div className="flex justify-between">
+                <button
+                  onClick={() => setEditAllProduct(null)}
+                  className="bg-gray-500 text-white px-4 py-2 rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleEditAllProductSubmit}
                   disabled={uploading}
                   className={`bg-blue-600 text-white px-4 py-2 rounded ${
                     uploading ? "opacity-50 cursor-not-allowed" : ""

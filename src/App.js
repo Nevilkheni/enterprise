@@ -18,6 +18,7 @@ import Category from "./pages/category";
 import Shop from "./pages/shop";
 import Home from "./pages/home";
 import WhatsAppButton from "./components/WhatsAppButton";
+import AllProducts from "./pages/allproduct";
 
 function AppContent() {
   const { user, cart, updateCart } = useAuth();
@@ -59,11 +60,17 @@ function AppContent() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
-      {!shouldHideFooter &&<Header />}
+      {!shouldHideFooter && <Header />}
       <Routes>
-        <Route path="/" element={<Home cart={cart} onAddToCart={handleAddToCart} />} />
+        <Route
+          path="/"
+          element={<Home cart={cart} onAddToCart={handleAddToCart} />}
+        />
         <Route path="/shop" element={<Shop onAddToCart={handleAddToCart} />} />
-        <Route path="/products" element={<Products onAddToCart={handleAddToCart} />} />
+        <Route
+          path="/products"
+          element={<Products onAddToCart={handleAddToCart} />}
+        />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/category" element={<Category />} />
@@ -82,6 +89,9 @@ function AppContent() {
         <Route path="/invoice" element={<Invoice />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        <Route path="/allproducts" element={<AllProducts />} />
+
         <Route
           path="/admin"
           element={

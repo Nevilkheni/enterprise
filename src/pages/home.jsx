@@ -2,29 +2,14 @@ import React, { useEffect, useState } from "react";
 import image1 from "../assets/image/img3.png";
 import image2 from "../assets/image/img2.png";
 import image3 from "../assets/image/img3.jpg";
-
 import middleSectionBg2 from "../assets/image/midelimage2.png";
-import middleSectionBg from "../assets/image/midellimge1.png";
 import submiddleSectionBg from "../assets/image/logo2.png";
-
 import CardShowcase from "../components/CardShowcase";
 import OurStory from "../components/ourstory";
 import Certificate from "../components/certificate";
+import Feature from "../components/feature";
 
 const images = [image1, image2, image3];
-
-const products = [
-  { name: "img", img: "/products/imali-ball.png" },
-  { name: "img", img: "/products/tomato-ketchup.png" },
-  { name: "img", img: "/products/jelly-pop.png" },
-  { name: "img", img: "/products/fruit-gummies.png" },
-  { name: "img", img: "/products/mum-mum.png" },
-  { name: "img", img: "/products/amla-candy.png" },
-  { name: "img", img: "/products/imali-pop.png" },
-  { name: "img", img: "/products/fruit-roll-pop.png" },
-  { name: "img", img: "/products/mix-fruit-bar.png" },
-  { name: "img", img: "/products/fruit-crush.png" },
-];
 
 function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -117,34 +102,8 @@ function Home() {
       </div>
 
       <CardShowcase />
-
-      <div
-        className="w-full pb-2 bg-cover bg-center bg-no-repeat bg-fixed text-center"
-        style={{ backgroundImage: `url(${middleSectionBg})` }}
-      >
-        <h2 className="text-3xl font-bold text-white backdrop-blur-3xl p-4">
-          Feature Products
-        </h2>
-        <div className="m-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-          {products.map((product, idx) => (
-            <div
-              key={idx}
-              className="border rounded-lg p-4 hover:shadow-lg transition-shadow bg-white"
-            >
-              <img
-                src={product.img}
-                alt={product.name}
-                className="mx-auto h-40 object-contain mb-3"
-              />
-              <h3 className="text-sm font-semibold text-black">
-                {product.name}
-              </h3>
-            </div>
-          ))}
-        </div>
-      </div>
-
-     <Certificate />
+      <Feature />
+      <Certificate />
     </div>
   );
 }

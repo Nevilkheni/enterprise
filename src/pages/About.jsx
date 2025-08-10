@@ -2,19 +2,23 @@ import React from "react";
 import { motion } from "framer-motion";
 import silver from "../assets/image/silver.jpg";
 
+import machine from "../assets/image/Sequin-Punching-Machine.avif";
+import machine1 from "../assets/image/machine.jpg";
+
+
 const companyHistory = [
   {
     year: "2008",
     title: "Milestone 2008",
     description: "Description for the year 2008 milestone.",
-    image: silver,
+    image: machine,
     imagePosition: "left",
   },
   {
     year: "2009",
     title: "Milestone 2009",
     description: "Description for the year 2009 milestone.",
-    image: silver,
+    image: machine1,
     imagePosition: "right",
   },
   {

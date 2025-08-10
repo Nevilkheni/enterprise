@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import midelImg from "../assets/image/logo.png";
-
+import "../pages/allproduct"
 
 const CardShowcase = () => {
+  const navigate = useNavigate();
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -85,13 +87,12 @@ const CardShowcase = () => {
           </ul>
           <button
             className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 w-max"
-            onClick={() => openModal(cards[0])}
+            onClick={() => navigate('/AllProducts')}
           >
             More Details
           </button>
         </div>
-                    <img src={midelImg} alt="img" className="w-60 h-60 mx-auto" />
-        
+        <img src={midelImg} alt="img" className="w-60 h-60 mx-auto" />
       </div>
 
       {modalOpen && selectedCard && (
@@ -154,7 +155,6 @@ const CardShowcase = () => {
           </div>
         </div>
       )}
-      
     </div>
   );
 };
