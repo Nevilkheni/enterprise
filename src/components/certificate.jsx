@@ -1,4 +1,6 @@
 import React from "react";
+import { useState } from "react";
+
 import midelImg from "../assets/image/logo.png";
 import NatureofBusiness from "../assets/image/bussnes.png";
 import iso from "../assets/image/leagal.png";
@@ -6,6 +8,14 @@ import QualityAssurance from "../assets/image/hand.png";
 import ExpertTeam from "../assets/image/staff.png";
 
 function Certificate() {
+  const [isRotating, setIsRotating] = useState(false);
+  const handleClick = () => {
+    setIsRotating(true);
+
+    setTimeout(() => {
+      setIsRotating(false);
+    }, 2000);
+  };
   return (
     <div className="bg-transparent m-auto py-12 px-6 text-center">
       <h2 className="text-3xl font-bold text-black mb-2">Why Choose Us</h2>
@@ -29,7 +39,14 @@ function Certificate() {
         </div>
 
         <div className="flex justify-center">
-          <img src={midelImg} alt="img" className="w-60 h-auto mx-auto" />
+          <img
+            src={midelImg}
+            alt="img"
+            className={`w-60 h-auto mx-auto ${
+              isRotating ? "animate-spin-slow" : ""
+            }`}
+            onClick={handleClick}
+          />
         </div>
 
         <div className="space-y-8">
