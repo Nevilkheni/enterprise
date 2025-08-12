@@ -189,7 +189,7 @@ const About = () => {
         className="text-center mb-16"
       >
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-          About TechStore
+          About Jyot Sequence
         </h1>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
           From humble beginnings to global technology leader - our journey of
@@ -213,7 +213,7 @@ const About = () => {
       >
         <div className="bg-gray-50 rounded-xl p-8 md:p-10 shadow-sm">
           <p className="text-gray-700 text-lg leading-relaxed mb-4">
-            Welcome to <strong className="text-blue-600">TechStore</strong>,
+            Welcome to <strong className="text-blue-600">Jyot Sequence</strong>,
             your premier destination for cutting-edge technology. Founded in
             2008, we've grown from a small startup to a global leader in tech
             retail, serving millions of customers worldwide.

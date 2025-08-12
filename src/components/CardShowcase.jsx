@@ -78,15 +78,15 @@ const CardShowcase = () => {
           ))}
         </div>
 
-        <div className="w-full lg:w-auto flex flex-col justify-center">
+        <div className="w-full lg:w-auto flex flex-col text-center md:text-left justify-center">
           <h2 className="text-2xl font-bold mb-4">New Product</h2>
-          <ul className="list-disc list-inside text-gray-700 space-y-2 mb-6">
+          <ul className="list-disc list-inside text-left text-gray-700 space-y-2 mb-6">
             <li>Trending item in market</li>
             <li>Available in all regions</li>
             <li>Click card for full details</li>
           </ul>
           <button
-            className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 w-max"
+            className="px-6 py-2 bg-blue-600 text-center text-white rounded hover:bg-blue-700 w-max mx-auto"
             onClick={() => navigate('/AllProducts')}
           >
             More Details

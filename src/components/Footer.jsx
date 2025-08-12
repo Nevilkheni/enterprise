@@ -67,7 +67,7 @@ const Footer = () => {
             <h3 className="text-xl font-bold text-blue-400 mb-4">Follow Us</h3>
             <div className="flex space-x-4">
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/jyotenterprice?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-gray-700 hover:bg-pink-600 text-white p-3 rounded-full transition-all duration-300"

@@ -72,10 +72,10 @@ function Home() {
       <OurStory />
 
       <section
-        className="w-full bg-cover bg-center bg-no-repeat bg-fixed"
+        className="w-full  bg-cover bg-center bg-no-repeat bg-fixed"
         style={{ backgroundImage: `url(${middleSectionBg2})` }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="max-w-7xl mx-auto px-4 backdrop-blur-[3px] sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col lg:flex-row items-center gap-8 md:gap-12">
             <div className="w-full lg:w-2/3 bg-black/70 backdrop-blur-lg rounded-xl p-8 shadow-lg">
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
