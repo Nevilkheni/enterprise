@@ -9,60 +9,70 @@ const products = [
     img: glitter,
     type: "Chewy Candy",
     size: "100g pack",
+    length: "500m",
   },
   {
     name: "item 2",
     img: silver,
     type: "Sauce",
     size: "250g bottle",
+    length: "500m",
   },
   {
     name: "item 3",
     img: glitter,
     type: "Jelly Candy",
     size: "50g pack",
+    length: "500m",
   },
   {
     name: "item 4",
     img: silver,
     type: "Gummy Candy",
     size: "150g pack",
+    length: "500m",
   },
   {
     name: "item 5",
     img: glitter,
     type: "Biscuit",
     size: "200g pack",
+    length: "500m",
   },
   {
     name: "item 6",
     img: silver,
     type: "Herbal Candy",
     size: "100g pack",
+    length: "500m",
   },
   {
     name: "item 7",
     img: glitter,
     type: "Lollipop",
     size: "Single piece",
+    length: "500m",
   },
   {
     name: "item 8",
     img: silver,
     type: "Roll Candy",
     size: "30g roll",
+    length: "500m",
   },
   {
     name: "item 9",
     img: glitter,
     type: "Fruit Bar",
     size: "40g bar",
+    length: "500m",
   },
   {
     name: "item 10",
     img: silver,
     type: "Drink",
     size: "200ml bottle",
+    length: "500m",
   },
 ];
 
@@ -85,12 +95,13 @@ function Feature() {
     (product) =>
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.size.toLowerCase().includes(searchTerm.toLowerCase())
+      product.size.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.length.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div
-      className="w-full pb-2 bg-cover bg-center  bg-no-repeat bg-fixed  text-center"
+      className="w-full pb-2 bg-cover bg-center bg-no-repeat bg-fixed text-center"
       style={{ backgroundImage: `url(${middleSectionBg})` }}
     >
       <h2 className="text-3xl font-bold text-white backdrop-blur-3xl p-4">
@@ -100,7 +111,7 @@ function Feature() {
       <div className="mx-auto max-w-md px-4 mb-6">
         <input
           type="text"
-          placeholder="Search products by name, type, or size..."
+          placeholder="Search products by name, type, size, or length..."
           className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -135,7 +146,7 @@ function Feature() {
       </div>
 
       {isModalOpen && selectedProduct && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg max-w-md w-full p-6">
             <div className="flex justify-between items-start mb-4">
               <h3 className="text-xl font-bold">{selectedProduct.name}</h3>
@@ -155,12 +166,20 @@ function Feature() {
 
             <div className="text-left space-y-2">
               <p>
+                <span className="font-semibold">Name:</span>{" "}
+                {selectedProduct.name}
+              </p>
+              <p>
                 <span className="font-semibold">Type:</span>{" "}
                 {selectedProduct.type}
               </p>
               <p>
                 <span className="font-semibold">Size:</span>{" "}
                 {selectedProduct.size}
+              </p>
+              <p>
+                <span className="font-semibold">Length:</span>{" "}
+                {selectedProduct.length}
               </p>
             </div>
 

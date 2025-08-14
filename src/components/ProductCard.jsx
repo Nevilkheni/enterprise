@@ -4,7 +4,10 @@ import {
   ShoppingBagIcon,
   StarIcon,
 } from "@heroicons/react/24/outline";
-import { HeartIcon as HeartIconSolid, XMarkIcon } from "@heroicons/react/24/solid";
+import {
+  HeartIcon as HeartIconSolid,
+  XMarkIcon,
+} from "@heroicons/react/24/solid";
 
 const ProductCard = ({
   product,
@@ -58,7 +61,7 @@ const ProductCard = ({
     <>
       <div
         ref={cardRef}
-        className={`bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 transform ${
+        className={` rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 transform ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
         }`}
         style={{ transitionDelay: `${index * 50}ms` }}
@@ -168,7 +171,7 @@ const ProductCard = ({
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2">
+        <div className="fixed inset-0 bg-black backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-2">
           <div className="bg-white rounded-lg shadow-lg max-w-lg w-full relative flex flex-col">
             <img
               src={product.image}

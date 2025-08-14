@@ -299,7 +299,7 @@ const About = () => {
             transition: { duration: 0.6 },
           },
         }}
-        className="mt-20 bg-red-600 rounded-xl p-8 md:p-10 text-white"
+        className="mt-20 bg-red-400  rounded-xl p-8 md:p-10 text-white"
       >
         <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
         <p className="text-lg leading-relaxed mb-4">

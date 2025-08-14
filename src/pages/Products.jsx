@@ -232,7 +232,7 @@ const Products = ({ onAddToCart }) => {
 
       {!loading && filteredProducts.length > 0 && (
         <>
-          <div className="mb-4 flex justify-between items-center">
+          <div className="mb-4  flex justify-between items-center">
             <p className="text-sm text-gray-500">
               Showing {filteredProducts.length} of {products.length} products
             </p>

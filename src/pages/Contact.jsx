@@ -276,7 +276,7 @@ const Contact = () => {
                       </h3>
                       <p className="mt-1 text-gray-600">
                         59-60 Vibhag-2,Ghanshyamnagar,Chopati Corner
-                        Opp,Varachham,Surat{" "}
+                        Opp,Varachha,Surat{" "}
                       </p>
                     </div>
                   </div>

@@ -96,7 +96,7 @@ const CardShowcase = () => {
       </div>
 
       {modalOpen && selectedCard && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center p-4">
+        <div className="fixed inset-0 z-50  backdrop-blur-sm bg-opacity-50 flex justify-center items-center p-4">
           <div className="bg-white p-6 rounded-lg max-w-2xl w-full relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={closeModal}
