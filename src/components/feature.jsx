@@ -101,7 +101,7 @@ function Feature() {
         <input
           type="text"
           placeholder="Search products by name, type, or size..."
-          className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -166,7 +166,7 @@ function Feature() {
 
             <button
               onClick={closeModal}
-              className="mt-6 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors"
+              className="mt-6 w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition-colors"
             >
               Close
             </button>

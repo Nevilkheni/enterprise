@@ -7,16 +7,16 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-blue-400 mb-4">Contact Us</h3>
+            <h3 className="text-xl font-bold text-red-400 mb-4">Contact Us</h3>
             <div className="flex items-start space-x-3">
-              <Mail className="h-5 w-5 text-blue-400 mt-1 flex-shrink-0" />
+              <Mail className="h-5 w-5 text-red-400 mt-1 flex-shrink-0" />
               <div>
                 <p className="font-medium">Email</p>
                 <p className="text-gray-300">jyotenterprise135@gmail.com</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">
-              <Phone className="h-5 w-5 text-blue-400 mt-1 flex-shrink-0" />
+              <Phone className="h-5 w-5 text-red-400 mt-1 flex-shrink-0" />
               <div>
                 <p className="font-medium">Phone</p>
                 <p className="text-gray-300">+91 9426154135</p>
@@ -26,7 +26,7 @@ const Footer = () => {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-blue-400 mb-4">
+            <h3 className="text-xl font-bold text-red-400 mb-4">
               Quick Links
             </h3>
             <div className="grid grid-cols-2 gap-4">
@@ -64,7 +64,7 @@ const Footer = () => {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-blue-400 mb-4">Follow Us</h3>
+            <h3 className="text-xl font-bold text-red-400 mb-4">Follow Us</h3>
             <div className="flex space-x-4">
               <a
                 href="https://www.instagram.com/jyotenterprice?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
@@ -79,7 +79,7 @@ const Footer = () => {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-gray-700 hover:bg-blue-700 text-white p-3 rounded-full transition-all duration-300"
+                className="bg-gray-700 hover:bg-red-700 text-white p-3 rounded-full transition-all duration-300"
                 aria-label="LinkedIn"
               >
                 <Youtube className="h-5 w-5" />
@@ -88,7 +88,7 @@ const Footer = () => {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-gray-700 hover:bg-blue-600 text-white p-3 rounded-full transition-all duration-300"
+                className="bg-gray-700 hover:bg-red-600 text-white p-3 rounded-full transition-all duration-300"
                 aria-label="Facebook"
               >
                 <Facebook className="h-5 w-5" />
@@ -101,9 +101,9 @@ const Footer = () => {
               <input 
                 type="email" 
                 placeholder="Your email" 
-                className="px-4 py-2 w-full rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                className="px-4 py-2 w-full rounded-l-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
               />
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg transition">
+              <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-r-lg transition">
                 Subscribe
               </button>
             </div> */}

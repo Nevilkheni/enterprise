@@ -66,7 +66,7 @@ const Contact = () => {
   const isFormValid = form.name && form.email && form.phone && form.message;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
@@ -76,7 +76,7 @@ const Contact = () => {
             Have questions or want to get in touch? We'd love to hear from you!
           </p>
           <div className="mt-6 flex justify-center">
-            <div className="w-16 h-1 bg-blue-600 rounded-full"></div>
+            <div className="w-16 h-1 bg-red-600 rounded-full"></div>
           </div>
         </div>
 
@@ -103,7 +103,7 @@ const Contact = () => {
                       value={form.name}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
                       placeholder="Name"
                     />
                   </div>
@@ -124,7 +124,7 @@ const Contact = () => {
                       value={form.email}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
                       placeholder="your@email.com"
                     />
                   </div>
@@ -145,7 +145,7 @@ const Contact = () => {
                       value={form.phone}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
                       placeholder="+91 1234567890"
                       pattern="[0-9]{10}"
                       title="Please enter a 10-digit phone number"
@@ -167,7 +167,7 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     rows="5"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
                     placeholder="How can we help you?"
                   ></textarea>
                 </div>
@@ -178,7 +178,7 @@ const Contact = () => {
                     disabled={!isFormValid || isLoading}
                     className={`w-full flex justify-center items-center py-4 px-6 rounded-lg font-medium text-white transition-all ${
                       isFormValid
-                        ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-md hover:shadow-lg"
+                        ? "bg-gradient-to-r from-red-600 to-indigo-600 hover:from-red-700 hover:to-indigo-700 shadow-md hover:shadow-lg"
                         : "bg-gray-400 cursor-not-allowed"
                     } ${isLoading ? "opacity-80" : ""}`}
                   >
@@ -267,8 +267,8 @@ const Contact = () => {
 
                 <div className="space-y-6">
                   <div className="flex items-start">
-                    <div className="flex-shrink-0 bg-blue-100 p-3 rounded-lg">
-                      <MapPin className="w-6 h-6 text-blue-600" />
+                    <div className="flex-shrink-0 bg-red-100 p-3 rounded-lg">
+                      <MapPin className="w-6 h-6 text-red-600" />
                     </div>
                     <div className="ml-4">
                       <h3 className="text-lg font-medium text-gray-900">
@@ -282,8 +282,8 @@ const Contact = () => {
                   </div>
 
                   <div className="flex items-start">
-                    <div className="flex-shrink-0 bg-blue-100 p-3 rounded-lg">
-                      <Phone className="w-6 h-6 text-blue-600" />
+                    <div className="flex-shrink-0 bg-red-100 p-3 rounded-lg">
+                      <Phone className="w-6 h-6 text-red-600" />
                     </div>
                     <div className="ml-4">
                       <h3 className="text-lg font-medium text-gray-900">
@@ -297,8 +297,8 @@ const Contact = () => {
                   </div>
 
                   <div className="flex items-start">
-                    <div className="flex-shrink-0 bg-blue-100 p-3 rounded-lg">
-                      <Mail className="w-6 h-6 text-blue-600" />
+                    <div className="flex-shrink-0 bg-red-100 p-3 rounded-lg">
+                      <Mail className="w-6 h-6 text-red-600" />
                     </div>
                     <div className="ml-4">
                       <h3 className="text-lg font-medium text-gray-900">
@@ -314,7 +314,7 @@ const Contact = () => {
                 <div className="mt-8 space-y-4">
                   <button
                     onClick={handleEmailClick}
-                    className="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                    className="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-gradient-to-r from-red-600 to-indigo-600 hover:from-red-700 hover:to-indigo-700"
                   >
                     Email Us Directly
                     <ArrowRight className="ml-2 -mr-1 w-5 h-5" />

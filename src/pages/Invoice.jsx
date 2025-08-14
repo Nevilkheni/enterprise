@@ -32,17 +32,17 @@ const Invoice = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-red-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <div ref={invoiceRef} className="bg-white rounded-xl shadow-2xl overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 sm:p-8 text-white">
+          <div className="bg-gradient-to-r from-red-600 to-indigo-700 p-6 sm:p-8 text-white">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
               <div>
                 <h1 className="text-2xl sm:text-3xl font-bold mb-2">INVOICE</h1>
-                <p className="text-blue-100">Tech Enterprise Solutions</p>
+                <p className="text-red-100">Tech Enterprise Solutions</p>
               </div>
               <div className="mt-4 sm:mt-0 text-right">
-                <p className="text-sm text-blue-100">Invoice #: {Math.floor(Math.random() * 90000) + 10000}</p>
+                <p className="text-sm text-red-100">Invoice #: {Math.floor(Math.random() * 90000) + 10000}</p>
                 <p className="text-lg font-semibold">{formatDate()}</p>
               </div>
             </div>
@@ -115,7 +115,7 @@ const Invoice = () => {
                   </div>
                   
                   <div className="text-right text-lg font-bold text-gray-900 pt-2">Total:</div>
-                  <div className="text-right text-lg font-bold text-blue-700 pt-2">
+                  <div className="text-right text-lg font-bold text-red-700 pt-2">
                     <IndianRupee className="inline h-5 w-5" />
                     {grandTotal.toFixed(2)}
                   </div>
@@ -138,7 +138,7 @@ const Invoice = () => {
         <div className="mt-8 flex flex-col sm:flex-row gap-4">
           <button
             onClick={handleDownload}
-            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 shadow-md hover:shadow-lg transition-all"
+            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-red-600 to-indigo-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-red-700 hover:to-indigo-700 shadow-md hover:shadow-lg transition-all"
           >
             <Download className="w-5 h-5" />
             Download Invoice

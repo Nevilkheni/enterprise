@@ -9,8 +9,8 @@ const categories = [
     description: "Cutting-edge gadgets and devices",
     image: "https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
     count: 42,
-    color: "bg-blue-100",
-    textColor: "text-blue-800"
+    color: "bg-red-100",
+    textColor: "text-red-800"
   },
   {
     id: 2,

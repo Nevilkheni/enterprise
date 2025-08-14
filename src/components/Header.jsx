@@ -61,7 +61,7 @@ const Header = () => {
                   aria-haspopup="true"
                   aria-expanded={userMenuOpen}
                 >
-                  <div className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center text-white font-medium">
+                  <div className="h-8 w-8 rounded-full bg-gradient-to-r from-red-600 to-red-400 flex items-center justify-center text-white font-medium">
                     {user.email.charAt(0).toUpperCase()}
                   </div>
                 </button>
@@ -84,7 +84,7 @@ const Header = () => {
             ) : (
               <button
                 onClick={() => navigate("/login")}
-                className="flex items-center space-x-1 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-sm"
+                className="flex items-center space-x-1 px-4 py-2 bg-gradient-to-r from-red-600 to-indigo-600 text-white rounded-lg hover:from-red-700 hover:to-indigo-700 transition-all shadow-sm"
               >
                 <User className="h-4 w-4" />
                 <span>Login</span>
@@ -97,10 +97,10 @@ const Header = () => {
               <button
                 key={item.name}
                 onClick={() => navigate(item.path)}
-                className="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 relative group"
+                className="text-gray-600 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 relative group"
               >
                 {item.name}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
               </button>
             ))}
           </nav>
@@ -114,7 +114,7 @@ const Header = () => {
               alt="Your Company"
               className="h-8 w-auto"
             />
-            <span className="text-xl font-bold text-blue-600">Jyot
+            <span className="text-xl font-bold text-red-600">Jyot
               <span className="text-gray-900">Enterprise</span>
             </span>
           </div>
@@ -124,10 +124,10 @@ const Header = () => {
               <button
                 key={item.name}
                 onClick={() => navigate(item.path)}
-                className="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 relative group"
+                className="text-gray-600 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 relative group"
               >
                 {item.name}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
               </button>
             ))}
           </nav>
@@ -135,7 +135,7 @@ const Header = () => {
           <div className="flex items-center space-x-4">
             <button
               onClick={() => navigate("/cart")}
-              className="p-2 rounded-full text-gray-600 hover:text-blue-600 hover:bg-blue-50 relative"
+              className="p-2 rounded-full text-gray-600 hover:text-red-600 hover:bg-red-50 relative"
               aria-label="Cart"
             >
               <ShoppingCart className="h-5 w-5" />
@@ -169,7 +169,7 @@ const Header = () => {
                   navigate(item.path);
                   setMenuOpen(false);
                 }}
-                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50"
+                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-red-600 hover:bg-red-50"
               >
                 {item.name}
               </button>
@@ -180,7 +180,7 @@ const Header = () => {
               {user ? (
                 <>
                   <div className="flex-shrink-0">
-                    <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center text-white font-medium">
+                    <div className="h-10 w-10 rounded-full bg-gradient-to-r from-red-500 to-indigo-500 flex items-center justify-center text-white font-medium">
                       {user.email.charAt(0).toUpperCase()}
                     </div>
                   </div>
@@ -202,7 +202,7 @@ const Header = () => {
                     navigate("/login");
                     setMenuOpen(false);
                   }}
-                  className="w-full flex items-center justify-center px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all"
+                  className="w-full flex items-center justify-center px-4 py-2 bg-gradient-to-r from-red-600 to-indigo-600 text-white rounded-lg hover:from-red-700 hover:to-indigo-700 transition-all"
                 >
                   <User className="h-5 w-5 mr-2" />
                   Sign in

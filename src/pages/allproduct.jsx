@@ -44,7 +44,7 @@
 //   if (loading) {
 //     return (
 //       <div className="container mx-auto px-4 py-8 text-center">
-//         <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+//         <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-red-500"></div>
 //         <p className="mt-2">Loading products...</p>
 //       </div>
 //     );
@@ -203,7 +203,7 @@ function AllProducts() {
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
-        <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-red-500"></div>
         <p className="mt-2">Loading products...</p>
       </div>
     );
@@ -226,12 +226,12 @@ function AllProducts() {
         <input
           type="text"
           placeholder="Search products by name..."
-          className="flex-grow px-4 py-2 border border-gray-300 rounded-l focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-grow px-4 py-2 border border-gray-300 rounded-l focus:outline-none focus:ring-2 focus:ring-red-500"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <button
-          className="px-4 py-2 bg-blue-500 text-white rounded-r hover:bg-blue-600 transition-colors"
+          className="px-4 py-2 bg-red-500 text-white rounded-r hover:bg-red-600 transition-colors"
           onClick={() => setSearchTerm('')} 
         >
           Clear

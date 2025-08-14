@@ -82,7 +82,7 @@ const ProductCard = ({ product, onAddToCart, index, showPrice = true }) => {
               e.stopPropagation();
               onAddToCart(product);
             }}
-            className="hidden sm:flex absolute bottom-3 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition items-center whitespace-nowrap"
+            className="hidden sm:flex absolute bottom-3 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-red-700 transition items-center whitespace-nowrap"
           >
             <ShoppingBagIcon className="h-5 w-5 mr-2" />
             Add to Cart
@@ -142,7 +142,7 @@ const ProductCard = ({ product, onAddToCart, index, showPrice = true }) => {
         {shouldShowAddToCart && (
           <button
             onClick={() => onAddToCart(product)}
-            className="mt-4 w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center justify-center sm:hidden"
+            className="mt-4 w-full bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition flex items-center justify-center sm:hidden"
           >
             <ShoppingBagIcon className="h-5 w-5 mr-2" />
             Add to Cart

@@ -213,7 +213,7 @@ const About = () => {
       >
         <div className="bg-gray-50 rounded-xl p-8 md:p-10 shadow-sm">
           <p className="text-gray-700 text-lg leading-relaxed mb-4">
-            Welcome to <strong className="text-blue-600">Jyot Sequence</strong>,
+            Welcome to <strong className="text-red-600">Jyot Sequence</strong>,
             your premier destination for cutting-edge technology. Founded in
             2008, we've grown from a small startup to a global leader in tech
             retail, serving millions of customers worldwide.
@@ -241,12 +241,12 @@ const About = () => {
               index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
             } items-center justify-between`}
           >
-            <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 top-1/2 w-16 h-16 bg-blue-600 rounded-full items-center justify-center z-10 shadow-lg">
+            <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 top-1/2 w-16 h-16 bg-red-600 rounded-full items-center justify-center z-10 shadow-lg">
               <span className="text-white font-bold text-lg">{item.year}</span>
             </div>
 
             <div className="md:hidden mb-4">
-              <span className="inline-block px-4 py-2 bg-blue-600 text-white font-bold rounded-full">
+              <span className="inline-block px-4 py-2 bg-red-600 text-white font-bold rounded-full">
                 {item.year}
               </span>
             </div>
@@ -299,14 +299,14 @@ const About = () => {
             transition: { duration: 0.6 },
           },
         }}
-        className="mt-20 bg-blue-600 rounded-xl p-8 md:p-10 text-white"
+        className="mt-20 bg-red-600 rounded-xl p-8 md:p-10 text-white"
       >
         <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
         <p className="text-lg leading-relaxed mb-4">
           To empower individuals and businesses through innovative technology
           solutions that simplify lives and drive progress.
         </p>
-        <p className="text-blue-100 leading-relaxed">
+        <p className="text-red-100 leading-relaxed">
           We believe technology should be accessible, intuitive, and
           transformative. Every product we offer is carefully selected to meet
           our high standards of quality, performance, and value.

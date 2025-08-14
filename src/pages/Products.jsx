@@ -94,7 +94,7 @@ const Products = ({ onAddToCart }) => {
             placeholder="Search products..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-red-500 focus:border-red-500"
           />
         </div>
 
@@ -110,7 +110,7 @@ const Products = ({ onAddToCart }) => {
             )}
             <span>Filters</span>
             {activeFilters > 0 && (
-              <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                 {activeFilters}
               </span>
             )}
@@ -122,11 +122,11 @@ const Products = ({ onAddToCart }) => {
         <div className="mb-4 flex flex-wrap gap-2 items-center">
           <span className="text-sm text-gray-500">Active filters:</span>
           {searchTerm && (
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
               Search: "{searchTerm}"
               <button
                 onClick={() => setSearchTerm("")}
-                className="ml-1.5 inline-flex text-blue-400 hover:text-blue-600"
+                className="ml-1.5 inline-flex text-red-400 hover:text-red-600"
               >
                 <XMarkIcon className="h-4 w-4" />
               </button>
@@ -156,7 +156,7 @@ const Products = ({ onAddToCart }) => {
           )}
           <button
             onClick={clearFilters}
-            className="ml-2 text-sm text-blue-600 hover:text-blue-800 hover:underline"
+            className="ml-2 text-sm text-red-600 hover:text-red-800 hover:underline"
           >
             Clear all
           </button>
@@ -173,7 +173,7 @@ const Products = ({ onAddToCart }) => {
               <select
                 value={sortOption}
                 onChange={(e) => setSortOption(e.target.value)}
-                className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
               >
                 <option value="featured">Featured</option>
                 <option value="price-low">Price: Low to High</option>
@@ -192,7 +192,7 @@ const Products = ({ onAddToCart }) => {
                   type="number"
                   value={priceRange[0]}
                   onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
                   min="0"
                 />
                 <span className="text-gray-500">to</span>
@@ -200,7 +200,7 @@ const Products = ({ onAddToCart }) => {
                   type="number"
                   value={priceRange[1]}
                   onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
                   min={priceRange[0]}
                 />
               </div>
@@ -211,7 +211,7 @@ const Products = ({ onAddToCart }) => {
 
       {loading && (
         <div className="flex justify-center items-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
         </div>
       )}
 
@@ -239,7 +239,7 @@ const Products = ({ onAddToCart }) => {
           {activeFilters > 0 && (
             <button
               onClick={clearFilters}
-              className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
               Clear all filters
             </button>

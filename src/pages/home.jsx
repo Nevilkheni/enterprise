@@ -1,5 +1,5 @@
 import middleSectionBg2 from "../assets/image/midelimage2.png";
-import submiddleSectionBg from "../assets/image/logo2.png";
+import submiddleSectionBg from "../assets/image/roll2.png";
 import CardShowcase from "../components/CardShowcase";
 import OurStory from "../components/ourstory";
 import Certificate from "../components/certificate";

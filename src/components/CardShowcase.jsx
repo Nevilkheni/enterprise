@@ -5,9 +5,9 @@ import { db } from "../firebase";
 import midelImg from "../assets/image/logo.png";
 import "../pages/allproduct"
 
-const CardShowcase = () => {
+const CardShowcase = () => {    
   const navigate = useNavigate();
-  const [cards, setCards] = useState([]);
+  const [setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [positions, setPositions] = useState({
@@ -54,7 +54,7 @@ const CardShowcase = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto  py-8">
       <h1 className="text-3xl font-bold text-center mb-8">Our Products</h1>
 
       <div className="flex flex-col lg:flex-row gap-8">
@@ -62,7 +62,7 @@ const CardShowcase = () => {
           {[1, 2, 3, 4].map((pos) => (
             <div
               key={pos}
-              className="w-60 h-40 bg-gray-100 rounded-lg overflow-hidden shadow-md cursor-pointer flex items-center justify-center"
+              className="w-[300px] h-40 bg-gray-100 rounded-lg overflow-hidden shadow-md cursor-pointer flex items-center justify-center"
               onClick={() => positions[pos] && openModal(positions[pos])}
             >
               {positions[pos] ? (
@@ -86,7 +86,7 @@ const CardShowcase = () => {
             <li>Click card for full details</li>
           </ul>
           <button
-            className="px-6 py-2 bg-blue-600 text-center text-white rounded hover:bg-blue-700 w-max mx-auto"
+            className="px-6 py-2 bg-red-600 text-center text-white rounded hover:bg-red-700 w-max mx-auto"
             onClick={() => navigate('/AllProducts')}
           >
             More Details
