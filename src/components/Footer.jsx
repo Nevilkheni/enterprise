@@ -76,7 +76,7 @@ const Footer = () => {
                 <Instagram className="h-5 w-5" />
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://youtube.com/@khenidhansukh2439?si=QqCDUbVKd2UKPshU"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-gray-700 hover:bg-red-700 text-white p-3 rounded-full transition-all duration-300"

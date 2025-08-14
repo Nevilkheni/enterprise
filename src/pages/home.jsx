@@ -6,10 +6,14 @@ import Certificate from "../components/certificate";
 import Feature from "../components/feature";
 import HomeImgSlider from "../components/Homeimgslider";
 
+import { useNavigate } from "react-router-dom";
+
 function Home() {
+  const navigate = useNavigate();
+
   return (
     <div>
-      <HomeImgSlider/>
+      <HomeImgSlider />
       <OurStory />
 
       <section
@@ -31,8 +35,11 @@ function Home() {
                 vehicula. Sed do eiusmod tempor incididunt ut labore et dolore
                 magna aliqua.
               </p>
-              <button className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg transition duration-300 transform hover:scale-105">
-                Discover More
+              <button
+                onClick={() => navigate("/Products")}
+                className="px-6 py-2 bg-red-600 text-white font-medium rounded hover:bg-red-700 transition"
+              >
+                Products
               </button>
             </div>
 

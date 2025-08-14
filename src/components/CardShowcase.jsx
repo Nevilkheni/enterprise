@@ -62,14 +62,14 @@ const CardShowcase = () => {
           {[1, 2, 3, 4].map((pos) => (
             <div
               key={pos}
-              className="w-[300px] h-40 bg-gray-100 rounded-lg overflow-hidden shadow-md cursor-pointer flex items-center justify-center"
+              className="w-[300px] h-48 bg-gray-100 rounded-lg overflow-hidden shadow-md cursor-pointer flex items-center justify-center"
               onClick={() => positions[pos] && openModal(positions[pos])}
             >
               {positions[pos] ? (
                 <img
                   src={positions[pos].image}
                   alt={positions[pos].title}
-                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-300  hover:scale-110"
                 />
               ) : (
                 <span className="text-gray-400">Card {pos} Empty</span>
@@ -92,7 +92,7 @@ const CardShowcase = () => {
             More Details
           </button>
         </div>
-        <img src={midelImg} alt="img" className="w-60 h-60 mx-auto" />
+        <img src={midelImg} alt="img" className="w-60 h-60 m-auto" />
       </div>
 
       {modalOpen && selectedCard && (

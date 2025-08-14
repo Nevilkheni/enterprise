@@ -32,7 +32,7 @@ function OurStory() {
           </p>
           <button
             onClick={() => navigate('/about')}
-            className="px-6 py-2 bg-black text-white font-medium rounded hover:bg-gray-800 transition"
+            className="px-6 py-2 bg-red-600 text-white font-medium rounded hover:bg-red-800 transition"
           >
             About Us
           </button>

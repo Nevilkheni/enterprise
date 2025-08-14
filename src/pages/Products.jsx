@@ -1,14 +1,8 @@
-
-
-
 import React, { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import ProductCard from "../components/ProductCard";
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
-
-// import { MagnifyingGlassIcon, FunnelIcon, XMarkIcon } from "@heroicons/react/24/outline";
-// import { FunnelIcon as FunnelIconSolid } from "@heroicons/react/24/solid";
 
 const Products = ({ onAddToCart }) => {
   const [products, setProducts] = useState([]);
@@ -16,16 +10,23 @@ const Products = ({ onAddToCart }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("featured");
   const [priceRange, setPriceRange] = useState([0, 10000]);
-  // const [showFilters, setShowFilters] = useState(false);
   const [activeFilters, setActiveFilters] = useState(0);
+  const [favorites, setFavorites] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
         const snapshot = await getDocs(collection(db, "products"));
-        const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const data = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
         setProducts(data.filter((p) => p.category === "product"));
+        
+        const savedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+        setFavorites(savedFavorites);
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
@@ -36,43 +37,67 @@ const Products = ({ onAddToCart }) => {
   }, []);
 
   useEffect(() => {
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+  }, [favorites]);
+
+  useEffect(() => {
+    const filtered = products
+      .filter((product) =>
+        product.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      .filter((product) => {
+        if (product.category === "product") return true;
+        return product.price >= priceRange[0] && product.price <= priceRange[1];
+      })
+      .sort((a, b) => {
+        const aIsFavorite = favorites.includes(a.id);
+        const bIsFavorite = favorites.includes(b.id);
+        if (aIsFavorite && !bIsFavorite) return -1;
+        if (!aIsFavorite && bIsFavorite) return 1;
+
+        if (a.category === "product" && b.category !== "product") return -1;
+        if (a.category !== "product" && b.category === "product") return 1;
+
+        switch (sortOption) {
+          case "price-low":
+            return a.price - b.price;
+          case "price-high":
+            return b.price - a.price;
+          case "rating":
+            return (b.rating || 0) - (a.rating || 0);
+          case "newest":
+            return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+          default:
+            return 0;
+        }
+      });
+
+    setFilteredProducts(filtered);
+    
     let count = 0;
     if (searchTerm) count++;
     if (sortOption !== "featured") count++;
     if (priceRange[0] !== 0 || priceRange[1] !== 10000) count++;
     setActiveFilters(count);
-  }, [searchTerm, sortOption, priceRange]);
+  }, [products, searchTerm, sortOption, priceRange, favorites]);
 
-  const filteredProducts = products
-    .filter((product) =>
-      product.name?.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .filter((product) => {
-      if (product.category === "product") return true;
-      return product.price >= priceRange[0] && product.price <= priceRange[1];
-    })
-    .sort((a, b) => {
-      if (a.category === "product" && b.category !== "product") return -1;
-      if (a.category !== "product" && b.category === "product") return 1;
-      
-      switch (sortOption) {
-        case "price-low":
-          return a.price - b.price;
-        case "price-high":
-          return b.price - a.price;
-        case "rating":
-          return (b.rating || 0) - (a.rating || 0);
-        case "newest":
-          return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
-        default:
-          return 0;
-      }
-    });
+  const toggleFavorite = (product) => {
+    if (favorites.includes(product.id)) {
+      setFavorites(favorites.filter(id => id !== product.id));
+    } else {
+      setFavorites([...favorites, product.id]);
+    }
+  };
 
   const clearFilters = () => {
     setSearchTerm("");
     setSortOption("featured");
     setPriceRange([0, 10000]);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
   };
 
   return (
@@ -85,37 +110,41 @@ const Products = ({ onAddToCart }) => {
       </div>
 
       <div className="mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
-        <div className="relative w-full md:w-96">
+        <form onSubmit={handleSearch} className="relative w-full md:w-96">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
           </div>
           <input
             type="text"
-            placeholder="Search products..."
+            placeholder="Search products by name or description..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-red-500 focus:border-red-500"
           />
-        </div>
+          {searchTerm && (
+            <button
+              type="button"
+              onClick={() => setSearchTerm("")}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center"
+            >
+              <XMarkIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+            </button>
+          )}
+        </form>
 
-        {/* <div className="flex gap-2 w-full md:w-auto">
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition relative"
+        <div className="w-full md:w-auto">
+          <select
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
+            className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md border"
           >
-            {showFilters ? (
-              <FunnelIconSolid className="h-5 w-5" />
-            ) : (
-              <FunnelIcon className="h-5 w-5" />
-            )}
-            <span>Filters</span>
-            {activeFilters > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                {activeFilters}
-              </span>
-            )}
-          </button>
-        </div> */}
+            <option value="featured">Featured</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating">Top Rated</option>
+            <option value="newest">Newest Arrivals</option>
+          </select>
+        </div>
       </div>
 
       {activeFilters > 0 && (
@@ -163,52 +192,6 @@ const Products = ({ onAddToCart }) => {
         </div>
       )}
 
-      {/* {showFilters && (
-        <div className="mb-6 p-4 bg-gray-50 rounded-lg shadow-inner">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Sort By
-              </label>
-              <select
-                value={sortOption}
-                onChange={(e) => setSortOption(e.target.value)}
-                className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
-              >
-                <option value="featured">Featured</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-                <option value="rating">Top Rated</option>
-                <option value="newest">Newest Arrivals</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Price Range
-              </label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="number"
-                  value={priceRange[0]}
-                  onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-                  min="0"
-                />
-                <span className="text-gray-500">to</span>
-                <input
-                  type="number"
-                  value={priceRange[1]}
-                  onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-                  min={priceRange[0]}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      )} */}
-
       {loading && (
         <div className="flex justify-center items-center py-20">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
@@ -253,15 +236,23 @@ const Products = ({ onAddToCart }) => {
             <p className="text-sm text-gray-500">
               Showing {filteredProducts.length} of {products.length} products
             </p>
+            {favorites.length > 0 && (
+              <p className="text-sm text-gray-500">
+                {favorites.length} favorite{favorites.length !== 1 ? 's' : ''}
+              </p>
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
+            {filteredProducts.map((product, index) => (
               <ProductCard
                 key={product.id}
                 product={product}
+                index={index}
                 onAddToCart={product.category === "product" ? null : onAddToCart}
                 showPrice={product.category !== "product"}
+                isFavorite={favorites.includes(product.id)}
+                onToggleFavorite={toggleFavorite}
               />
             ))}
           </div>
