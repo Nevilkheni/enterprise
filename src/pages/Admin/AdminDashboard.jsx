@@ -25,7 +25,7 @@ const AdminDashboard = () => {
     thickness: "",
     length: "",
     imageUrl: "",
-    position: "1", 
+    position: "1",
   });
   const [allProductForm, setAllProductForm] = useState({
     name: "",
@@ -53,7 +53,7 @@ const AdminDashboard = () => {
   const [error, setError] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
-  const [activeForm, setActiveForm] = useState("product"); 
+  const [activeForm, setActiveForm] = useState("product");
   const [searchTerm, setSearchTerm] = useState("");
 
   const fetchProducts = async () => {
@@ -166,12 +166,16 @@ const AdminDashboard = () => {
       }
     } else if (modalCategory) {
       if (term === "") {
-        setProducts(originalProducts.filter(p => modalCategory ? p.category === modalCategory : true));
+        setProducts(
+          originalProducts.filter((p) =>
+            modalCategory ? p.category === modalCategory : true
+          )
+        );
       } else {
         const filtered = originalProducts.filter(
           (product) =>
             (product.name?.toLowerCase().includes(term) ||
-            product.description?.toLowerCase().includes(term)) &&
+              product.description?.toLowerCase().includes(term)) &&
             (modalCategory ? product.category === modalCategory : true)
         );
         setProducts(filtered);
@@ -187,8 +191,8 @@ const AdminDashboard = () => {
 
       if (imageFile) {
         const imageRef = ref(storage, `products/${uuidv4()}-${imageFile.name}`);
-        await uploadBytes(imageRef, imageFile);
-        imageUrl = await getDownloadURL(imageRef);
+        const snapshot = await uploadBytes(imageRef, imageFile);
+        imageUrl = await getDownloadURL(snapshot.ref);
       } else if (formData.imageUrl) {
         imageUrl = formData.imageUrl;
       } else {
@@ -220,7 +224,7 @@ const AdminDashboard = () => {
         imageUrl: "",
       });
       setImageFile(null);
-      fetchProducts();
+      await fetchProducts();
     } catch (err) {
       console.error("Add error:", err);
       setError("Something went wrong! Check the console.");
@@ -247,12 +251,18 @@ const AdminDashboard = () => {
       );
 
       if (existingInPosition) {
-        if (!window.confirm(`Position ${homeProductForm.position} already has a product. Replace it?`)) {
+        if (
+          !window.confirm(
+            `Position ${homeProductForm.position} already has a product. Replace it?`
+          )
+        ) {
           setUploading(false);
           return;
         }
         await deleteDoc(doc(db, "showcaseCards", existingInPosition.id));
-        alert(`Removed existing product from position ${homeProductForm.position}`);
+        alert(
+          `Removed existing product from position ${homeProductForm.position}`
+        );
       }
 
       let imageUrl = homeProductForm.imageUrl;
@@ -261,10 +271,14 @@ const AdminDashboard = () => {
           storage,
           `showcaseImages/${homeProductImageFile.name}-${Date.now()}`
         );
-        await uploadBytes(imageRef, homeProductImageFile);
-        imageUrl = await getDownloadURL(imageRef);
+        const snapshot = await uploadBytes(imageRef, homeProductImageFile);
+        imageUrl = await getDownloadURL(snapshot.ref);
+      } else if (!imageUrl) {
+        alert("Please upload a file or paste a file URL.");
+        setUploading(false);
+        return;
       }
-      
+
       await addDoc(collection(db, "showcaseCards"), {
         title: homeProductForm.name,
         shortDescription: homeProductForm.material,
@@ -288,11 +302,12 @@ const AdminDashboard = () => {
         position: "1",
       });
       setHomeProductImageFile(null);
-      fetchProducts();
+      await fetchProducts();
       alert("✅ Home Product added successfully!");
     } catch (error) {
       console.error("❌ Error adding product:", error);
       setError("Failed to add product.");
+    } finally {
       setUploading(false);
     }
   };
@@ -304,9 +319,12 @@ const AdminDashboard = () => {
       let imageUrl = allProductForm.imageUrl;
 
       if (allProductImageFile) {
-        const imageRef = ref(storage, `allProducts/${uuidv4()}-${allProductImageFile.name}`);
-        await uploadBytes(imageRef, allProductImageFile);
-        imageUrl = await getDownloadURL(imageRef);
+        const imageRef = ref(
+          storage,
+          `allProducts/${uuidv4()}-${allProductImageFile.name}`
+        );
+        const snapshot = await uploadBytes(imageRef, allProductImageFile);
+        imageUrl = await getDownloadURL(snapshot.ref);
       } else if (!imageUrl) {
         alert("Please upload a file or paste a file URL.");
         setUploading(false);
@@ -331,7 +349,7 @@ const AdminDashboard = () => {
         category: "all",
       });
       setAllProductImageFile(null);
-      fetchProducts();
+      await fetchProducts();
     } catch (err) {
       console.error("Add error:", err);
       setError("Something went wrong! Check the console.");
@@ -344,7 +362,7 @@ const AdminDashboard = () => {
     if (window.confirm("Are you sure you want to delete this item?")) {
       try {
         await deleteDoc(doc(db, collectionName, id));
-        fetchProducts();
+        await fetchProducts();
       } catch (err) {
         console.error("Delete error:", err);
         setError("Failed to delete item");
@@ -379,8 +397,8 @@ const AdminDashboard = () => {
           storage,
           `products/${uuidv4()}-${editProduct.newImageFile.name}`
         );
-        await uploadBytes(imageRef, editProduct.newImageFile);
-        imageUrl = await getDownloadURL(imageRef);
+        const snapshot = await uploadBytes(imageRef, editProduct.newImageFile);
+        imageUrl = await getDownloadURL(snapshot.ref);
       }
 
       const updateData = {
@@ -397,7 +415,7 @@ const AdminDashboard = () => {
       await updateDoc(doc(db, "products", editProduct.id), updateData);
 
       setEditProduct(null);
-      fetchProducts();
+      await fetchProducts();
       alert("Product updated successfully!");
     } catch (err) {
       console.error("Error updating product:", err);
@@ -427,7 +445,7 @@ const AdminDashboard = () => {
   const handleEditCardSubmit = async () => {
     try {
       setUploading(true);
-      
+
       if (editCard.newPosition && editCard.newPosition !== editCard.position) {
         const existingCards = await getDocs(collection(db, "showcaseCards"));
         const existingInPosition = existingCards.docs.find(
@@ -446,8 +464,8 @@ const AdminDashboard = () => {
           storage,
           `showcaseImages/${uuidv4()}-${editCard.newImageFile.name}`
         );
-        await uploadBytes(imageRef, editCard.newImageFile);
-        imageUrl = await getDownloadURL(imageRef);
+        const snapshot = await uploadBytes(imageRef, editCard.newImageFile);
+        imageUrl = await getDownloadURL(snapshot.ref);
       }
 
       const updateData = {
@@ -467,7 +485,7 @@ const AdminDashboard = () => {
       await updateDoc(doc(db, "showcaseCards", editCard.id), updateData);
 
       setEditCard(null);
-      fetchProducts();
+      await fetchProducts();
       alert("Showcase card updated successfully!");
     } catch (err) {
       console.error("Error updating showcase card:", err);
@@ -504,8 +522,8 @@ const AdminDashboard = () => {
           storage,
           `allProducts/${uuidv4()}-${editAllProduct.newImageFile.name}`
         );
-        await uploadBytes(imageRef, editAllProduct.newImageFile);
-        imageUrl = await getDownloadURL(imageRef);
+        const snapshot = await uploadBytes(imageRef, editAllProduct.newImageFile);
+        imageUrl = await getDownloadURL(snapshot.ref);
       }
 
       const updateData = {
@@ -518,7 +536,7 @@ const AdminDashboard = () => {
       await updateDoc(doc(db, "allProducts", editAllProduct.id), updateData);
 
       setEditAllProduct(null);
-      fetchProducts();
+      await fetchProducts();
       alert("Product updated successfully!");
     } catch (err) {
       console.error("Error updating product:", err);
@@ -528,11 +546,14 @@ const AdminDashboard = () => {
     }
   };
 
-  const filteredProducts = modalCategory === "showcase" 
-    ? cards 
-    : modalCategory === "all" 
-      ? allProducts 
-      : products.filter(p => modalCategory ? p.category === modalCategory : true);
+  const filteredProducts =
+    modalCategory === "showcase"
+      ? cards
+      : modalCategory === "all"
+      ? allProducts
+      : products.filter((p) =>
+          modalCategory ? p.category === modalCategory : true
+        );
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
