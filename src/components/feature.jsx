@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import middleSectionBg from "../assets/image/midellimge1.png";
-import silver from "../assets/image/silver.png";
-import glitter from "../assets/image/glitter.jpg";
+import silver from "../assets/image/blank.png";
+import glitter from "../assets/image/blank.png";
 
 const products = [
   {
@@ -129,7 +129,7 @@ function Feature() {
               <img
                 src={product.img}
                 alt={product.name}
-                className="mx-auto h-40 object-contain mb-3"
+                className="mx-auto h-40 p-4 object-contain mb-3"
               />
               <h3 className="text-sm font-semibold text-black">
                 {product.name}

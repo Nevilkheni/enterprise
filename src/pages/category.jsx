@@ -5,58 +5,49 @@ import { Link } from "react-router-dom";
 const categories = [
   {
     id: 1,
-    name: "Electronics",
-    description: "Cutting-edge gadgets and devices",
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-    count: 42,
-    color: "bg-red-100",
-    textColor: "text-red-800"
+    name: "All Products",
+    description: "Browse our complete product collection",
+    image: "https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    count: 120,
+    color: "bg-blue-100",
+    textColor: "text-blue-800"
   },
   {
     id: 2,
-    name: "Computers",
-    description: "Laptops, desktops and accessories",
-    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-    count: 36,
-    color: "bg-purple-100",
-    textColor: "text-purple-800"
-  },
-  {
-    id: 3,
-    name: "Smartphones",
-    description: "Latest mobile devices",
-    image: "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-    count: 28,
+    name: "Roll",
+    description: "Various types of rolls for industrial use",
+    image: "https://images.unsplash.com/photo-1591348278863-a8fb3887e2aa?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    count: 45,
     color: "bg-green-100",
     textColor: "text-green-800"
   },
   {
-    id: 4,
-    name: "Audio",
-    description: "Headphones and speakers",
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-    count: 19,
-    color: "bg-red-100",
-    textColor: "text-red-800"
+    id: 3,
+    name: "CD",
+    description: "Compact discs and related media",
+    image: "https://images.unsplash.com/photo-1583997057406-624d304ac6d1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    count: 32,
+    color: "bg-purple-100",
+    textColor: "text-purple-800"
   },
   {
-    id: 5,
-    name: "Wearables",
-    description: "Smart watches and fitness trackers",
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-    count: 15,
+    id: 4,
+    name: "Spool",
+    description: "Industrial spools and reels",
+    image: "https://images.unsplash.com/photo-1587840178395-940e4f6d6f5d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    count: 28,
     color: "bg-yellow-100",
     textColor: "text-yellow-800"
   },
   {
-    id: 6,
-    name: "Gaming",
-    description: "Consoles and accessories",
-    image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-    count: 22,
-    color: "bg-indigo-100",
-    textColor: "text-indigo-800"
-  },
+    id: 5,
+    name: "Others",
+    description: "Additional products and miscellaneous items",
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    count: 15,
+    color: "bg-red-100",
+    textColor: "text-red-800"
+  }
 ];
 
 const containerVariants = {
@@ -95,11 +86,11 @@ const Category = () => {
       >
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Shop by Category</h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Explore our wide range of technology products organized by category
+          Explore our wide range of products organized by category
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  gap-6">
         {categories.map((category) => (
           <motion.div
             key={category.id}
@@ -159,8 +150,8 @@ const Category = () => {
         className="mt-16"
       >
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Featured Categories</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {categories.slice(0, 4).map((category) => (
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          {categories.map((category) => (
             <Link 
               key={`featured-${category.id}`}
               to={`/category/${category.id}`}

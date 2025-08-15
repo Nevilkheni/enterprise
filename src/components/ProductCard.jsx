@@ -73,7 +73,7 @@ const ProductCard = ({
           <img
             src={product.image}
             alt={product.name || "Product Image"}
-            className="w-full h-60 object-cover hover:scale-105 transition-transform duration-500"
+            className="w-full h-60 p-4 object-cover hover:scale-105 transition-transform duration-500"
           />
 
           <button
@@ -176,10 +176,10 @@ const ProductCard = ({
             <img
               src={product.image}
               alt={product.name}
-              className="w-full h-64 object-cover rounded-t-lg"
+              className="w-64 h-64 m-auto rounded-t-lg"
             />
 
-            <div className="p-4 flex-1">
+            <div className="p-4  flex-1">
               <h2 className="text-2xl font-bold text-gray-800">
                 {product.name}
               </h2>
