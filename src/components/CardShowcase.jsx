@@ -7,7 +7,7 @@ import "../pages/allproduct"
 
 const CardShowcase = () => {    
   const navigate = useNavigate();
-  const [setCards] = useState([]);
+  // Removed unused 'cards' state
   const [selectedCard, setSelectedCard] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [positions, setPositions] = useState({
@@ -33,7 +33,7 @@ const CardShowcase = () => {
       });
 
       setPositions(newPositions);
-      setCards(fetchedCards);
+      // Removed setCards as 'cards' state is not used
     } catch (error) {
       console.error("❌ Error fetching showcaseCards:", error);
     }
@@ -41,6 +41,7 @@ const CardShowcase = () => {
 
   useEffect(() => {
     fetchCards();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const openModal = (card) => {
@@ -69,7 +70,7 @@ const CardShowcase = () => {
                 <img
                   src={positions[pos].image}
                   alt={positions[pos].title}
-                  className="w-full h-full object-cover transition-transform duration-300  hover:scale-110"
+                  className="w-full m-24 h-full object-cover transition-transform duration-300  hover:scale-110"
                 />
               ) : (
                 <span className="text-gray-400">Card {pos} Empty</span>
@@ -79,8 +80,8 @@ const CardShowcase = () => {
         </div>
 
         <div className="w-full lg:w-auto flex flex-col text-center md:text-left justify-center">
-          <h2 className="text-2xl font-bold mb-4">New Product</h2>
-          <ul className="list-disc list-inside text-left text-gray-700 space-y-2 mb-6">
+          <h2 className="text-2xl font-bold mx-auto mb-4">New Product</h2>
+          <ul className="list-disc list-inside mx-auto text-gray-700 space-y-2 mb-6">
             <li>Trending item in market</li>
             <li>Available in all regions</li>
             <li>Click card for full details</li>
