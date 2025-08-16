@@ -26,7 +26,7 @@ function HomeImgSlider() {
   };
 
   return (
-    <div className="relative w-full h-[30vh] sm:h-[25vh] md:h-[45vh] lg:h-[50vh] overflow-hidden">
+    <div className="relative mt-2 w-full h-[30vh] sm:h-[25vh] md:h-[45vh] lg:h-[50vh] overflow-hidden">
       <div
         className="w-full h-full bg-cover bg-center transition-all duration-1000 ease-in-out"
         style={{ backgroundImage: `url(${images[currentIndex]})` }}
