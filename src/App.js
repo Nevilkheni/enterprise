@@ -101,11 +101,9 @@ function AppContent() {
           }
         />
 
-        {/* Auth */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Admin */}
         <Route
           path="/admin"
           element={
