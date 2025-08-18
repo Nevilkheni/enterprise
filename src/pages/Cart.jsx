@@ -451,7 +451,7 @@ function Cart({ cart, onRemoveFromCart, onUpdateQuantity }) {
                   variants={buttonVariants}
                   whileHover="hover"
                   whileTap="tap"
-                  onClick={() => navigate("/invoice", { state: { cart } })}
+                  onClick={() => navigate("/payment", { state: { cart } })}
                   className="flex-1 py-3 px-6 font-michroma text-sm bg-indigo-600 text-white rounded-lg font-medium shadow-md flex items-center justify-center"
                 >
                   Proceed to Checkout

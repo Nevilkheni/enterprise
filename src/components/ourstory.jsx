@@ -79,7 +79,7 @@ function OurStory() {
           className="text-center md:text-left"
           variants={textVariants}
         >
-          <h2 className="text-2xl font-semibold font-josefin text-black mb-4">Simple Beginnings, Clear Vision</h2>
+          <h2 className="md:text-2xl font-semibold   text-black mb-4">Simple Beginnings, Clear Vision</h2>
           <p className="text-gray-800 leading-relaxed mb-6">
             We started small with one goal: to do work that matters.
             No fluff, just quality. Every project reflects our commitment
