@@ -133,13 +133,13 @@ function Home() {
               className="w-full lg:w-2/3 bg-black/70 backdrop-blur-lg rounded-xl p-8 shadow-lg"
             >
               <motion.h2 
-                className="text-3xl md:text-4xl font-bold mb-4 text-white"
+                className="text-lg md:text-3xl font-michroma  font-bold mb-4 text-white"
                 whileHover={{ x: 5 }}
               >
                 Welcome to Jyot Sequence
               </motion.h2>
               <motion.p 
-                className="text-lg md:text-xl mb-6 text-gray-200"
+                className="text-lg font-josefin  md:text-xl mb-6 text-gray-200"
                 whileHover={{ x: 5 }}
               >
                 Creating exceptional digital experiences for your talent journey
@@ -158,7 +158,7 @@ function Home() {
                 whileHover="hover"
                 whileTap="tap"
                 onClick={() => navigate("/Products")}
-                className="px-6 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-all"
+                className="px-6 py-3 font-michroma text-sm bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-all"
               >
                 Explore Products
               </motion.button>

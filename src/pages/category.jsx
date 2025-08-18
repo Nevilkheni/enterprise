@@ -84,8 +84,8 @@ const Category = () => {
         variants={itemVariants}
         className="text-center mb-12"
       >
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Shop by Category</h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+        <h1 className="text-lg md:text-3xl font-michroma  font-bold text-gray-900 mb-4">Shop by Category</h1>
+        <p className="font-josefin text-lg text-gray-600 max-w-2xl mx-auto">
           Explore our wide range of products organized by category
         </p>
       </motion.div>

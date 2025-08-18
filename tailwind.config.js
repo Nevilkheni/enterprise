@@ -4,7 +4,6 @@ module.exports = {
     extend: {
       animation: {
         'spin-slow': 'spin 2s linear',
-
         'fade-in-down': 'fadeInDown 0.3s ease-out',
         'swing': 'swing 6s ease-in-out infinite alternate',
         'roll': 'roll 6s ease-in-out infinite alternate',
@@ -28,7 +27,13 @@ module.exports = {
             'animation-timing-function': 'cubic-bezier(0.25, 1, 0.5, 1)'
           },
         }
-      }
+      },
+      fontFamily: {
+        federant: ["'Federant'", "serif"],
+        josefin: ["'Josefin Sans'", "sans-serif"],
+        meie: ["'Meie Script'", "cursive"],
+        michroma: ["'Michroma'", "sans-serif"],
+      },
     },
   },
   plugins: [],

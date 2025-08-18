@@ -188,10 +188,10 @@ const About = () => {
         }}
         className="text-center mb-16"
       >
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+        <h1 className="text-3xl font-michroma  md:text-4xl font-bold text-gray-900 mb-6">
           About Jyot Sequence
         </h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <p className="font-josefin text-lx text-gray-600 max-w-3xl mx-auto">
           From humble beginnings to global technology leader - our journey of
           innovation and customer dedication.
         </p>
@@ -212,13 +212,13 @@ const About = () => {
         className="mb-20"
       >
         <div className="bg-gray-50 rounded-xl p-8 md:p-10 shadow-sm">
-          <p className="text-gray-700 text-lg leading-relaxed mb-4">
-            Welcome to <strong className="text-red-600">Jyot Sequence</strong>,
+          <p className="text-gray-700 font-josefin text-lg leading-relaxed mb-4">
+            Welcome to <strong className="text-red-600 text-sm font-michroma">Jyot Sequence</strong>,
             your premier destination for cutting-edge technology. Founded in
             2008, we've grown from a small startup to a global leader in tech
             retail, serving millions of customers worldwide.
           </p>
-          <p className="text-gray-600 leading-relaxed">
+          <p className="text-gray-600 font-josefin text-sm leading-relaxed">
             Our mission is to bridge the gap between innovative technology and
             everyday users. We carefully curate our product selection to bring
             you the best devices that enhance your life while providing
@@ -246,7 +246,7 @@ const About = () => {
             </div>
 
             <div className="md:hidden mb-4">
-              <span className="inline-block px-4 py-2 bg-red-600 text-white font-bold rounded-full">
+              <span className="inline-block px-4 py-2 bg-red-600  text-white font-bold rounded-full">
                 {item.year}
               </span>
             </div>
@@ -276,7 +276,7 @@ const About = () => {
                 item.imagePosition === "left" ? "md:text-right" : "md:text-left"
               }`}
             >
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">
+              <h3 className=" font-bold text-lg font-michroma text-gray-900 mb-3">
                 {item.title}
               </h3>
               <p className="text-gray-600 leading-relaxed">
@@ -301,12 +301,12 @@ const About = () => {
         }}
         className="mt-20 bg-red-400  rounded-xl p-8 md:p-10 text-white"
       >
-        <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
-        <p className="text-lg leading-relaxed mb-4">
+        <h2 className="text-lg md:text-2xl font-michroma  font-bold mb-6">Our Mission</h2>
+        <p className="font-josefin text-lg leading-relaxed  mb-4">
           To empower individuals and businesses through innovative technology
           solutions that simplify lives and drive progress.
         </p>
-        <p className="text-red-100 leading-relaxed">
+        <p className="font-josefin text-lg text-red-100 leading-relaxed">
           We believe technology should be accessible, intuitive, and
           transformative. Every product we offer is carefully selected to meet
           our high standards of quality, performance, and value.

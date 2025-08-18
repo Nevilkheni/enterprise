@@ -571,7 +571,7 @@ const AdminDashboard = () => {
         )}
 
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+          <h2 className="font-michroma  text-lg md:text-3xl text-gray-900 sm:text-4xl">
             Admin Dashboard
           </h2>
           <p className="mt-3 text-xl text-gray-500">
@@ -582,7 +582,7 @@ const AdminDashboard = () => {
         <div className="flex justify-center mb-8 gap-4 flex-wrap">
           <button
             onClick={() => setActiveForm("product")}
-            className={`px-6 py-3 rounded-lg shadow transition-colors ${
+            className={`px-6 py-3 rounded-lg shadow transition-colors font-michroma text-sm ${
               activeForm === "product"
                 ? "bg-red-600 text-white"
                 : "bg-gray-200 text-gray-700"
@@ -592,7 +592,7 @@ const AdminDashboard = () => {
           </button>
           <button
             onClick={() => setActiveForm("homeProduct")}
-            className={`px-6 py-3 rounded-lg shadow transition-colors ${
+            className={`px-6 py-3 rounded-lg shadow transition-colors font-michroma text-sm ${
               activeForm === "homeProduct"
                 ? "bg-red-600 text-white"
                 : "bg-gray-200 text-gray-700"
@@ -602,7 +602,7 @@ const AdminDashboard = () => {
           </button>
           <button
             onClick={() => setActiveForm("allProduct")}
-            className={`px-6 py-3 rounded-lg shadow transition-colors ${
+            className={`px-6 py-3 rounded-lg shadow transition-colors font-michroma text-sm${
               activeForm === "allProduct"
                 ? "bg-red-600 text-white"
                 : "bg-gray-200 text-gray-700"
@@ -970,32 +970,32 @@ const AdminDashboard = () => {
 
         <div className="bg-white shadow-xl rounded-lg overflow-hidden">
           <div className="p-6 sm:p-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-6 border-b pb-2">
+            <h3 className="font-michroma text-lg font-medium text-gray-900 mb-6 border-b pb-2">
               Manage Items
             </h3>
 
             <div className="flex flex-wrap justify-center gap-4 mb-8">
               <button
                 onClick={() => setModalCategory("product")}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                className="font-michroma text-sm inline-flex items-center px-4 py-2 border border-transparent  font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
                 View Products
               </button>
               <button
                 onClick={() => setModalCategory("shop")}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                className="font-michroma text-sm inline-flex items-center px-4 py-2 border border-transparent  font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
               >
                 View Shop Items
               </button>
               <button
                 onClick={() => setModalCategory("showcase")}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                className="font-michroma text-sm inline-flex items-center px-4 py-2 border border-transparent font-medium rounded-md shadow-sm text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
               >
                 View Showcase Cards
               </button>
               <button
                 onClick={() => setModalCategory("all")}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                className=" font-michroma text-sm inline-flex items-center px-4 py-2 border border-transparent font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
               >
                 View All Products
               </button>
