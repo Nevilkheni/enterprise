@@ -4,7 +4,7 @@ import "./index.css";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import AdminHeader from "./components/AdminHeader";
+// import AdminHeader from "./components/AdminHeader";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Products from "./pages/Products";
@@ -20,12 +20,14 @@ import Home from "./pages/home";
 import WhatsAppButton from "./components/WhatsAppButton";
 import AllProducts from "./pages/allproduct";
 import Payment from "./pages/Payment";
+import { useProducts } from "./hooks/productHooks"; 
 
 function AppContent() {
   const { user, cart, updateCart } = useAuth();
   const location = useLocation();
   const hideFooterRoutes = ["/login", "/register"];
   const shouldHideFooter = hideFooterRoutes.includes(location.pathname);
+  const { products, loading } = useProducts(); 
 
   const handleAddToCart = async (product) => {
     if (!user) {
@@ -64,13 +66,38 @@ function AppContent() {
     <div className="min-h-screen flex flex-col bg-gray-100">
       {!shouldHideFooter && <Header />}
       <Routes>
-        <Route path="/" element={<Home cart={cart} onAddToCart={handleAddToCart} />} />
+        <Route 
+          path="/" 
+          element={
+            <Home 
+              cart={cart} 
+              onAddToCart={handleAddToCart} 
+              productCount={products.length} 
+            />
+          } 
+        />
+        <Route 
+          path="/category" 
+          element={
+            <Category 
+              productCount={products.length} 
+              loading={loading} 
+            />
+          } 
+        />
+        <Route 
+          path="/allproducts" 
+          element={
+            <AllProducts 
+              onAddToCart={handleAddToCart} 
+            />
+          } 
+        />
         <Route path="/shop" element={<Shop onAddToCart={handleAddToCart} />} />
         <Route path="/products" element={<Products onAddToCart={handleAddToCart} />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/category" element={<Category />} />
-        <Route path="/allproducts" element={<AllProducts />} />
+        <Route path="/products/category/:categoryName" element={<Category />} />
 
         <Route
           path="/cart"
@@ -109,22 +136,6 @@ function AppContent() {
           element={
             <ProtectedRoute isAdmin={true}>
               <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/home-data"
-          element={
-            <ProtectedRoute isAdmin={true}>
-              <AdminHeader />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/product-data"
-          element={
-            <ProtectedRoute isAdmin={true}>
-              <AdminHeader />
             </ProtectedRoute>
           }
         />

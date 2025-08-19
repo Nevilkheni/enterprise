@@ -27,16 +27,9 @@ const AdminDashboard = () => {
     imageUrl: "",
     position: "1",
   });
-  const [allProductForm, setAllProductForm] = useState({
-    name: "",
-    description: "",
-    imageUrl: "",
-    category: "all",
-  });
 
   const [imageFile, setImageFile] = useState(null);
   const [homeProductImageFile, setHomeProductImageFile] = useState(null);
-  const [allProductImageFile, setAllProductImageFile] = useState(null);
 
   const [products, setProducts] = useState([]);
   const [cards, setCards] = useState([]);
@@ -47,7 +40,6 @@ const AdminDashboard = () => {
   const [modalCategory, setModalCategory] = useState(null);
   const [editProduct, setEditProduct] = useState(null);
   const [editCard, setEditCard] = useState(null);
-  const [editAllProduct, setEditAllProduct] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -118,23 +110,12 @@ const AdminDashboard = () => {
     }));
   };
 
-  const handleAllProductChange = (e) => {
-    setAllProductForm((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
   const handleFileChange = (e) => {
     setImageFile(e.target.files[0]);
   };
 
   const handleHomeProductFileChange = (e) => {
     setHomeProductImageFile(e.target.files[0]);
-  };
-
-  const handleAllProductFileChange = (e) => {
-    setAllProductImageFile(e.target.files[0]);
   };
 
   const handleSearch = (e) => {
@@ -183,6 +164,20 @@ const AdminDashboard = () => {
     }
   };
 
+  const addToAllProducts = async (productData) => {
+    try {
+      await addDoc(collection(db, "allProducts"), {
+        name: productData.name,
+        description: productData.description,
+        image: productData.image,
+        category: "all",
+        createdAt: new Date().toISOString(),
+      });
+    } catch (err) {
+      console.error("Error adding to all products:", err);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -214,6 +209,7 @@ const AdminDashboard = () => {
       }
 
       await addDoc(collection(db, "products"), productData);
+      await addToAllProducts(productData);
 
       alert("Product added successfully!");
       setFormData({
@@ -279,7 +275,7 @@ const AdminDashboard = () => {
         return;
       }
 
-      await addDoc(collection(db, "showcaseCards"), {
+      const productData = {
         title: homeProductForm.name,
         shortDescription: homeProductForm.material,
         longDescription: `Thickness: ${homeProductForm.thickness}, Length: ${homeProductForm.length}`,
@@ -291,6 +287,15 @@ const AdminDashboard = () => {
           `Length: ${homeProductForm.length}`,
         ],
         createdAt: new Date().toISOString(),
+      };
+
+      await addDoc(collection(db, "showcaseCards"), productData);
+      
+      // Add to all products
+      await addToAllProducts({
+        name: homeProductForm.name,
+        description: `Material: ${homeProductForm.material}, Thickness: ${homeProductForm.thickness}, Length: ${homeProductForm.length}`,
+        image: imageUrl
       });
 
       setHomeProductForm({
@@ -312,56 +317,19 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleAllProductSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      setUploading(true);
-      let imageUrl = allProductForm.imageUrl;
-
-      if (allProductImageFile) {
-        const imageRef = ref(
-          storage,
-          `allProducts/${uuidv4()}-${allProductImageFile.name}`
-        );
-        const snapshot = await uploadBytes(imageRef, allProductImageFile);
-        imageUrl = await getDownloadURL(snapshot.ref);
-      } else if (!imageUrl) {
-        alert("Please upload a file or paste a file URL.");
-        setUploading(false);
-        return;
-      }
-
-      const productData = {
-        name: allProductForm.name,
-        description: allProductForm.description,
-        image: imageUrl,
-        category: "all",
-        createdAt: new Date().toISOString(),
-      };
-
-      await addDoc(collection(db, "allProducts"), productData);
-
-      alert("Product added successfully!");
-      setAllProductForm({
-        name: "",
-        description: "",
-        imageUrl: "",
-        category: "all",
-      });
-      setAllProductImageFile(null);
-      await fetchProducts();
-    } catch (err) {
-      console.error("Add error:", err);
-      setError("Something went wrong! Check the console.");
-    } finally {
-      setUploading(false);
-    }
-  };
-
   const handleDelete = async (id, collectionName = "products") => {
     if (window.confirm("Are you sure you want to delete this item?")) {
       try {
         await deleteDoc(doc(db, collectionName, id));
+        
+        if (collectionName !== "allProducts") {
+          const allProductsSnap = await getDocs(collection(db, "allProducts"));
+          const productToDelete = allProductsSnap.docs.find(doc => doc.data().name === id);
+          if (productToDelete) {
+            await deleteDoc(doc(db, "allProducts", productToDelete.id));
+          }
+        }
+        
         await fetchProducts();
       } catch (err) {
         console.error("Delete error:", err);
@@ -413,6 +381,21 @@ const AdminDashboard = () => {
       }
 
       await updateDoc(doc(db, "products", editProduct.id), updateData);
+      
+      // Update in allProducts as well
+      const allProductsSnap = await getDocs(collection(db, "allProducts"));
+      const productToUpdate = allProductsSnap.docs.find(doc => 
+        doc.data().name === editProduct.name
+      );
+      
+      if (productToUpdate) {
+        await updateDoc(doc(db, "allProducts", productToUpdate.id), {
+          name: updateData.name,
+          description: updateData.description,
+          image: updateData.image,
+          updatedAt: updateData.updatedAt
+        });
+      }
 
       setEditProduct(null);
       await fetchProducts();
@@ -483,63 +466,27 @@ const AdminDashboard = () => {
       };
 
       await updateDoc(doc(db, "showcaseCards", editCard.id), updateData);
+      
+      // Update in allProducts as well
+      const allProductsSnap = await getDocs(collection(db, "allProducts"));
+      const productToUpdate = allProductsSnap.docs.find(doc => 
+        doc.data().name === editCard.name
+      );
+      
+      if (productToUpdate) {
+        await updateDoc(doc(db, "allProducts", productToUpdate.id), {
+          name: editCard.name,
+          description: `Material: ${editCard.material}, Thickness: ${editCard.thickness}, Length: ${editCard.length}`,
+          image: imageUrl,
+          updatedAt: updateData.updatedAt
+        });
+      }
 
       setEditCard(null);
       await fetchProducts();
       alert("Showcase card updated successfully!");
     } catch (err) {
       console.error("Error updating showcase card:", err);
-      setError("Update failed");
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const handleEditAllProductChange = (e) => {
-    setEditAllProduct((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handleEditAllProductImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setEditAllProduct((prev) => ({
-        ...prev,
-        newImageFile: file,
-      }));
-    }
-  };
-
-  const handleEditAllProductSubmit = async () => {
-    try {
-      setUploading(true);
-      let imageUrl = editAllProduct.image;
-
-      if (editAllProduct.newImageFile) {
-        const imageRef = ref(
-          storage,
-          `allProducts/${uuidv4()}-${editAllProduct.newImageFile.name}`
-        );
-        const snapshot = await uploadBytes(imageRef, editAllProduct.newImageFile);
-        imageUrl = await getDownloadURL(snapshot.ref);
-      }
-
-      const updateData = {
-        name: editAllProduct.name,
-        description: editAllProduct.description,
-        image: imageUrl,
-        updatedAt: new Date().toISOString(),
-      };
-
-      await updateDoc(doc(db, "allProducts", editAllProduct.id), updateData);
-
-      setEditAllProduct(null);
-      await fetchProducts();
-      alert("Product updated successfully!");
-    } catch (err) {
-      console.error("Error updating product:", err);
       setError("Update failed");
     } finally {
       setUploading(false);
@@ -599,16 +546,6 @@ const AdminDashboard = () => {
             }`}
           >
             Add Home Product
-          </button>
-          <button
-            onClick={() => setActiveForm("allProduct")}
-            className={`px-6 py-3 rounded-lg shadow transition-colors font-michroma text-sm${
-              activeForm === "allProduct"
-                ? "bg-red-600 text-white"
-                : "bg-gray-200 text-gray-700"
-            }`}
-          >
-            Add All Product
           </button>
         </div>
 
@@ -869,105 +806,6 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {activeForm === "allProduct" && (
-          <div className="bg-white shadow-xl rounded-lg overflow-hidden mb-10">
-            <div className="p-6 sm:p-8">
-              <h3 className="text-lg font-medium text-gray-900 mb-6 border-b pb-2">
-                Add All Product
-              </h3>
-              <form onSubmit={handleAllProductSubmit} className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Product Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={allProductForm.name}
-                    onChange={handleAllProductChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Description
-                  </label>
-                  <textarea
-                    name="description"
-                    value={allProductForm.description}
-                    onChange={handleAllProductChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    rows={3}
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Image URL (optional)
-                  </label>
-                  <input
-                    type="text"
-                    name="imageUrl"
-                    value={allProductForm.imageUrl}
-                    onChange={handleAllProductChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Product Image
-                  </label>
-                  <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                    <div className="space-y-1 text-center">
-                      <div className="flex text-sm text-gray-600">
-                        <label
-                          htmlFor="all-product-file-upload"
-                          className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                        >
-                          <span>Upload a file</span>
-                          <input
-                            id="all-product-file-upload"
-                            type="file"
-                            className="sr-only"
-                            onChange={handleAllProductFileChange}
-                          />
-                        </label>
-                        <p className="pl-1">or drag and drop</p>
-                      </div>
-                      <p className="text-xs text-gray-500">
-                        PNG, JPG, GIF up to 10MB
-                      </p>
-                      {allProductImageFile && (
-                        <p className="text-sm text-green-600">
-                          {allProductImageFile.name} selected
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex justify-end">
-                  <button
-                    type="submit"
-                    disabled={uploading}
-                    className={`inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white ${
-                      uploading
-                        ? "bg-indigo-400"
-                        : "bg-indigo-600 hover:bg-indigo-700"
-                    } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
-                  >
-                    {uploading ? "Processing..." : "Add Product"}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
-
         <div className="bg-white shadow-xl rounded-lg overflow-hidden">
           <div className="p-6 sm:p-8">
             <h3 className="font-michroma text-lg font-medium text-gray-900 mb-6 border-b pb-2">
@@ -1110,7 +948,7 @@ const AdminDashboard = () => {
                           </p>
                           {item.price && (
                             <p className="mt-2 text-sm text-gray-500">
-                              Price: ${item.price}
+                              Price: {item.price}₹
                             </p>
                           )}
                           {item.createdAt && (
@@ -1158,12 +996,7 @@ const AdminDashboard = () => {
                                   position: item.position,
                                 });
                               } else if (modalCategory === "all") {
-                                setEditAllProduct({
-                                  id: item.id,
-                                  name: item.name,
-                                  description: item.description,
-                                  image: item.image,
-                                });
+                                // No edit for all products as they're synced from other collections
                               } else {
                                 setEditProduct({
                                   ...item,
@@ -1335,62 +1168,6 @@ const AdminDashboard = () => {
                 </button>
                 <button
                   onClick={handleEditCardSubmit}
-                  disabled={uploading}
-                  className={`bg-red-600 text-white px-4 py-2 rounded ${
-                    uploading ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                >
-                  {uploading ? "Saving..." : "Save Changes"}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {editAllProduct && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4">Edit Product</h2>
-            <div className="space-y-4">
-              <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                value={editAllProduct.name}
-                onChange={handleEditAllProductChange}
-                className="w-full border p-2 rounded"
-              />
-              <textarea
-                name="description"
-                placeholder="Description"
-                value={editAllProduct.description}
-                onChange={handleEditAllProductChange}
-                className="w-full border p-2 rounded"
-                rows={3}
-              />
-              <div className="flex items-center gap-4">
-                <img
-                  src={editAllProduct.image}
-                  alt="Current product"
-                  className="w-20 h-20 object-cover rounded border"
-                />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleEditAllProductImageChange}
-                  className="w-full border p-2 rounded"
-                />
-              </div>
-              <div className="flex justify-between">
-                <button
-                  onClick={() => setEditAllProduct(null)}
-                  className="bg-gray-500 text-white px-4 py-2 rounded"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleEditAllProductSubmit}
                   disabled={uploading}
                   className={`bg-red-600 text-white px-4 py-2 rounded ${
                     uploading ? "opacity-50 cursor-not-allowed" : ""
