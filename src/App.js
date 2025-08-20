@@ -20,14 +20,15 @@ import Home from "./pages/home";
 import WhatsAppButton from "./components/WhatsAppButton";
 import AllProducts from "./pages/allproduct";
 import Payment from "./pages/Payment";
-import { useProducts } from "./hooks/productHooks"; 
+import { useProducts } from "./hooks/productHooks";
+
 
 function AppContent() {
   const { user, cart, updateCart } = useAuth();
   const location = useLocation();
   const hideFooterRoutes = ["/login", "/register"];
   const shouldHideFooter = hideFooterRoutes.includes(location.pathname);
-  const { products, loading } = useProducts(); 
+  const { products, loading } = useProducts();
 
   const handleAddToCart = async (product) => {
     if (!user) {
@@ -66,39 +67,39 @@ function AppContent() {
     <div className="min-h-screen flex flex-col bg-gray-100">
       {!shouldHideFooter && <Header />}
       <Routes>
-        <Route 
-          path="/" 
+        <Route
+          path="/"
           element={
-            <Home 
-              cart={cart} 
-              onAddToCart={handleAddToCart} 
-              productCount={products.length} 
+            <Home
+              cart={cart}
+              onAddToCart={handleAddToCart}
+              productCount={products.length}
             />
-          } 
+          }
         />
-        <Route 
-          path="/category" 
+        <Route
+          path="/category"
           element={
-            <Category 
-              productCount={products.length} 
-              loading={loading} 
+            <Category
+              productCount={products.length}
+              loading={loading}
             />
-          } 
+          }
         />
-        <Route 
-          path="/allproducts" 
+        <Route
+          path="/allproducts"
           element={
-            <AllProducts 
-              onAddToCart={handleAddToCart} 
+            <AllProducts
+              onAddToCart={handleAddToCart}
             />
-          } 
+          }
         />
         <Route path="/shop" element={<Shop onAddToCart={handleAddToCart} />} />
         <Route path="/products" element={<Products onAddToCart={handleAddToCart} />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/products/category/:categoryName" element={<Category />} />
-
+        <Route path="/category" element={<Category />} />
+        <Route path="/category/:categoryType" element={<Category />} />
         <Route
           path="/cart"
           element={

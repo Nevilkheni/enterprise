@@ -27,19 +27,32 @@ const AdminDashboard = () => {
     imageUrl: "",
     position: "1",
   });
+  const [categoryForm, setCategoryForm] = useState({
+    name: "",
+    material: "",
+    thickness: "",
+    length: "",
+    imageUrl: "",
+    description: "",
+    categoryType: "roll", 
+  });
 
   const [imageFile, setImageFile] = useState(null);
   const [homeProductImageFile, setHomeProductImageFile] = useState(null);
+  const [categoryImageFile, setCategoryImageFile] = useState(null);
 
   const [products, setProducts] = useState([]);
   const [cards, setCards] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [originalProducts, setOriginalProducts] = useState([]);
   const [originalCards, setOriginalCards] = useState([]);
   const [originalAllProducts, setOriginalAllProducts] = useState([]);
+  const [originalCategories, setOriginalCategories] = useState([]);
   const [modalCategory, setModalCategory] = useState(null);
   const [editProduct, setEditProduct] = useState(null);
   const [editCard, setEditCard] = useState(null);
+  const [editCategory, setEditCategory] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -54,6 +67,7 @@ const AdminDashboard = () => {
       const productsSnap = await getDocs(collection(db, "products"));
       const showcaseSnap = await getDocs(collection(db, "showcaseCards"));
       const allProductsSnap = await getDocs(collection(db, "allProducts"));
+      const categoriesSnap = await getDocs(collection(db, "categories"));
 
       const productItems = productsSnap.docs.map((doc) => ({
         id: doc.id,
@@ -67,16 +81,22 @@ const AdminDashboard = () => {
         id: doc.id,
         ...doc.data(),
       }));
+      const categoryItems = categoriesSnap.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
       setProducts(productItems);
       setCards(showcaseItems);
       setAllProducts(allProductItems);
+      setCategories(categoryItems);
       setOriginalProducts(productItems);
       setOriginalCards(showcaseItems);
       setOriginalAllProducts(allProductItems);
+      setOriginalCategories(categoryItems);
     } catch (err) {
       console.error("Fetch error:", err);
-      setError("Failed to fetch products");
+      setError("Failed to fetch products. Check Firebase permissions.");
     } finally {
       setIsLoading(false);
     }
@@ -110,12 +130,23 @@ const AdminDashboard = () => {
     }));
   };
 
+  const handleCategoryChange = (e) => {
+    setCategoryForm((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
   const handleFileChange = (e) => {
     setImageFile(e.target.files[0]);
   };
 
   const handleHomeProductFileChange = (e) => {
     setHomeProductImageFile(e.target.files[0]);
+  };
+
+  const handleCategoryFileChange = (e) => {
+    setCategoryImageFile(e.target.files[0]);
   };
 
   const handleSearch = (e) => {
@@ -144,6 +175,19 @@ const AdminDashboard = () => {
             product.description?.toLowerCase().includes(term)
         );
         setAllProducts(filtered);
+      }
+    } else if (modalCategory === "categories") {
+      if (term === "") {
+        setCategories(originalCategories);
+      } else {
+        const filtered = originalCategories.filter(
+          (category) =>
+            category.name?.toLowerCase().includes(term) ||
+            category.description?.toLowerCase().includes(term) ||
+            category.material?.toLowerCase().includes(term) ||
+            category.categoryType?.toLowerCase().includes(term)
+        );
+        setCategories(filtered);
       }
     } else if (modalCategory) {
       if (term === "") {
@@ -291,7 +335,6 @@ const AdminDashboard = () => {
 
       await addDoc(collection(db, "showcaseCards"), productData);
       
-      // Add to all products
       await addToAllProducts({
         name: homeProductForm.name,
         description: `Material: ${homeProductForm.material}, Thickness: ${homeProductForm.thickness}, Length: ${homeProductForm.length}`,
@@ -312,6 +355,65 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error("❌ Error adding product:", error);
       setError("Failed to add product.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleCategorySubmit = async (e) => {
+    e.preventDefault();
+    setUploading(true);
+
+    try {
+      let imageUrl = categoryForm.imageUrl;
+      if (!imageUrl && categoryImageFile) {
+        const imageRef = ref(
+          storage,
+          `categories/${categoryImageFile.name}-${Date.now()}`
+        );
+        const snapshot = await uploadBytes(imageRef, categoryImageFile);
+        imageUrl = await getDownloadURL(snapshot.ref);
+      } else if (!imageUrl) {
+        alert("Please upload a file or paste a file URL.");
+        setUploading(false);
+        return;
+      }
+
+      const categoryData = {
+        name: categoryForm.name,
+        material: categoryForm.material,
+        thickness: categoryForm.thickness,
+        length: categoryForm.length,
+        description: categoryForm.description,
+        categoryType: categoryForm.categoryType,
+        image: imageUrl,
+        createdAt: new Date().toISOString(),
+      };
+
+      await addDoc(collection(db, "categories"), categoryData);
+      
+      await addToAllProducts({
+        name: categoryForm.name,
+        description: `${categoryForm.description} | Material: ${categoryForm.material} | Thickness: ${categoryForm.thickness} | Length: ${categoryForm.length}`,
+        image: imageUrl,
+        category: categoryForm.categoryType
+      });
+
+      setCategoryForm({
+        name: "",
+        material: "",
+        thickness: "",
+        length: "",
+        imageUrl: "",
+        description: "",
+        categoryType: "roll",
+      });
+      setCategoryImageFile(null);
+      await fetchProducts();
+      alert("✅ Category added successfully!");
+    } catch (error) {
+      console.error("❌ Error adding category:", error);
+      setError("Failed to add category.");
     } finally {
       setUploading(false);
     }
@@ -382,7 +484,6 @@ const AdminDashboard = () => {
 
       await updateDoc(doc(db, "products", editProduct.id), updateData);
       
-      // Update in allProducts as well
       const allProductsSnap = await getDocs(collection(db, "allProducts"));
       const productToUpdate = allProductsSnap.docs.find(doc => 
         doc.data().name === editProduct.name
@@ -467,7 +568,6 @@ const AdminDashboard = () => {
 
       await updateDoc(doc(db, "showcaseCards", editCard.id), updateData);
       
-      // Update in allProducts as well
       const allProductsSnap = await getDocs(collection(db, "allProducts"));
       const productToUpdate = allProductsSnap.docs.find(doc => 
         doc.data().name === editCard.name
@@ -493,11 +593,83 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleEditCategoryChange = (e) => {
+    setEditCategory((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleEditCategoryImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setEditCategory((prev) => ({
+        ...prev,
+        newImageFile: file,
+      }));
+    }
+  };
+
+  const handleEditCategorySubmit = async () => {
+    try {
+      setUploading(true);
+      let imageUrl = editCategory.image;
+
+      if (editCategory.newImageFile) {
+        const imageRef = ref(
+          storage,
+          `categories/${uuidv4()}-${editCategory.newImageFile.name}`
+        );
+        const snapshot = await uploadBytes(imageRef, editCategory.newImageFile);
+        imageUrl = await getDownloadURL(snapshot.ref);
+      }
+
+      const updateData = {
+        name: editCategory.name,
+        material: editCategory.material,
+        thickness: editCategory.thickness,
+        length: editCategory.length,
+        description: editCategory.description,
+        categoryType: editCategory.categoryType,
+        image: imageUrl,
+        updatedAt: new Date().toISOString(),
+      };
+
+      await updateDoc(doc(db, "categories", editCategory.id), updateData);
+      
+      const allProductsSnap = await getDocs(collection(db, "allProducts"));
+      const productToUpdate = allProductsSnap.docs.find(doc => 
+        doc.data().name === editCategory.name
+      );
+      
+      if (productToUpdate) {
+        await updateDoc(doc(db, "allProducts", productToUpdate.id), {
+          name: editCategory.name,
+          description: `${editCategory.description} | Material: ${editCategory.material} | Thickness: ${editCategory.thickness} | Length: ${editCategory.length}`,
+          image: imageUrl,
+          category: editCategory.categoryType,
+          updatedAt: updateData.updatedAt
+        });
+      }
+
+      setEditCategory(null);
+      await fetchProducts();
+      alert("Category updated successfully!");
+    } catch (err) {
+      console.error("Error updating category:", err);
+      setError("Update failed");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const filteredProducts =
     modalCategory === "showcase"
       ? cards
       : modalCategory === "all"
       ? allProducts
+      : modalCategory === "categories"
+      ? categories
       : products.filter((p) =>
           modalCategory ? p.category === modalCategory : true
         );
@@ -546,6 +718,16 @@ const AdminDashboard = () => {
             }`}
           >
             Add Home Product
+          </button>
+          <button
+            onClick={() => setActiveForm("category")}
+            className={`px-6 py-3 rounded-lg shadow transition-colors font-michroma text-sm ${
+              activeForm === "category"
+                ? "bg-red-600 text-white"
+                : "bg-gray-200 text-gray-700"
+            }`}
+          >
+            Add Category
           </button>
         </div>
 
@@ -806,6 +988,144 @@ const AdminDashboard = () => {
           </div>
         )}
 
+        {activeForm === "category" && (
+          <div className="bg-white shadow-xl rounded-lg overflow-hidden mb-10">
+            <div className="p-6 sm:p-8">
+              <h3 className="text-lg font-medium text-gray-900 mb-6 border-b pb-2">
+                Add New Category
+              </h3>
+              <form onSubmit={handleCategorySubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Category Type
+                  </label>
+                  <select
+                    name="categoryType"
+                    value={categoryForm.categoryType}
+                    onChange={handleCategoryChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    required
+                  >
+                    <option value="roll">Roll</option>
+                    <option value="cd">CD</option>
+                    <option value="spool">Spool</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Name"
+                    value={categoryForm.name}
+                    onChange={handleCategoryChange}
+                    className="w-full border px-3 py-2 rounded"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Material
+                  </label>
+                  <input
+                    type="text"
+                    name="material"
+                    placeholder="Material"
+                    value={categoryForm.material}
+                    onChange={handleCategoryChange}
+                    className="w-full border px-3 py-2 rounded"
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Thickness
+                    </label>
+                    <input
+                      type="text"
+                      name="thickness"
+                      placeholder="Thickness"
+                      value={categoryForm.thickness}
+                      onChange={handleCategoryChange}
+                      className="w-full border px-3 py-2 rounded"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Length
+                    </label>
+                    <input
+                      type="text"
+                      name="length"
+                      placeholder="Length"
+                      value={categoryForm.length}
+                      onChange={handleCategoryChange}
+                      className="w-full border px-3 py-2 rounded"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Description
+                  </label>
+                  <textarea
+                    name="description"
+                    placeholder="Description"
+                    value={categoryForm.description}
+                    onChange={handleCategoryChange}
+                    className="w-full border px-3 py-2 rounded"
+                    rows={3}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Image URL (optional)
+                  </label>
+                  <input
+                    type="text"
+                    name="imageUrl"
+                    placeholder="Image URL (optional)"
+                    value={categoryForm.imageUrl || ""}
+                    onChange={handleCategoryChange}
+                    className="w-full border px-3 py-2 rounded"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Upload Image
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleCategoryFileChange}
+                    className="w-full border px-3 py-2 rounded"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="bg-red-600 text-white px-4 py-2 rounded w-full"
+                  disabled={uploading}
+                >
+                  {uploading ? "Uploading..." : "Add Category"}
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+
         <div className="bg-white shadow-xl rounded-lg overflow-hidden">
           <div className="p-6 sm:p-8">
             <h3 className="font-michroma text-lg font-medium text-gray-900 mb-6 border-b pb-2">
@@ -832,8 +1152,14 @@ const AdminDashboard = () => {
                 View Showcase Cards
               </button>
               <button
+                onClick={() => setModalCategory("categories")}
+                className="font-michroma text-sm inline-flex items-center px-4 py-2 border border-transparent font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+              >
+                View Categories
+              </button>
+              <button
                 onClick={() => setModalCategory("all")}
-                className=" font-michroma text-sm inline-flex items-center px-4 py-2 border border-transparent font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                className=" font-michroma text-sm inline-flex items-center px-4 py-2 border border-transparent font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 View All Products
               </button>
@@ -849,6 +1175,8 @@ const AdminDashboard = () => {
                         ? "showcase cards"
                         : modalCategory === "all"
                         ? "all products"
+                        : modalCategory === "categories"
+                        ? "categories"
                         : "products"
                     }...`}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
@@ -905,6 +1233,8 @@ const AdminDashboard = () => {
                               ? "showcase cards"
                               : modalCategory === "all"
                               ? "all products"
+                              : modalCategory === "categories"
+                              ? "categories"
                               : "products"
                           } to get started.`}
                     </p>
@@ -943,12 +1273,32 @@ const AdminDashboard = () => {
                               Position: {item.position}
                             </p>
                           )}
+                          {item.categoryType && (
+                            <p className="text-sm font-medium text-blue-600">
+                              Type: {item.categoryType}
+                            </p>
+                          )}
                           <p className="text-sm text-gray-600">
                             {item.description || item.shortDescription}
                           </p>
                           {item.price && (
                             <p className="mt-2 text-sm text-gray-500">
                               Price: {item.price}₹
+                            </p>
+                          )}
+                          {item.material && (
+                            <p className="mt-1 text-sm text-gray-500">
+                              Material: {item.material}
+                            </p>
+                          )}
+                          {item.thickness && (
+                            <p className="mt-1 text-sm text-gray-500">
+                              Thickness: {item.thickness}
+                            </p>
+                          )}
+                          {item.length && (
+                            <p className="mt-1 text-sm text-gray-500">
+                              Length: {item.length}
                             </p>
                           )}
                           {item.createdAt && (
@@ -967,6 +1317,8 @@ const AdminDashboard = () => {
                                   ? "showcaseCards"
                                   : modalCategory === "all"
                                   ? "allProducts"
+                                  : modalCategory === "categories"
+                                  ? "categories"
                                   : "products"
                               )
                             }
@@ -995,8 +1347,18 @@ const AdminDashboard = () => {
                                   image: item.image,
                                   position: item.position,
                                 });
+                              } else if (modalCategory === "categories") {
+                                setEditCategory({
+                                  id: item.id,
+                                  name: item.name,
+                                  material: item.material,
+                                  thickness: item.thickness,
+                                  length: item.length,
+                                  description: item.description,
+                                  categoryType: item.categoryType,
+                                  image: item.image,
+                                });
                               } else if (modalCategory === "all") {
-                                // No edit for all products as they're synced from other collections
                               } else {
                                 setEditProduct({
                                   ...item,
@@ -1170,6 +1532,103 @@ const AdminDashboard = () => {
                   onClick={handleEditCardSubmit}
                   disabled={uploading}
                   className={`bg-red-600 text-white px-4 py-2 rounded ${
+                    uploading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                >
+                  {uploading ? "Saving..." : "Save Changes"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {editCategory && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">Edit Category</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Category Type
+                </label>
+                <select
+                  name="categoryType"
+                  value={editCategory.categoryType}
+                  onChange={handleEditCategoryChange}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  required
+                >
+                  <option value="roll">Roll</option>
+                  <option value="cd">CD</option>
+                  <option value="spool">Spool</option>
+                </select>
+              </div>
+
+              <input
+                type="text"
+                name="name"
+                placeholder="Name"
+                value={editCategory.name}
+                onChange={handleEditCategoryChange}
+                className="w-full border p-2 rounded"
+              />
+              <input
+                type="text"
+                name="material"
+                placeholder="Material"
+                value={editCategory.material}
+                onChange={handleEditCategoryChange}
+                className="w-full border p-2 rounded"
+              />
+              <input
+                type="text"
+                name="thickness"
+                placeholder="Thickness"
+                value={editCategory.thickness}
+                onChange={handleEditCategoryChange}
+                className="w-full border p-2 rounded"
+              />
+              <input
+                type="text"
+                name="length"
+                placeholder="Length"
+                value={editCategory.length}
+                onChange={handleEditCategoryChange}
+                className="w-full border p-2 rounded"
+              />
+              <textarea
+                name="description"
+                placeholder="Description"
+                value={editCategory.description}
+                onChange={handleEditCategoryChange}
+                className="w-full border p-2 rounded"
+                rows={3}
+              />
+              <div className="flex items-center gap-4">
+                <img
+                  src={editCategory.image}
+                  alt="Current category"
+                  className="w-20 h-20 object-cover rounded border"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleEditCategoryImageChange}
+                  className="w-full border p-2 rounded"
+                />
+              </div>
+              <div className="flex justify-between">
+                <button
+                  onClick={() => setEditCategory(null)}
+                  className="bg-gray-500 text-white px-4 py-2 rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleEditCategorySubmit}
+                  disabled={uploading}
+                  className={`bg-purple-600 text-white px-4 py-2 rounded ${
                     uploading ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 >
