@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, addDoc, query, where } from 'firebase/firestore';
 import { useAuth } from '../context/AuthContext';
 
 const countries = [
@@ -103,7 +103,6 @@ const countries = [
   { name: "Zimbabwe", code: "ZW", dialCode: "+263" },
 ];
 
-
 function AllProducts() {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -123,10 +122,43 @@ function AllProducts() {
     productDescription: ''
   });
 
-
-  
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState(countries[0]); 
+  const [selectedCountry, setSelectedCountry] = useState(countries.find(c => c.code === "IN") || countries[0]);
+
+  // Check if product name already exists
+  const productNameExists = async (productName) => {
+    try {
+      const q = query(collection(db, 'allProducts'), where('name', '==', productName));
+      const querySnapshot = await getDocs(q);
+      return !querySnapshot.empty;
+    } catch (error) {
+      console.error("Error checking product name:", error);
+      return false;
+    }
+  };
+
+  // Add product function (example)
+  const addProduct = async (productData) => {
+    // Check if product name already exists
+    const exists = await productNameExists(productData.name);
+    
+    if (exists) {
+      alert('A product with this name already exists!');
+      return false;
+    }
+    
+    try {
+      const docRef = await addDoc(collection(db, 'allProducts'), productData);
+      console.log("Product added with ID: ", docRef.id);
+      
+      // Update local state
+      setProducts(prevProducts => [...prevProducts, { id: docRef.id, ...productData }]);
+      return true;
+    } catch (error) {
+      console.error("Error adding product: ", error);
+      return false;
+    }
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {

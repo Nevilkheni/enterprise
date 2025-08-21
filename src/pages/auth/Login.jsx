@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { 
-  signInWithEmailAndPassword, 
-  sendPasswordResetEmail 
+import {
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth } from "../../firebase";
 import { useAuth } from "../../context/AuthContext";
-import { EyeIcon, EyeSlashIcon, EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
+import {
+  EyeIcon,
+  EyeSlashIcon,
+  EnvelopeIcon,
+  LockClosedIcon,
+} from "@heroicons/react/24/outline";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -29,12 +34,28 @@ const Login = () => {
       await signInWithEmailAndPassword(auth, email, password);
       navigate("/");
     } catch (err) {
-      let errorMessage = err.message;
-      if (err.code === "auth/invalid-credential") {
-        errorMessage = "Invalid email or password";
-      } else if (err.code === "auth/too-many-requests") {
-        errorMessage = "Account temporarily locked due to too many failed attempts. Try again later or reset your password.";
+      let errorMessage = "Unable to sign in. Please try again.";
+
+      switch (err.code) {
+        case "auth/invalid-credential":
+        case "auth/wrong-password":
+        case "auth/user-not-found":
+          errorMessage = "Invalid email or password";
+          break;
+
+        case "auth/too-many-requests":
+          errorMessage =
+            "Account temporarily locked due to too many failed attempts. Try again later or reset your password.";
+          break;
+
+        case "auth/invalid-email":
+          errorMessage = "Please enter a valid email address";
+          break;
+
+        default:
+          errorMessage = "Something went wrong. Please try again.";
       }
+
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -53,12 +74,23 @@ const Login = () => {
 
     try {
       await sendPasswordResetEmail(auth, email);
-      setMessage(`Password reset link sent to ${email}. Check your inbox (and spam folder).`);
+      setMessage(
+        `Password reset link sent to ${email}. Check your inbox (and spam folder).`
+      );
     } catch (err) {
-      let errorMessage = err.message;
-      if (err.code === "auth/user-not-found") {
-        errorMessage = "No account found with this email address.";
+      let errorMessage = "Unable to send reset link. Please try again.";
+
+      switch (err.code) {
+        case "auth/user-not-found":
+          errorMessage = "No account found with this email address.";
+          break;
+        case "auth/invalid-email":
+          errorMessage = "Please enter a valid email address.";
+          break;
+        default:
+          errorMessage = "Something went wrong. Please try again.";
       }
+
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -70,7 +102,9 @@ const Login = () => {
       <div className="w-full max-w-md">
         <div className="bg-white rounded-xl shadow-2xl p-8 sm:p-10">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Welcome Back
+            </h1>
             <p className="text-gray-600">Sign in to your account</p>
           </div>
 
@@ -87,7 +121,10 @@ const Login = () => {
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Email address
               </label>
               <div className="relative rounded-md shadow-sm">
@@ -109,7 +146,10 @@ const Login = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Password
               </label>
               <div className="relative rounded-md shadow-sm">
@@ -151,7 +191,10 @@ const Login = () => {
                   type="checkbox"
                   className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                <label
+                  htmlFor="remember-me"
+                  className="ml-2 block text-sm text-gray-700"
+                >
                   Remember me
                 </label>
               </div>
@@ -234,3 +277,4 @@ const Login = () => {
 };
 
 export default Login;
+ 

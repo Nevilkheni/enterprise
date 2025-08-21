@@ -1,5 +1,11 @@
 import React from "react";
-import { Mail, Phone, Instagram, Youtube, Facebook } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  Instagram,
+  Youtube,
+  Facebook,
+} from "lucide-react";
 import { motion } from "framer-motion";
 
 const Footer = () => {
@@ -9,9 +15,9 @@ const Footer = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
+        delayChildren: 0.2,
+      },
+    },
   };
 
   const itemVariants = {
@@ -21,31 +27,47 @@ const Footer = () => {
       opacity: 1,
       transition: {
         duration: 0.5,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
+
+  const TelegramIcon = (props) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        d="M9.999 15.5 8.5 20l2.5-4.5L17.5 7l-7.501 8.5zM12 2C6.486 2 2 6.486 2 12c0 5.514 
+    4.486 10 10 10s10-4.486 10-10c0-5.514-4.486-10-10-10z"
+      />
+    </svg>
+  );
 
   const socialIconVariants = {
     hover: { scale: 1.1, y: -3 },
-    tap: { scale: 0.95 }
+    tap: { scale: 0.95 },
   };
 
   return (
-    <motion.footer 
+    <motion.footer
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
       className="bg-gradient-to-r from-gray-800 to-gray-900 text-white pt-12 pb-6 px-4 sm:px-6"
     >
       <div className="max-w-7xl mx-auto">
-        <motion.div 
+        <motion.div
           variants={containerVariants}
           className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8"
         >
           <motion.div variants={itemVariants} className="space-y-4">
-            <h3 className="text-xl font-michroma font-bold text-red-400 mb-4">Contact Us</h3>
-            <motion.div 
+            <h3 className="text-xl font-michroma font-bold text-red-400 mb-4">
+              Contact Us
+            </h3>
+            <motion.div
               whileHover={{ x: 5 }}
               className="flex items-start space-x-3"
             >
@@ -55,7 +77,7 @@ const Footer = () => {
                 <p className="text-gray-300">jyotenterprise135@gmail.com</p>
               </div>
             </motion.div>
-            <motion.div 
+            <motion.div
               whileHover={{ x: 5 }}
               className="flex items-start space-x-3"
             >
@@ -69,7 +91,9 @@ const Footer = () => {
           </motion.div>
 
           <motion.div variants={itemVariants} className="space-y-4">
-            <h3 className="text-xl font-michroma  font-bold text-red-400 mb-4">Quick Links</h3>
+            <h3 className="text-xl font-michroma  font-bold text-red-400 mb-4">
+              Quick Links
+            </h3>
             <div className="grid grid-cols-2 gap-4">
               {[
                 { name: "Home", path: "/home" },
@@ -77,14 +101,14 @@ const Footer = () => {
                 { name: "About Us", path: "/about" },
                 { name: "Contact", path: "/contact" },
                 { name: "FAQs", path: "/faqs" },
-                { name: "Privacy Policy", path: "/privacy" }
+                { name: "Privacy Policy", path: "/privacy" },
               ].map((link, index) => (
                 <motion.a
                   key={index}
                   variants={itemVariants}
-                  whileHover={{ 
+                  whileHover={{
                     x: 5,
-                    color: "#ffffff"
+                    color: "#ffffff",
                   }}
                   href={link.path}
                   className="text-gray-300 transition-colors"
@@ -96,24 +120,31 @@ const Footer = () => {
           </motion.div>
 
           <motion.div variants={itemVariants} className="space-y-4">
-            <h3 className="text-xl font-michroma font-bold text-red-400 mb-4">Follow Us</h3>
+            <h3 className="text-xl font-michroma font-bold text-red-400 mb-4">
+              Follow Us
+            </h3>
             <div className="flex space-x-4">
               {[
                 {
                   icon: Instagram,
                   url: "https://www.instagram.com/jyotenterprice?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
-                  color: "bg-pink-600"
+                  color: "bg-pink-600",
                 },
                 {
                   icon: Youtube,
                   url: "https://youtube.com/@khenidhansukh2439?si=QqCDUbVKd2UKPshU",
-                  color: "bg-red-700"
+                  color: "bg-red-700",
                 },
                 {
                   icon: Facebook,
                   url: "https://facebook.com",
-                  color: "bg-blue-600"
-                }
+                  color: "bg-blue-600",
+                },
+                {
+                  icon: TelegramIcon,
+                  url: "https://t.me/yourchannel",
+                  color: "bg-blue-500",
+                },
               ].map((social, index) => (
                 <motion.a
                   key={index}
@@ -130,16 +161,13 @@ const Footer = () => {
                 </motion.a>
               ))}
             </div>
-            <motion.p 
-              whileHover={{ x: 5 }}
-              className="text-gray-400 mt-4"
-            >
+            <motion.p whileHover={{ x: 5 }} className="text-gray-400 mt-4">
               Subscribe to our newsletter for the latest updates and offers.
             </motion.p>
           </motion.div>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -147,19 +175,22 @@ const Footer = () => {
           className="border-t border-gray-700 pt-6 flex flex-col md:flex-row justify-between items-center"
         >
           <p className="text-gray-400  font-michroma text-sm">
-            &copy; {new Date().getFullYear()} Jyot Enterprise. All rights reserved.
+            &copy; {new Date().getFullYear()} Jyot Enterprise. All rights
+            reserved.
           </p>
           <div className="flex space-x-4 mt-4 md:mt-0">
-            {["Terms of Service", "Privacy Policy", "Cookie Policy"].map((item, index) => (
-              <motion.a
-                key={index}
-                whileHover={{ color: "#ffffff", x: 2 }}
-                href="/"
-                className="text-gray-400 text-sm transition-colors"
-              >
-                {item}
-              </motion.a>
-            ))}
+            {["Terms of Service", "Privacy Policy", "Cookie Policy"].map(
+              (item, index) => (
+                <motion.a
+                  key={index}
+                  whileHover={{ color: "#ffffff", x: 2 }}
+                  href="/"
+                  className="text-gray-400 text-sm transition-colors"
+                >
+                  {item}
+                </motion.a>
+              )
+            )}
           </div>
         </motion.div>
       </div>

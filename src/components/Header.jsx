@@ -18,14 +18,14 @@ const Header = () => {
 
   const leftNavItems = [
     { name: "Home", path: "/" },
-    { name: "About", path: "/about" },
-    { name: "Contact", path: "/contact" },
+    { name: "Products", path: "/products" },
+    { name: "Category", path: "/category" },
   ];
 
   const rightNavItems = [
+    { name: "About", path: "/about" },
     { name: "Shope", path: "/shop" },
-    { name: "Products", path: "/products" },
-    { name: "Category", path: "/category" },
+    { name: "Contact", path: "/contact" },
   ];
 
   const handleLogout = async () => {
@@ -148,11 +148,7 @@ const Header = () => {
               className="flex-shrink-0 cursor-pointer flex items-center mx-2"
               onClick={() => handleNavigation("/")}
             >
-              <img
-                src={compnylogo}
-                alt="Your Company"
-                className="h-8 w-auto"
-              />
+              <img src={compnylogo} alt="Your Company" className="h-8 w-auto" />
               <span className="font-michroma text-sm md:text-lg font-bold text-red-600 ml-1 sm:ml-2">
                 Jyot<span className="text-gray-900">Enterprise</span>
               </span>
