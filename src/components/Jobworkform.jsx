@@ -39,7 +39,7 @@ const JobWorkForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="w-full max-w-6xl bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="bg-red-400 text-white p-2 text-center">
           <h1 className="font-bold font-michroma text-md md:text-2xl">Job Work Form</h1>
