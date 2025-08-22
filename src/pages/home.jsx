@@ -7,6 +7,7 @@ import Certificate from "../components/certificate";
 import Feature from "../components/feature";
 import HomeImgSlider from "../components/Homeimgslider";
 import { useNavigate } from "react-router-dom";
+import JobWorkForm from "../components/Jobworkform";
 
 function Home() {
   const navigate = useNavigate();
@@ -126,6 +127,7 @@ function Home() {
       <CardShowcase />
       <Feature />
       <Certificate />
+      <JobWorkForm/>  
     </div>
   );
 }
