@@ -4,15 +4,19 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
   onAuthStateChanged,
-  signOut,
-  deleteUser
+  deleteUser,
+  updateProfile
 } from "firebase/auth";
 import { auth } from "../../firebase";
+import { doc, setDoc, getFirestore, deleteDoc } from "firebase/firestore"; // Added deleteDoc import
+
+const db = getFirestore();
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,15 +25,16 @@ const Register = () => {
   const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState("");
   const [tempUser, setTempUser] = useState(null);
+  const [checkSpamMessage, setCheckSpamMessage] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        await user.reload(); // refresh user state
+        await user.reload();
         if (user.emailVerified) {
-          navigate("/"); // auto login & redirect
+          navigate("/");
         }
       }
     });
@@ -55,12 +60,37 @@ const Register = () => {
         password
       );
       const user = userCredential.user;
-      setTempUser(user); // Store the user temporarily
+      setTempUser(user);
 
-      // Send verification email
-      await sendEmailVerification(user);
+      // Update profile with name if provided
+      if (name) {
+        await updateProfile(user, {
+          displayName: name
+        });
+      }
+
+      // Create a user document in Firestore
+      try {
+        await setDoc(doc(db, "users", user.uid), {
+          email: user.email,
+          name: name || "",
+          createdAt: new Date(),
+          emailVerified: false,
+          role: "user"
+        });
+      } catch (dbError) {
+        console.error("Error creating user document: ", dbError);
+      }
+
+      // Send verification email with custom settings
+      await sendEmailVerification(user, {
+        url: `${window.location.origin}/login?verified=true`,
+        handleCodeInApp: false
+      });
+      
       setRegisteredEmail(email);
       setShowVerificationModal(true);
+      setCheckSpamMessage(true);
 
       // Set up a listener to check if email is verified
       const interval = setInterval(async () => {
@@ -68,31 +98,52 @@ const Register = () => {
         if (user.emailVerified) {
           clearInterval(interval);
           setShowVerificationModal(false);
-          navigate("/"); // Redirect to home page after verification
+          
+          // Update Firestore document
+          try {
+            await setDoc(doc(db, "users", user.uid), {
+              emailVerified: true,
+              verifiedAt: new Date()
+            }, { merge: true });
+          } catch (dbError) {
+            console.error("Error updating user document: ", dbError);
+          }
+          
+          navigate("/");
         }
-      }, 2000); // Check every 2 seconds
+      }, 3000);
 
       // Set timeout to delete unverified user after 24 hours
       setTimeout(async () => {
         await user.reload();
         if (!user.emailVerified) {
           try {
+            // Delete from Firestore first
+            try {
+              await deleteDoc(doc(db, "users", user.uid));
+            } catch (dbError) {
+              console.error("Error deleting user document: ", dbError);
+            }
+            
+            // Then delete the auth user
             await deleteUser(user);
             console.log("Unverified user deleted after 24 hours");
           } catch (error) {
             console.error("Error deleting unverified user:", error);
           }
         }
-      }, 24 * 60 * 60 * 1000); // 24 hours
+      }, 24 * 60 * 60 * 1000);
 
     } catch (err) {
       let errorMessage = err.message;
       if (err.code === "auth/email-already-in-use") {
-        errorMessage = "An account with this email already exists.";
+        errorMessage = "An account with this email already exists. Try signing in.";
       } else if (err.code === "auth/weak-password") {
         errorMessage = "Password should be at least 6 characters.";
       } else if (err.code === "auth/invalid-email") {
         errorMessage = "Please enter a valid email address.";
+      } else if (err.code === "auth/operation-not-allowed") {
+        errorMessage = "Email/password accounts are not enabled. Please contact support.";
       }
       setError(errorMessage);
     }
@@ -102,8 +153,12 @@ const Register = () => {
   const handleResendVerification = async () => {
     try {
       if (tempUser) {
-        await sendEmailVerification(tempUser);
+        await sendEmailVerification(tempUser, {
+          url: `${window.location.origin}/login?verified=true`,
+          handleCodeInApp: false
+        });
         setMessage("Verification email sent again! Please check your inbox.");
+        setCheckSpamMessage(true);
       }
     } catch (err) {
       setError("Failed to resend verification email. Please try again.");
@@ -113,13 +168,21 @@ const Register = () => {
   const handleCancelRegistration = async () => {
     try {
       if (tempUser) {
+        // Delete from Firestore first
+        try {
+          await deleteDoc(doc(db, "users", tempUser.uid));
+        } catch (dbError) {
+          console.error("Error deleting user document: ", dbError);
+        }
+        
+        // Then delete the auth user
         await deleteUser(tempUser);
         setShowVerificationModal(false);
         setTempUser(null);
         setMessage("Registration cancelled. User account deleted.");
       }
     } catch (err) {
-      setError("Failed to cancel registration. Please try again.");
+      setError("Failed to cancel registration. You may need to sign in and delete your account manually.");
     }
   };
 
@@ -145,6 +208,39 @@ const Register = () => {
           )}
 
           <form onSubmit={handleRegister} className="space-y-6">
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                Full Name (Optional)
+              </label>
+              <div className="relative rounded-md shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg
+                    className="h-5 w-5 text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
+                  </svg>
+                </div>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  autoComplete="name"
+                  placeholder="Your Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                 Email address
@@ -415,6 +511,12 @@ const Register = () => {
                 Please check your inbox and click the verification link to activate your account.
                 Your account will be created only after email verification.
               </p>
+              
+              {checkSpamMessage && (
+                <p className="text-blue-800 text-sm mt-2">
+                  <strong>Note:</strong> If you don't see the email in your inbox, please check your spam or junk folder.
+                </p>
+              )}
             </div>
 
             <div className="flex flex-col gap-3">
@@ -423,6 +525,13 @@ const Register = () => {
                 className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 Resend Verification Email
+              </button>
+              
+              <button
+                onClick={handleCancelRegistration}
+                className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+              >
+                Cancel Registration
               </button>
             </div>
           </div>
