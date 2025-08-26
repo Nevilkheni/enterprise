@@ -273,11 +273,8 @@
 // };
 
 // export default Register;
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { httpsCallable } from "firebase/functions";
-import { auth, functions } from "../../firebase";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -311,20 +308,26 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const sendOtpFunction = httpsCallable(functions, "sendOtp");
-      const result = await sendOtpFunction({ email });
+      const res = await fetch(
+        "https://asia-south1-product-3deed.cloudfunctions.net/sendOtp",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        }
+      );
 
-      setVerificationId(result.data.verificationId || email); // fallback as verificationId
-      setOtpSent(true);
-      setLoading(false);
-    } catch (err) {
-      let errorMessage = "Something went wrong. Please try again.";
-      if (err.code === "auth/email-already-in-use") {
-        errorMessage = "An account with this email already exists.";
-      } else if (err.code === "auth/invalid-email") {
-        errorMessage = "Please enter a valid email address.";
+      const data = await res.json();
+
+      if (res.ok) {
+        setVerificationId(data.verificationId || email); // fallback
+        setOtpSent(true);
+      } else {
+        setError(data.error || "Failed to send OTP");
       }
-      setError(errorMessage);
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+    } finally {
       setLoading(false);
     }
   };
@@ -336,21 +339,30 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const verifyOtpFunction = httpsCallable(
-        functions,
-        "verifyOtpAndCreateUser"
+      const res = await fetch(
+        "https://asia-south1-product-3deed.cloudfunctions.net/verifyOtpAndCreateUser",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            password,
+            otp,
+            verificationId: email, // backend expects same as email
+          }),
+        }
       );
-      await verifyOtpFunction({
-        email,
-        password,
-        otp,
-        verificationId,
-      });
 
-      setLoading(false);
-      navigate("/login"); // success -> go login
+      const data = await res.json();
+
+      if (res.ok) {
+        navigate("/login");
+      } else {
+        setError(data.error || "Invalid or expired OTP. Please try again.");
+      }
     } catch (err) {
-      setError("Invalid or expired OTP. Please try again.");
+      setError("Failed to verify OTP. Try again.");
+    } finally {
       setLoading(false);
     }
   };
