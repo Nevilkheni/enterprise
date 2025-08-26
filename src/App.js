@@ -21,6 +21,7 @@ import WhatsAppButton from "./components/WhatsAppButton";
 import AllProducts from "./pages/allproduct";
 import Payment from "./pages/Payment";
 import { useProducts } from "./hooks/productHooks";
+import VerifyEmail from "./components/VerifyEmail";
 
 
 function AppContent() {
@@ -100,6 +101,8 @@ function AppContent() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/category" element={<Category />} />
         <Route path="/category/:categoryType" element={<Category />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+
         <Route
           path="/cart"
           element={
