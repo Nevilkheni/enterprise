@@ -1,11 +1,8 @@
 [
   {
-    "origin": [
-      "http://localhost:3000",
-      "https://enterprise-fawn.vercel.app"
-    ],
-    "method": ["GET", "POST", "PUT", "DELETE"],
-    "maxAgeSeconds": 3600,
-    "responseHeader": ["Content-Type", "x-goog-meta-*"]
+    "origin": ["http://localhost:3000"],
+    "method": ["GET", "PUT", "POST", "DELETE", "HEAD"],
+    "responseHeader": ["Content-Type", "Authorization", "Content-Length", "User-Agent", "x-goog-resumable"],
+    "maxAgeSeconds": 3600
   }
 ]

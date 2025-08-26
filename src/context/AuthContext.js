@@ -32,7 +32,7 @@ export function AuthProvider({ children }) {
       if (!isMounted) return;
 
       if (currentUser) {
-        const adminEmails = ["nevilkheni135@gmail.com"];
+        const adminEmails = ["nevilkheni14@gmail.com"];
         const isAdmin = adminEmails.includes(currentUser.email);
 
         setCart([]);

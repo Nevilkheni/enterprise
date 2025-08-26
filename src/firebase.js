@@ -19,7 +19,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
-// ✅ better to use your region (India latency fix)
 const functions = getFunctions(app, "asia-south1");
 
 export { auth, db, storage, functions };
