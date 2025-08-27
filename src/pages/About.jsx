@@ -1,10 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import silver from "../assets/image/silver.jpg";
-
 import machine from "../assets/image/Sequin-Punching-Machine.avif";
 import machine1 from "../assets/image/machine.jpg";
-
 
 const companyHistory = [
   {
@@ -173,7 +171,7 @@ const imageVariantsRight = {
 
 const About = () => {
   return (
-    <div className="max-w-5xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+    <div className="max-w-5xl mx-auto px-4 py-12 sm:px-6 lg:px-8 overflow-hidden">
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -188,7 +186,7 @@ const About = () => {
         }}
         className="text-center mb-16"
       >
-        <h1 className="text-3xl font-michroma  md:text-4xl font-bold text-gray-900 mb-6">
+        <h1 className="text-3xl font-michroma md:text-4xl font-bold text-gray-900 mb-6">
           About Jyot Sequence
         </h1>
         <p className="font-josefin text-lx text-gray-600 max-w-3xl mx-auto">
@@ -235,18 +233,18 @@ const About = () => {
             key={index}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "-50px" }}
             variants={itemVariants}
             className={`relative mb-16 md:flex ${
               index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-            } items-center justify-between`}
+            } items-center justify-between w-full`}
           >
             <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 top-1/2 w-16 h-16 bg-red-600 rounded-full items-center justify-center z-10 shadow-lg">
               <span className="text-white font-bold text-lg">{item.year}</span>
             </div>
 
-            <div className="md:hidden mb-4">
-              <span className="inline-block px-4 py-2 bg-red-600  text-white font-bold rounded-full">
+            <div className="md:hidden mb-4 flex justify-center">
+              <span className="inline-block px-4 py-2 bg-red-600 text-white font-bold rounded-full">
                 {item.year}
               </span>
             </div>
@@ -262,7 +260,7 @@ const About = () => {
                 item.imagePosition === "left" ? "md:pr-8" : "md:pl-8"
               }`}
             >
-              <div className="overflow-hidden rounded-xl shadow-lg">
+              <div className="overflow-hidden rounded-xl shadow-lg mx-auto max-w-md">
                 <img
                   src={item.image}
                   alt={item.title}
@@ -274,12 +272,12 @@ const About = () => {
             <div
               className={`w-full md:w-5/12 ${
                 item.imagePosition === "left" ? "md:text-right" : "md:text-left"
-              }`}
+              } text-center md:text-left`}
             >
-              <h3 className=" font-bold text-lg font-michroma text-gray-900 mb-3">
+              <h3 className="font-bold text-lg font-michroma text-gray-900 mb-3">
                 {item.title}
               </h3>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-gray-600 leading-relaxed px-4 md:px-0">
                 {item.description}
               </p>
             </div>
@@ -299,10 +297,10 @@ const About = () => {
             transition: { duration: 0.6 },
           },
         }}
-        className="mt-20 bg-red-400  rounded-xl p-8 md:p-10 text-white"
+        className="mt-20 bg-red-400 rounded-xl p-8 md:p-10 text-white"
       >
-        <h2 className="text-lg md:text-2xl font-michroma  font-bold mb-6">Our Mission</h2>
-        <p className="font-josefin text-lg leading-relaxed  mb-4">
+        <h2 className="text-lg md:text-2xl font-michroma font-bold mb-6">Our Mission</h2>
+        <p className="font-josefin text-lg leading-relaxed mb-4">
           To empower individuals and businesses through innovative technology
           solutions that simplify lives and drive progress.
         </p>
