@@ -125,7 +125,6 @@ function AllProducts() {
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(countries.find(c => c.code === "IN") || countries[0]);
 
-  // Check if product name already exists
   const productNameExists = async (productName) => {
     try {
       const q = query(collection(db, 'allProducts'), where('name', '==', productName));
@@ -137,9 +136,7 @@ function AllProducts() {
     }
   };
 
-  // Add product function (example)
   const addProduct = async (productData) => {
-    // Check if product name already exists
     const exists = await productNameExists(productData.name);
     
     if (exists) {
@@ -151,7 +148,6 @@ function AllProducts() {
       const docRef = await addDoc(collection(db, 'allProducts'), productData);
       console.log("Product added with ID: ", docRef.id);
       
-      // Update local state
       setProducts(prevProducts => [...prevProducts, { id: docRef.id, ...productData }]);
       return true;
     } catch (error) {
