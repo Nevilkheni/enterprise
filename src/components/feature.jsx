@@ -216,7 +216,7 @@ function Feature() {
 
   return (
     <div
-      className="w-full pb-2 bg-cover bg-center bg-no-repeat bg-fixed text-center"
+      className="w-full p-4  bg-cover bg-center bg-no-repeat bg-fixed text-center"
       style={{ backgroundImage: `url(${middleSectionBg})` }}
     >
       <motion.div

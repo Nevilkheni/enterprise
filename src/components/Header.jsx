@@ -122,7 +122,7 @@ const Header = () => {
               )}
             </div>
 
-            <nav className="hidden lg:flex items-center space-x-4 xl:space-x-8">
+            <nav className="hidden lg:flex  items-center space-x-4 xl:space-x-8">
               {leftNavItems.map((item) => (
                 <motion.button
                   key={item.name}
@@ -220,7 +220,7 @@ const Header = () => {
                     key={item.name}
                     onClick={() => handleNavigation(item.path)}
                     whileHover={{ x: 5 }}
-                    className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-red-600 hover:bg-red-50"
+                    className="block w-full text-center px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-red-600 hover:bg-red-50"
                   >
                     {item.name}
                   </motion.button>
