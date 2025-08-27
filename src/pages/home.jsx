@@ -92,7 +92,7 @@ function Home() {
                 variants={buttonVariants}
                 whileHover="hover"
                 whileTap="tap"
-                onClick={() => navigate("/Products")}
+                onClick={() => navigate("/category")}
                 className="px-6 py-3 font-michroma text-sm bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-all"
               >
                 Explore Products

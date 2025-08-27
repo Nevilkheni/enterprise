@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import silver from "../assets/image/silver.jpg";
 import machine from "../assets/image/Sequin-Punching-Machine.avif";
 import machine1 from "../assets/image/machine.jpg";
+import Stats from "../components/Stats";
 
 const companyHistory = [
   {
@@ -211,8 +212,11 @@ const About = () => {
       >
         <div className="bg-gray-50 rounded-xl p-8 md:p-10 shadow-sm">
           <p className="text-gray-700 font-josefin text-lg leading-relaxed mb-4">
-            Welcome to <strong className="text-red-600 text-sm font-michroma">Jyot Sequence</strong>,
-            your premier destination for cutting-edge technology. Founded in
+            Welcome to{" "}
+            <strong className="text-red-600 text-sm font-michroma">
+              Jyot Sequence
+            </strong>
+            , your premier destination for cutting-edge technology. Founded in
             2008, we've grown from a small startup to a global leader in tech
             retail, serving millions of customers worldwide.
           </p>
@@ -224,7 +228,7 @@ const About = () => {
           </p>
         </div>
       </motion.div>
-
+      <Stats />
       <div className="relative">
         <div className="hidden md:block absolute left-1/2 h-full w-1 bg-gray-200 transform -translate-x-1/2"></div>
 
@@ -299,7 +303,9 @@ const About = () => {
         }}
         className="mt-20 bg-red-400 rounded-xl p-8 md:p-10 text-white"
       >
-        <h2 className="text-lg md:text-2xl font-michroma font-bold mb-6">Our Mission</h2>
+        <h2 className="text-lg md:text-2xl font-michroma font-bold mb-6">
+          Our Mission
+        </h2>
         <p className="font-josefin text-lg leading-relaxed mb-4">
           To empower individuals and businesses through innovative technology
           solutions that simplify lives and drive progress.

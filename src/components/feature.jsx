@@ -240,7 +240,7 @@ function Feature() {
         <input
           type="text"
           placeholder="Search products by name, type, size, or length..."
-          className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="w-full p-2 m-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
