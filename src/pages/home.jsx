@@ -72,7 +72,8 @@ function Home() {
                 className="text-lg md:text-3xl flex-none  md:flex md:gap-3  font-michroma  font-bold mb-4 text-white"
                 whileHover={{ x: 5 }}
               >
-               <p> Welcome to</p> <p className=" text-red-500">Jyot Sequence</p>
+                <p> Welcome to</p>{" "}
+                <p className=" text-red-500">Jyot Sequence</p>
               </motion.h2>
               <motion.p
                 className="text-lg font-josefin  md:text-xl mb-6 text-gray-200"
@@ -123,13 +124,13 @@ function Home() {
             </motion.div>
           </motion.div>
         </div>
+        
       </motion.section>
-
       <CardShowcase />
       <Feature />
       <Certificate />
-      <JobWorkForm/>  
-      <Reviewe/>
+      <JobWorkForm />
+      <Reviewe />
     </div>
   );
 }
