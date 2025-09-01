@@ -1,5 +1,4 @@
 
-
 // import React, { useState, useEffect, useRef } from "react";
 // import {
 //   HeartIcon,
@@ -25,6 +24,7 @@
 //   const [isVisible, setIsVisible] = useState(false);
 //   const [isModalOpen, setIsModalOpen] = useState(false);
 //   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+//   const [loadedImages, setLoadedImages] = useState({});
 //   const cardRef = useRef(null);
 
 //   useEffect(() => {
@@ -57,11 +57,28 @@
 //       document.body.style.overflow = "hidden";
 //     } else {
 //       document.body.style.overflow = "auto";
+//       setCurrentImageIndex(0);
 //     }
 
 //     return () => {
 //       document.body.style.overflow = "auto";
 //     };
+//   }, [isModalOpen]);
+
+//   // Preload images when modal opens
+//   useEffect(() => {
+//     if (isModalOpen) {
+//       const images = getProductImages();
+//       images.forEach((imgSrc, index) => {
+//         if (!loadedImages[imgSrc]) {
+//           const img = new Image();
+//           img.src = imgSrc;
+//           img.onload = () => {
+//             setLoadedImages(prev => ({ ...prev, [imgSrc]: true }));
+//           };
+//         }
+//       });
+//     }
 //   }, [isModalOpen]);
 
 //   const shouldShowPrice = showPrice && product.category !== "product";
@@ -83,32 +100,45 @@
 
 //   const images = getProductImages();
 
-//   const nextImage = () => {
+//   const nextImage = (e) => {
+//     if (e) e.stopPropagation();
 //     setCurrentImageIndex((prevIndex) => 
 //       prevIndex === images.length - 1 ? 0 : prevIndex + 1
 //     );
 //   };
 
-//   const prevImage = () => {
+//   const prevImage = (e) => {
+//     if (e) e.stopPropagation();
 //     setCurrentImageIndex((prevIndex) => 
 //       prevIndex === 0 ? images.length - 1 : prevIndex - 1
 //     );
 //   };
 
-//   const goToImage = (index) => {
+//   const goToImage = (index, e) => {
+//     if (e) e.stopPropagation();
 //     setCurrentImageIndex(index);
 //   };
 
 //   const closeModal = () => {
 //     setIsModalOpen(false);
-//     setCurrentImageIndex(0);
 //   };
+
+//   // Auto-rotate images in modal
+//   useEffect(() => {
+//     let interval;
+//     if (isModalOpen && images.length > 1) {
+//       interval = setInterval(() => {
+//         nextImage();
+//       }, 3000); // Change image every 3 seconds
+//     }
+//     return () => clearInterval(interval);
+//   }, [isModalOpen, currentImageIndex, images.length]);
 
 //   return (
 //     <>
 //       <div
 //         ref={cardRef}
-//         className={` rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 transform ${
+//         className={`rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 transform ${
 //           isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
 //         }`}
 //         style={{ transitionDelay: `${index * 50}ms` }}
@@ -117,11 +147,14 @@
 //         onClick={() => setIsModalOpen(true)}
 //       >
 //         <div className="relative">
-//           <img
-//             src={images[0]}
-//             alt={product.name || "Product Image"}
-//             className="w-full h-60 p-4 object-cover hover:scale-105 transition-transform duration-500"
-//           />
+//           <div className="w-full h-60 overflow-hidden">
+//             <img
+//               src={images[0]}
+//               alt={product.name || "Product Image"}
+//               className="w-full h-full p-4 object-contain hover:scale-105 transition-transform duration-500"
+//               loading="lazy"
+//             />
+//           </div>
 
 //           {images.length > 1 && (
 //             <div className="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
@@ -235,39 +268,38 @@
 //             {/* Close button */}
 //             <button
 //               onClick={closeModal}
-//               className="absolute top-2 right-2 z-10 bg-white rounded-full p-1 shadow-md hover:bg-gray-100 transition"
+//               className="absolute top-2 right-2 z-20 bg-white rounded-full p-1 shadow-md hover:bg-gray-100 transition"
 //             >
 //               <XMarkIcon className="h-6 w-6 text-gray-700" />
 //             </button>
 
 //             {/* Image gallery - Desktop: Left side, Mobile: Top */}
-//             <div className="relative md:w-1/2 h-64 md:h-auto">
+//             <div className="relative md:w-1/2 h-72 md:h-96 flex items-center justify-center bg-gray-50">
 //               {images.length > 0 && (
 //                 <>
-//                   <img
-//                     src={images[currentImageIndex]}
-//                     alt={`${product.name} - Image ${currentImageIndex + 1}`}
-//                     className="w-full h-full object-contain"
-//                   />
+//                   <div className="w-full h-full flex items-center justify-center">
+//                     <img
+//                       src={images[currentImageIndex]}
+//                       alt={`${product.name} - Image ${currentImageIndex + 1}`}
+//                       className="max-w-full max-h-full object-contain p-4"
+//                       onError={(e) => {
+//                         e.target.src = "https://via.placeholder.com/400x400?text=Image+Not+Found";
+//                       }}
+//                     />
+//                   </div>
                   
 //                   {/* Navigation arrows */}
 //                   {images.length > 1 && (
 //                     <>
 //                       <button
-//                         onClick={(e) => {
-//                           e.stopPropagation();
-//                           prevImage();
-//                         }}
-//                         className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition"
+//                         onClick={prevImage}
+//                         className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition z-10"
 //                       >
 //                         <ChevronLeftIcon className="h-5 w-5 text-gray-700" />
 //                       </button>
 //                       <button
-//                         onClick={(e) => {
-//                           e.stopPropagation();
-//                           nextImage();
-//                         }}
-//                         className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition"
+//                         onClick={nextImage}
+//                         className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition z-10"
 //                       >
 //                         <ChevronRightIcon className="h-5 w-5 text-gray-700" />
 //                       </button>
@@ -276,21 +308,25 @@
                   
 //                   {/* Image indicators */}
 //                   {images.length > 1 && (
-//                     <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
+//                     <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
 //                       {images.map((_, index) => (
 //                         <button
 //                           key={index}
-//                           onClick={(e) => {
-//                             e.stopPropagation();
-//                             goToImage(index);
-//                           }}
-//                           className={`w-2 h-2 rounded-full ${
+//                           onClick={(e) => goToImage(index, e)}
+//                           className={`w-3 h-3 rounded-full transition-all ${
 //                             index === currentImageIndex 
-//                               ? "bg-red-600" 
+//                               ? "bg-red-600 scale-125" 
 //                               : "bg-white"
 //                           }`}
 //                         />
 //                       ))}
+//                     </div>
+//                   )}
+
+//                   {/* Image counter */}
+//                   {images.length > 1 && (
+//                     <div className="absolute top-2 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white text-sm px-2 py-1 rounded z-10">
+//                       {currentImageIndex + 1} / {images.length}
 //                     </div>
 //                   )}
 //                 </>
@@ -371,6 +407,7 @@
 //                     onClick={(e) => {
 //                       e.stopPropagation();
 //                       onAddToCart(product);
+//                       closeModal();
 //                     }}
 //                     className="flex-1 flex items-center justify-center px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
 //                   >
@@ -407,8 +444,7 @@
 // };
 
 // export default ProductCard;
-
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   HeartIcon,
   ShoppingBagIcon,
@@ -436,7 +472,40 @@ const ProductCard = ({
   const [loadedImages, setLoadedImages] = useState({});
   const cardRef = useRef(null);
 
+  // Get product images
+  const getProductImages = useCallback(() => {
+    if (product.images && product.images.length > 0) {
+      return product.images;
+    }
+    return product.image ? [product.image] : [];
+  }, [product.images, product.image]);
+
+  const images = getProductImages();
+
+  // Next image function
+  const nextImage = useCallback((e) => {
+    if (e) e.stopPropagation();
+    setCurrentImageIndex((prevIndex) => 
+      prevIndex === images.length - 1 ? 0 : prevIndex + 1
+    );
+  }, [images.length]);
+
+  // Previous image function
+  const prevImage = useCallback((e) => {
+    if (e) e.stopPropagation();
+    setCurrentImageIndex((prevIndex) => 
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+    );
+  }, [images.length]);
+
+  // Go to specific image
+  const goToImage = useCallback((index, e) => {
+    if (e) e.stopPropagation();
+    setCurrentImageIndex(index);
+  }, []);
+
   useEffect(() => {
+    const currentCardRef = cardRef.current;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -450,13 +519,13 @@ const ProductCard = ({
       }
     );
 
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
+    if (currentCardRef) {
+      observer.observe(currentCardRef);
     }
 
     return () => {
-      if (cardRef.current) {
-        observer.unobserve(cardRef.current);
+      if (currentCardRef) {
+        observer.unobserve(currentCardRef);
       }
     };
   }, []);
@@ -477,8 +546,8 @@ const ProductCard = ({
   // Preload images when modal opens
   useEffect(() => {
     if (isModalOpen) {
-      const images = getProductImages();
-      images.forEach((imgSrc, index) => {
+      const imagesToPreload = getProductImages();
+      imagesToPreload.forEach((imgSrc, index) => {
         if (!loadedImages[imgSrc]) {
           const img = new Image();
           img.src = imgSrc;
@@ -488,7 +557,7 @@ const ProductCard = ({
         }
       });
     }
-  }, [isModalOpen]);
+  }, [isModalOpen, getProductImages, loadedImages]);
 
   const shouldShowPrice = showPrice && product.category !== "product";
   const shouldShowAddToCart = onAddToCart && product.category !== "product";
@@ -500,38 +569,6 @@ const ProductCard = ({
     }
   };
 
-  const getProductImages = () => {
-    if (product.images && product.images.length > 0) {
-      return product.images;
-    }
-    return product.image ? [product.image] : [];
-  };
-
-  const images = getProductImages();
-
-  const nextImage = (e) => {
-    if (e) e.stopPropagation();
-    setCurrentImageIndex((prevIndex) => 
-      prevIndex === images.length - 1 ? 0 : prevIndex + 1
-    );
-  };
-
-  const prevImage = (e) => {
-    if (e) e.stopPropagation();
-    setCurrentImageIndex((prevIndex) => 
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
-    );
-  };
-
-  const goToImage = (index, e) => {
-    if (e) e.stopPropagation();
-    setCurrentImageIndex(index);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
   // Auto-rotate images in modal
   useEffect(() => {
     let interval;
@@ -541,7 +578,11 @@ const ProductCard = ({
       }, 3000); // Change image every 3 seconds
     }
     return () => clearInterval(interval);
-  }, [isModalOpen, currentImageIndex, images.length]);
+  }, [isModalOpen, images.length, nextImage]);
+
+  const closeModal = useCallback(() => {
+    setIsModalOpen(false);
+  }, []);
 
   return (
     <>
@@ -559,7 +600,7 @@ const ProductCard = ({
           <div className="w-full h-60 overflow-hidden">
             <img
               src={images[0]}
-              alt={product.name || "Product Image"}
+              alt={product.name}
               className="w-full h-full p-4 object-contain hover:scale-105 transition-transform duration-500"
               loading="lazy"
             />
@@ -689,7 +730,7 @@ const ProductCard = ({
                   <div className="w-full h-full flex items-center justify-center">
                     <img
                       src={images[currentImageIndex]}
-                      alt={`${product.name} - Image ${currentImageIndex + 1}`}
+                      alt={product.name}
                       className="max-w-full max-h-full object-contain p-4"
                       onError={(e) => {
                         e.target.src = "https://via.placeholder.com/400x400?text=Image+Not+Found";
