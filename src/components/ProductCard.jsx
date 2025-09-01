@@ -1,8 +1,420 @@
+
+
+// import React, { useState, useEffect, useRef } from "react";
+// import {
+//   HeartIcon,
+//   ShoppingBagIcon,
+//   StarIcon,
+//   ChevronLeftIcon,
+//   ChevronRightIcon,
+// } from "@heroicons/react/24/outline";
+// import {
+//   HeartIcon as HeartIconSolid,
+//   XMarkIcon,
+// } from "@heroicons/react/24/solid";
+
+// const ProductCard = ({
+//   product,
+//   onAddToCart,
+//   index,
+//   showPrice = true,
+//   onToggleFavorite,
+//   isFavorite,
+// }) => {
+//   const [isHovered, setIsHovered] = useState(false);
+//   const [isVisible, setIsVisible] = useState(false);
+//   const [isModalOpen, setIsModalOpen] = useState(false);
+//   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+//   const cardRef = useRef(null);
+
+//   useEffect(() => {
+//     const observer = new IntersectionObserver(
+//       ([entry]) => {
+//         if (entry.isIntersecting) {
+//           setIsVisible(true);
+//           observer.unobserve(entry.target);
+//         }
+//       },
+//       {
+//         threshold: 0.1,
+//         rootMargin: "0px 0px -50px 0px",
+//       }
+//     );
+
+//     if (cardRef.current) {
+//       observer.observe(cardRef.current);
+//     }
+
+//     return () => {
+//       if (cardRef.current) {
+//         observer.unobserve(cardRef.current);
+//       }
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//     if (isModalOpen) {
+//       document.body.style.overflow = "hidden";
+//     } else {
+//       document.body.style.overflow = "auto";
+//     }
+
+//     return () => {
+//       document.body.style.overflow = "auto";
+//     };
+//   }, [isModalOpen]);
+
+//   const shouldShowPrice = showPrice && product.category !== "product";
+//   const shouldShowAddToCart = onAddToCart && product.category !== "product";
+
+//   const handleFavoriteClick = (e) => {
+//     e.stopPropagation();
+//     if (onToggleFavorite && typeof onToggleFavorite === "function") {
+//       onToggleFavorite(product);
+//     }
+//   };
+
+//   const getProductImages = () => {
+//     if (product.images && product.images.length > 0) {
+//       return product.images;
+//     }
+//     return product.image ? [product.image] : [];
+//   };
+
+//   const images = getProductImages();
+
+//   const nextImage = () => {
+//     setCurrentImageIndex((prevIndex) => 
+//       prevIndex === images.length - 1 ? 0 : prevIndex + 1
+//     );
+//   };
+
+//   const prevImage = () => {
+//     setCurrentImageIndex((prevIndex) => 
+//       prevIndex === 0 ? images.length - 1 : prevIndex - 1
+//     );
+//   };
+
+//   const goToImage = (index) => {
+//     setCurrentImageIndex(index);
+//   };
+
+//   const closeModal = () => {
+//     setIsModalOpen(false);
+//     setCurrentImageIndex(0);
+//   };
+
+//   return (
+//     <>
+//       <div
+//         ref={cardRef}
+//         className={` rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 transform ${
+//           isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+//         }`}
+//         style={{ transitionDelay: `${index * 50}ms` }}
+//         onMouseEnter={() => setIsHovered(true)}
+//         onMouseLeave={() => setIsHovered(false)}
+//         onClick={() => setIsModalOpen(true)}
+//       >
+//         <div className="relative">
+//           <img
+//             src={images[0]}
+//             alt={product.name || "Product Image"}
+//             className="w-full h-60 p-4 object-cover hover:scale-105 transition-transform duration-500"
+//           />
+
+//           {images.length > 1 && (
+//             <div className="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
+//               +{images.length - 1}
+//             </div>
+//           )}
+
+//           <button
+//             onClick={handleFavoriteClick}
+//             className={`absolute top-3 right-3 p-2 rounded-full shadow-md transition-all ${
+//               isFavorite
+//                 ? "bg-red-100 text-red-500"
+//                 : "bg-white text-gray-700 hover:text-red-500"
+//             }`}
+//             aria-label={isFavorite ? "Remove from wishlist" : "Add to wishlist"}
+//           >
+//             {isFavorite ? (
+//               <HeartIconSolid className="h-6 w-6" />
+//             ) : (
+//               <HeartIcon className="h-6 w-6" />
+//             )}
+//           </button>
+
+//           {isHovered && shouldShowAddToCart && (
+//             <button
+//               onClick={(e) => {
+//                 e.stopPropagation();
+//                 onAddToCart(product);
+//               }}
+//               className="hidden sm:flex absolute bottom-3 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-red-700 transition items-center whitespace-nowrap"
+//             >
+//               <ShoppingBagIcon className="h-5 w-5 mr-2" />
+//               Add to Cart
+//             </button>
+//           )}
+//         </div>
+
+//         <div className="p-4">
+//           <div className="flex justify-between items-start">
+//             <h3 className="text-lg font-semibold text-gray-800 line-clamp-1">
+//               {product.name}
+//             </h3>
+//             {product.discount && shouldShowPrice && (
+//               <span className="bg-red-100 text-red-600 text-xs font-medium px-2 py-1 rounded-full">
+//                 {product.discount}% OFF
+//               </span>
+//             )}
+//           </div>
+
+//           {product.rating && (
+//             <div className="flex items-center mt-1">
+//               <div className="flex">
+//                 {[1, 2, 3, 4, 5].map((star) => (
+//                   <StarIcon
+//                     key={star}
+//                     className={`h-4 w-4 ${
+//                       star <= Math.round(product.rating)
+//                         ? "text-yellow-400 fill-current"
+//                         : "text-gray-300"
+//                     }`}
+//                   />
+//                 ))}
+//               </div>
+//               <span className="text-xs text-gray-500 ml-1">
+//                 ({product.reviewCount || 0})
+//               </span>
+//             </div>
+//           )}
+
+//           <p className="text-gray-600 text-sm mt-2 line-clamp-2">
+//             {product.description}
+//           </p>
+
+//           {shouldShowPrice && (
+//             <div className="mt-3 flex items-center">
+//               <p className="text-gray-900 font-bold text-lg">
+//                 ₹{Number(product.price).toLocaleString("en-IN")}
+//               </p>
+//               {product.originalPrice && (
+//                 <p className="text-gray-400 text-sm line-through ml-2">
+//                   ₹{Number(product.originalPrice).toLocaleString("en-IN")}
+//                 </p>
+//               )}
+//             </div>
+//           )}
+
+//           {shouldShowAddToCart && (
+//             <button
+//               onClick={(e) => {
+//                 e.stopPropagation();
+//                 onAddToCart(product);
+//               }}
+//               className="mt-4 w-full bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition flex items-center justify-center sm:hidden"
+//             >
+//               <ShoppingBagIcon className="h-5 w-5 mr-2" />
+//               Add to Cart
+//             </button>
+//           )}
+//         </div>
+//       </div>
+
+//       {isModalOpen && (
+//         <div 
+//           className="fixed inset-0 bg-black backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-2 md:p-4"
+//           onClick={closeModal}
+//         >
+//           <div 
+//             className="bg-white rounded-lg shadow-lg max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col md:flex-row"
+//             onClick={(e) => e.stopPropagation()}
+//           >
+//             {/* Close button */}
+//             <button
+//               onClick={closeModal}
+//               className="absolute top-2 right-2 z-10 bg-white rounded-full p-1 shadow-md hover:bg-gray-100 transition"
+//             >
+//               <XMarkIcon className="h-6 w-6 text-gray-700" />
+//             </button>
+
+//             {/* Image gallery - Desktop: Left side, Mobile: Top */}
+//             <div className="relative md:w-1/2 h-64 md:h-auto">
+//               {images.length > 0 && (
+//                 <>
+//                   <img
+//                     src={images[currentImageIndex]}
+//                     alt={`${product.name} - Image ${currentImageIndex + 1}`}
+//                     className="w-full h-full object-contain"
+//                   />
+                  
+//                   {/* Navigation arrows */}
+//                   {images.length > 1 && (
+//                     <>
+//                       <button
+//                         onClick={(e) => {
+//                           e.stopPropagation();
+//                           prevImage();
+//                         }}
+//                         className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition"
+//                       >
+//                         <ChevronLeftIcon className="h-5 w-5 text-gray-700" />
+//                       </button>
+//                       <button
+//                         onClick={(e) => {
+//                           e.stopPropagation();
+//                           nextImage();
+//                         }}
+//                         className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition"
+//                       >
+//                         <ChevronRightIcon className="h-5 w-5 text-gray-700" />
+//                       </button>
+//                     </>
+//                   )}
+                  
+//                   {/* Image indicators */}
+//                   {images.length > 1 && (
+//                     <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
+//                       {images.map((_, index) => (
+//                         <button
+//                           key={index}
+//                           onClick={(e) => {
+//                             e.stopPropagation();
+//                             goToImage(index);
+//                           }}
+//                           className={`w-2 h-2 rounded-full ${
+//                             index === currentImageIndex 
+//                               ? "bg-red-600" 
+//                               : "bg-white"
+//                           }`}
+//                         />
+//                       ))}
+//                     </div>
+//                   )}
+//                 </>
+//               )}
+//             </div>
+
+//             {/* Product details - Desktop: Right side, Mobile: Bottom */}
+//             <div className="p-4 md:p-6 flex-1 overflow-y-auto">
+//               <h2 className="text-2xl font-bold text-gray-800">
+//                 {product.name}
+//               </h2>
+              
+//               {product.rating && (
+//                 <div className="flex items-center mt-2">
+//                   <div className="flex">
+//                     {[1, 2, 3, 4, 5].map((star) => (
+//                       <StarIcon
+//                         key={star}
+//                         className={`h-5 w-5 ${
+//                           star <= Math.round(product.rating)
+//                             ? "text-yellow-400 fill-current"
+//                             : "text-gray-300"
+//                         }`}
+//                       />
+//                     ))}
+//                   </div>
+//                   <span className="text-sm text-gray-500 ml-2">
+//                     ({product.reviewCount || 0} reviews)
+//                   </span>
+//                 </div>
+//               )}
+
+//               <p className="text-gray-600 mt-4">{product.description}</p>
+
+//               {shouldShowPrice && (
+//                 <div className="mt-4 flex items-center">
+//                   <p className="text-gray-900 font-bold text-xl">
+//                     ₹{Number(product.price).toLocaleString("en-IN")}
+//                   </p>
+//                   {product.originalPrice && (
+//                     <p className="text-gray-400 text-sm line-through ml-2">
+//                       ₹{Number(product.originalPrice).toLocaleString("en-IN")}
+//                     </p>
+//                   )}
+//                   {product.discount && (
+//                     <span className="bg-red-100 text-red-600 text-sm font-medium px-2 py-1 rounded-full ml-3">
+//                       {product.discount}% OFF
+//                     </span>
+//                   )}
+//                 </div>
+//               )}
+
+//               {/* Additional product details */}
+//               {product.material && (
+//                 <div className="mt-4">
+//                   <h3 className="text-sm font-semibold text-gray-700">Material:</h3>
+//                   <p className="text-gray-600">{product.material}</p>
+//                 </div>
+//               )}
+
+//               {product.thickness && (
+//                 <div className="mt-2">
+//                   <h3 className="text-sm font-semibold text-gray-700">Thickness:</h3>
+//                   <p className="text-gray-600">{product.thickness}</p>
+//                 </div>
+//               )}
+
+//               {product.length && (
+//                 <div className="mt-2">
+//                   <h3 className="text-sm font-semibold text-gray-700">Length:</h3>
+//                   <p className="text-gray-600">{product.length}</p>
+//                 </div>
+//               )}
+
+//               <div className="mt-6 flex gap-3 flex-col sm:flex-row">
+//                 {shouldShowAddToCart && (
+//                   <button
+//                     onClick={(e) => {
+//                       e.stopPropagation();
+//                       onAddToCart(product);
+//                     }}
+//                     className="flex-1 flex items-center justify-center px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+//                   >
+//                     <ShoppingBagIcon className="h-5 w-5 mr-2" />
+//                     Add to Cart
+//                   </button>
+//                 )}
+                
+//                 <button
+//                   onClick={(e) => {
+//                     e.stopPropagation();
+//                     handleFavoriteClick(e);
+//                   }}
+//                   className={`flex-1 flex items-center justify-center px-4 py-3 rounded-lg border ${
+//                     isFavorite
+//                       ? "bg-red-100 text-red-500 border-red-300"
+//                       : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+//                   }`}
+//                 >
+//                   {isFavorite ? (
+//                     <HeartIconSolid className="h-5 w-5 mr-2" />
+//                   ) : (
+//                     <HeartIcon className="h-5 w-5 mr-2" />
+//                   )}
+//                   {isFavorite ? "Wishlisted" : "Add to Wishlist"}
+//                 </button>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       )}
+//     </>
+//   );
+// };
+
+// export default ProductCard;
+
 import React, { useState, useEffect, useRef } from "react";
 import {
   HeartIcon,
   ShoppingBagIcon,
   StarIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from "@heroicons/react/24/outline";
 import {
   HeartIcon as HeartIconSolid,
@@ -20,6 +432,8 @@ const ProductCard = ({
   const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [loadedImages, setLoadedImages] = useState({});
   const cardRef = useRef(null);
 
   useEffect(() => {
@@ -47,6 +461,35 @@ const ProductCard = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+      setCurrentImageIndex(0);
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isModalOpen]);
+
+  // Preload images when modal opens
+  useEffect(() => {
+    if (isModalOpen) {
+      const images = getProductImages();
+      images.forEach((imgSrc, index) => {
+        if (!loadedImages[imgSrc]) {
+          const img = new Image();
+          img.src = imgSrc;
+          img.onload = () => {
+            setLoadedImages(prev => ({ ...prev, [imgSrc]: true }));
+          };
+        }
+      });
+    }
+  }, [isModalOpen]);
+
   const shouldShowPrice = showPrice && product.category !== "product";
   const shouldShowAddToCart = onAddToCart && product.category !== "product";
 
@@ -57,11 +500,54 @@ const ProductCard = ({
     }
   };
 
+  const getProductImages = () => {
+    if (product.images && product.images.length > 0) {
+      return product.images;
+    }
+    return product.image ? [product.image] : [];
+  };
+
+  const images = getProductImages();
+
+  const nextImage = (e) => {
+    if (e) e.stopPropagation();
+    setCurrentImageIndex((prevIndex) => 
+      prevIndex === images.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const prevImage = (e) => {
+    if (e) e.stopPropagation();
+    setCurrentImageIndex((prevIndex) => 
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+    );
+  };
+
+  const goToImage = (index, e) => {
+    if (e) e.stopPropagation();
+    setCurrentImageIndex(index);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  // Auto-rotate images in modal
+  useEffect(() => {
+    let interval;
+    if (isModalOpen && images.length > 1) {
+      interval = setInterval(() => {
+        nextImage();
+      }, 3000); // Change image every 3 seconds
+    }
+    return () => clearInterval(interval);
+  }, [isModalOpen, currentImageIndex, images.length]);
+
   return (
     <>
       <div
         ref={cardRef}
-        className={` rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 transform ${
+        className={`rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 transform ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
         }`}
         style={{ transitionDelay: `${index * 50}ms` }}
@@ -70,11 +556,20 @@ const ProductCard = ({
         onClick={() => setIsModalOpen(true)}
       >
         <div className="relative">
-          <img
-            src={product.image}
-            alt={product.name || "Product Image"}
-            className="w-full h-60 p-4 object-cover hover:scale-105 transition-transform duration-500"
-          />
+          <div className="w-full h-60 overflow-hidden">
+            <img
+              src={images[0]}
+              alt={product.name || "Product Image"}
+              className="w-full h-full p-4 object-contain hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            />
+          </div>
+
+          {images.length > 1 && (
+            <div className="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
+              +{images.length - 1}
+            </div>
+          )}
 
           <button
             onClick={handleFavoriteClick}
@@ -171,19 +666,109 @@ const ProductCard = ({
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-2">
-          <div className="bg-white rounded-lg shadow-lg max-w-lg w-full relative flex flex-col">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="w-64 h-64 m-auto rounded-t-lg"
-            />
+        <div 
+          className="fixed inset-0 bg-black backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-2 md:p-4"
+          onClick={closeModal}
+        >
+          <div 
+            className="bg-white rounded-lg shadow-lg max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col md:flex-row"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button
+              onClick={closeModal}
+              className="absolute top-2 right-2 z-20 bg-white rounded-full p-1 shadow-md hover:bg-gray-100 transition"
+            >
+              <XMarkIcon className="h-6 w-6 text-gray-700" />
+            </button>
 
-            <div className="p-4  flex-1">
+            {/* Image gallery - Desktop: Left side, Mobile: Top */}
+            <div className="relative md:w-1/2 h-72 md:h-96 flex items-center justify-center bg-gray-50">
+              {images.length > 0 && (
+                <>
+                  <div className="w-full h-full flex items-center justify-center">
+                    <img
+                      src={images[currentImageIndex]}
+                      alt={`${product.name} - Image ${currentImageIndex + 1}`}
+                      className="max-w-full max-h-full object-contain p-4"
+                      onError={(e) => {
+                        e.target.src = "https://via.placeholder.com/400x400?text=Image+Not+Found";
+                      }}
+                    />
+                  </div>
+                  
+                  {/* Navigation arrows */}
+                  {images.length > 1 && (
+                    <>
+                      <button
+                        onClick={prevImage}
+                        className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition z-10"
+                      >
+                        <ChevronLeftIcon className="h-5 w-5 text-gray-700" />
+                      </button>
+                      <button
+                        onClick={nextImage}
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition z-10"
+                      >
+                        <ChevronRightIcon className="h-5 w-5 text-gray-700" />
+                      </button>
+                    </>
+                  )}
+                  
+                  {/* Image indicators */}
+                  {images.length > 1 && (
+                    <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+                      {images.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={(e) => goToImage(index, e)}
+                          className={`w-3 h-3 rounded-full transition-all ${
+                            index === currentImageIndex 
+                              ? "bg-red-600 scale-125" 
+                              : "bg-white"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Image counter */}
+                  {images.length > 1 && (
+                    <div className="absolute top-2 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white text-sm px-2 py-1 rounded z-10">
+                      {currentImageIndex + 1} / {images.length}
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+
+            {/* Product details - Desktop: Right side, Mobile: Bottom */}
+            <div className="p-4 md:p-6 flex-1 overflow-y-auto">
               <h2 className="text-2xl font-bold text-gray-800">
                 {product.name}
               </h2>
-              <p className="text-gray-600 mt-2">{product.description}</p>
+              
+              {product.rating && (
+                <div className="flex items-center mt-2">
+                  <div className="flex">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <StarIcon
+                        key={star}
+                        className={`h-5 w-5 ${
+                          star <= Math.round(product.rating)
+                            ? "text-yellow-400 fill-current"
+                            : "text-gray-300"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-sm text-gray-500 ml-2">
+                    ({product.reviewCount || 0} reviews)
+                  </span>
+                </div>
+              )}
+
+              <p className="text-gray-600 mt-4">{product.description}</p>
 
               {shouldShowPrice && (
                 <div className="mt-4 flex items-center">
@@ -195,19 +780,60 @@ const ProductCard = ({
                       ₹{Number(product.originalPrice).toLocaleString("en-IN")}
                     </p>
                   )}
+                  {product.discount && (
+                    <span className="bg-red-100 text-red-600 text-sm font-medium px-2 py-1 rounded-full ml-3">
+                      {product.discount}% OFF
+                    </span>
+                  )}
                 </div>
               )}
 
-              <div className="mt-6 flex gap-3">
+              {/* Additional product details */}
+              {product.material && (
+                <div className="mt-4">
+                  <h3 className="text-sm font-semibold text-gray-700">Material:</h3>
+                  <p className="text-gray-600">{product.material}</p>
+                </div>
+              )}
+
+              {product.thickness && (
+                <div className="mt-2">
+                  <h3 className="text-sm font-semibold text-gray-700">Thickness:</h3>
+                  <p className="text-gray-600">{product.thickness}</p>
+                </div>
+              )}
+
+              {product.length && (
+                <div className="mt-2">
+                  <h3 className="text-sm font-semibold text-gray-700">Length:</h3>
+                  <p className="text-gray-600">{product.length}</p>
+                </div>
+              )}
+
+              <div className="mt-6 flex gap-3 flex-col sm:flex-row">
+                {shouldShowAddToCart && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onAddToCart(product);
+                      closeModal();
+                    }}
+                    className="flex-1 flex items-center justify-center px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+                  >
+                    <ShoppingBagIcon className="h-5 w-5 mr-2" />
+                    Add to Cart
+                  </button>
+                )}
+                
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     handleFavoriteClick(e);
                   }}
-                  className={`flex-1 flex items-center justify-center px-4 py-2 rounded-lg border ${
+                  className={`flex-1 flex items-center justify-center px-4 py-3 rounded-lg border ${
                     isFavorite
                       ? "bg-red-100 text-red-500 border-red-300"
-                      : "bg-white text-gray-700 border-gray-300"
+                      : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                   }`}
                 >
                   {isFavorite ? (
@@ -218,15 +844,6 @@ const ProductCard = ({
                   {isFavorite ? "Wishlisted" : "Add to Wishlist"}
                 </button>
               </div>
-            </div>
-
-            <div className="p-2 border-t flex justify-center">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
-              >
-                Close
-              </button>
             </div>
           </div>
         </div>
