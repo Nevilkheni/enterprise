@@ -11,7 +11,7 @@
 //   XMarkIcon,
 // } from "@heroicons/react/24/solid";
 
-// const ProductCard = ({
+// const ShopCard = ({
 //   product,
 //   onAddToCart,
 //   index,
@@ -178,6 +178,12 @@
 //             )}
 //           </button>
 
+//           {product.discount && (
+//             <span className="absolute top-3 left-3 bg-red-100 text-red-600 text-xs font-medium px-2 py-1 rounded-full">
+//               {product.discount}% OFF
+//             </span>
+//           )}
+
 //           {isHovered && (
 //             <button
 //               onClick={(e) => {
@@ -187,7 +193,7 @@
 //               className="hidden sm:flex absolute bottom-3 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-red-700 transition items-center whitespace-nowrap"
 //             >
 //               <ShoppingBagIcon className="h-5 w-5 mr-2" />
-//               View Details
+//               Add to Cart
 //             </button>
 //           )}
 //         </div>
@@ -223,6 +229,17 @@
 //             {product.description}
 //           </p>
 
+//           <div className="mt-3 flex items-center">
+//             <p className="text-gray-900 font-bold text-lg">
+//               ₹{Number(product.price).toLocaleString("en-IN")}
+//             </p>
+//             {product.originalPrice && (
+//               <p className="text-gray-400 text-sm line-through ml-2">
+//                 ₹{Number(product.originalPrice).toLocaleString("en-IN")}
+//               </p>
+//             )}
+//           </div>
+
 //           <button
 //             onClick={(e) => {
 //               e.stopPropagation();
@@ -231,7 +248,7 @@
 //             className="mt-4 w-full bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition flex items-center justify-center sm:hidden"
 //           >
 //             <ShoppingBagIcon className="h-5 w-5 mr-2" />
-//             View Details
+//             Add to Cart
 //           </button>
 //         </div>
 //       </div>
@@ -341,6 +358,22 @@
 
 //               <p className="text-gray-600 mt-4">{product.description}</p>
 
+//               <div className="mt-4 flex items-center">
+//                 <p className="text-gray-900 font-bold text-xl">
+//                   ₹{Number(product.price).toLocaleString("en-IN")}
+//                 </p>
+//                 {product.originalPrice && (
+//                   <p className="text-gray-400 text-sm line-through ml-2">
+//                     ₹{Number(product.originalPrice).toLocaleString("en-IN")}
+//                   </p>
+//                 )}
+//                 {product.discount && (
+//                   <span className="bg-red-100 text-red-600 text-sm font-medium px-2 py-1 rounded-full ml-3">
+//                     {product.discount}% OFF
+//                   </span>
+//                 )}
+//               </div>
+
 //               {/* Additional product details */}
 //               {product.material && (
 //                 <div className="mt-4">
@@ -373,7 +406,7 @@
 //                   className="flex-1 flex items-center justify-center px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
 //                 >
 //                   <ShoppingBagIcon className="h-5 w-5 mr-2" />
-//                   Contact for Details
+//                   Add to Cart
 //                 </button>
                 
 //                 <button
@@ -403,8 +436,7 @@
 //   );
 // };
 
-// export default ProductCard;
-
+// export default ShopCard;
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   HeartIcon,
@@ -418,7 +450,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/solid";
 
-const ProductCard = ({
+const ShopCard = ({
   product,
   onAddToCart,
   index,
@@ -585,6 +617,12 @@ const ProductCard = ({
             )}
           </button>
 
+          {product.discount && (
+            <span className="absolute top-3 left-3 bg-red-100 text-red-600 text-xs font-medium px-2 py-1 rounded-full">
+              {product.discount}% OFF
+            </span>
+          )}
+
           {isHovered && (
             <button
               onClick={(e) => {
@@ -594,7 +632,7 @@ const ProductCard = ({
               className="hidden sm:flex absolute bottom-3 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-red-700 transition items-center whitespace-nowrap"
             >
               <ShoppingBagIcon className="h-5 w-5 mr-2" />
-              View Details
+              Add to Cart
             </button>
           )}
         </div>
@@ -630,6 +668,17 @@ const ProductCard = ({
             {product.description}
           </p>
 
+          <div className="mt-3 flex items-center">
+            <p className="text-gray-900 font-bold text-lg">
+              ₹{Number(product.price).toLocaleString("en-IN")}
+            </p>
+            {product.originalPrice && (
+              <p className="text-gray-400 text-sm line-through ml-2">
+                ₹{Number(product.originalPrice).toLocaleString("en-IN")}
+              </p>
+            )}
+          </div>
+
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -638,7 +687,7 @@ const ProductCard = ({
             className="mt-4 w-full bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition flex items-center justify-center sm:hidden"
           >
             <ShoppingBagIcon className="h-5 w-5 mr-2" />
-            View Details
+            Add to Cart
           </button>
         </div>
       </div>
@@ -748,6 +797,22 @@ const ProductCard = ({
 
               <p className="text-gray-600 mt-4">{product.description}</p>
 
+              <div className="mt-4 flex items-center">
+                <p className="text-gray-900 font-bold text-xl">
+                  ₹{Number(product.price).toLocaleString("en-IN")}
+                </p>
+                {product.originalPrice && (
+                  <p className="text-gray-400 text-sm line-through ml-2">
+                    ₹{Number(product.originalPrice).toLocaleString("en-IN")}
+                  </p>
+                )}
+                {product.discount && (
+                  <span className="bg-red-100 text-red-600 text-sm font-medium px-2 py-1 rounded-full ml-3">
+                    {product.discount}% OFF
+                  </span>
+                )}
+              </div>
+
               {/* Additional product details */}
               {product.material && (
                 <div className="mt-4">
@@ -780,7 +845,7 @@ const ProductCard = ({
                   className="flex-1 flex items-center justify-center px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
                 >
                   <ShoppingBagIcon className="h-5 w-5 mr-2" />
-                  Contact for Details
+                  Add to Cart
                 </button>
                 
                 <button
@@ -810,4 +875,4 @@ const ProductCard = ({
   );
 };
 
-export default ProductCard;
+export default ShopCard;

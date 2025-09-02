@@ -19,7 +19,7 @@
 //     price: "",
 //     description: "",
 //     category: "shop",
-//     imageUrl: "",
+//     imageUrls: [""], // Changed to array for multiple images
 //   });
 //   const [homeProductForm, setHomeProductForm] = useState({
 //     name: "",
@@ -39,7 +39,7 @@
 //     categoryType: "roll", 
 //   });
 
-//   const [imageFile, setImageFile] = useState(null);
+//   const [imageFiles, setImageFiles] = useState([]); // Changed to array for multiple files
 //   const [homeProductImageFile, setHomeProductImageFile] = useState(null);
 //   const [categoryImageFile, setCategoryImageFile] = useState(null);
 
@@ -172,6 +172,43 @@
 //     setDuplicateWarning(""); // Clear warning when user types
 //   };
 
+//   // Handle multiple image URL inputs
+//   const handleImageUrlChange = (index, value) => {
+//     const newImageUrls = [...formData.imageUrls];
+//     newImageUrls[index] = value;
+//     setFormData((prev) => ({
+//       ...prev,
+//       imageUrls: newImageUrls,
+//     }));
+//   };
+
+//   // Add a new empty image URL field
+//   const addImageUrlField = () => {
+//     setFormData((prev) => ({
+//       ...prev,
+//       imageUrls: [...prev.imageUrls, ""],
+//     }));
+//   };
+
+//   // Remove an image URL field
+//   const removeImageUrlField = (index) => {
+//     if (formData.imageUrls.length <= 1) return;
+    
+//     const newImageUrls = [...formData.imageUrls];
+//     newImageUrls.splice(index, 1);
+//     setFormData((prev) => ({
+//       ...prev,
+//       imageUrls: newImageUrls,
+//     }));
+    
+//     // Also remove the corresponding file if it exists
+//     if (imageFiles[index]) {
+//       const newImageFiles = [...imageFiles];
+//       newImageFiles.splice(index, 1);
+//       setImageFiles(newImageFiles);
+//     }
+//   };
+
 //   const handleHomeProductChange = (e) => {
 //     setHomeProductForm((prev) => ({
 //       ...prev,
@@ -188,8 +225,17 @@
 //     setDuplicateWarning(""); // Clear warning when user types
 //   };
 
+//   // Handle multiple file selection
 //   const handleFileChange = (e) => {
-//     setImageFile(e.target.files[0]);
+//     const files = Array.from(e.target.files);
+//     setImageFiles((prev) => [...prev, ...files]);
+//   };
+
+//   // Remove a selected file
+//   const removeFile = (index) => {
+//     const newFiles = [...imageFiles];
+//     newFiles.splice(index, 1);
+//     setImageFiles(newFiles);
 //   };
 
 //   const handleHomeProductFileChange = (e) => {
@@ -271,7 +317,8 @@
 //       await addDoc(collection(db, "allProducts"), {
 //         name: productData.name,
 //         description: productData.description,
-//         image: productData.image,
+//         image: productData.images && productData.images.length > 0 ? productData.images[0] : "",
+//         images: productData.images || [],
 //         category: "all",
 //         createdAt: new Date().toISOString(),
 //       });
@@ -293,16 +340,26 @@
 //         return;
 //       }
       
-//       let imageUrl = "";
+//       let imageUrls = [];
 
-//       if (imageFile) {
-//         const imageRef = ref(storage, `products/${uuidv4()}-${imageFile.name}`);
-//         const snapshot = await uploadBytes(imageRef, imageFile);
-//         imageUrl = await getDownloadURL(snapshot.ref);
-//       } else if (formData.imageUrl) {
-//         imageUrl = formData.imageUrl;
-//       } else {
-//         alert("Please upload a file or paste a file URL.");
+//       // Upload files first
+//       if (imageFiles.length > 0) {
+//         for (const file of imageFiles) {
+//           const imageRef = ref(storage, `products/${uuidv4()}-${file.name}`);
+//           const snapshot = await uploadBytes(imageRef, file);
+//           const url = await getDownloadURL(snapshot.ref);
+//           imageUrls.push(url);
+//         }
+//       }
+      
+//       // Add any URLs that were manually entered
+//       if (formData.imageUrls && formData.imageUrls.length > 0) {
+//         const validUrls = formData.imageUrls.filter(url => url.trim() !== "");
+//         imageUrls = [...imageUrls, ...validUrls];
+//       }
+      
+//       if (imageUrls.length === 0) {
+//         alert("Please upload at least one image or paste at least one image URL.");
 //         setUploading(false);
 //         return;
 //       }
@@ -311,7 +368,7 @@
 //         name: formData.name,
 //         description: formData.description,
 //         category: formData.category,
-//         image: imageUrl,
+//         images: imageUrls,
 //         createdAt: new Date().toISOString(),
 //       };
 
@@ -328,9 +385,9 @@
 //         price: "",
 //         description: "",
 //         category: "shop",
-//         imageUrl: "",
+//         imageUrls: [""],
 //       });
-//       setImageFile(null);
+//       setImageFiles([]);
 //       setDuplicateWarning("");
 //       await fetchProducts();
 //     } catch (err) {
@@ -900,20 +957,41 @@
 
 //                 <div>
 //                   <label className="block text-sm font-medium text-gray-700">
-//                     Image URL (optional)
+//                     Image URLs (one per line)
 //                   </label>
-//                     <input
-//                       type="text"
-//                       name="imageUrl"
-//                       value={formData.imageUrl}
-//                       onChange={handleChange}
-//                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-//                     />
+//                   <div className="space-y-2">
+//                     {formData.imageUrls.map((url, index) => (
+//                       <div key={index} className="flex items-center gap-2">
+//                         <input
+//                           type="text"
+//                           value={url}
+//                           onChange={(e) => handleImageUrlChange(index, e.target.value)}
+//                           className="flex-1 border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+//                           placeholder="Paste image URL here"
+//                         />
+//                         <button
+//                           type="button"
+//                           onClick={() => removeImageUrlField(index)}
+//                           className="text-red-500 hover:text-red-700 p-2"
+//                           disabled={formData.imageUrls.length <= 1}
+//                         >
+//                           ×
+//                         </button>
+//                       </div>
+//                     ))}
+//                     <button
+//                       type="button"
+//                       onClick={addImageUrlField}
+//                       className="text-sm text-indigo-600 hover:text-indigo-500"
+//                     >
+//                       + Add another URL
+//                     </button>
+//                   </div>
 //                 </div>
 
 //                 <div>
 //                   <label className="block text-sm font-medium text-gray-700">
-//                     Product Image
+//                     Upload Product Images
 //                   </label>
 //                   <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
 //                     <div className="space-y-1 text-center">
@@ -922,23 +1000,38 @@
 //                           htmlFor="product-file-upload"
 //                           className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
 //                         >
-//                           <span>Upload a file</span>
+//                           <span>Upload files</span>
 //                           <input
 //                             id="product-file-upload"
 //                             type="file"
 //                             className="sr-only"
 //                             onChange={handleFileChange}
+//                             multiple
 //                           />
 //                         </label>
 //                         <p className="pl-1">or drag and drop</p>
 //                       </div>
 //                       <p className="text-xs text-gray-500">
-//                         PNG, JPG, GIF up to 10MB
+//                         PNG, JPG, GIF up to 10MB each
 //                       </p>
-//                       {imageFile && (
-//                         <p className="text-sm text-green-600">
-//                           {imageFile.name} selected
-//                         </p>
+//                       {imageFiles.length > 0 && (
+//                         <div className="mt-2">
+//                           <p className="text-sm font-medium text-gray-700">Selected files:</p>
+//                           <ul className="text-sm text-green-600">
+//                             {imageFiles.map((file, index) => (
+//                               <li key={index} className="flex items-center justify-between">
+//                                 <span>{file.name}</span>
+//                                 <button
+//                                   type="button"
+//                                   onClick={() => removeFile(index)}
+//                                   className="text-red-500 hover:text-red-700 ml-2"
+//                                 >
+//                                   ×
+//                                 </button>
+//                               </li>
+//                             ))}
+//                           </ul>
+//                         </div>
 //                       )}
 //                     </div>
 //                   </div>
@@ -1345,22 +1438,46 @@
 //                     >
 //                       <div className="flex flex-col md:flex-row gap-4">
 //                         <div className="flex-shrink-0">
-//                           <img
-//                             src={item.image || "/default.jpg"}
-//                             alt={item.name || item.title}
-//                             className="w-32 h-32 object-cover rounded-lg border"
-//                             onClick={() =>
-//                               modalCategory === "showcase"
-//                                 ? openModal(item)
-//                                 : null
-//                             }
-//                             style={{
-//                               cursor:
+//                           {item.images && item.images.length > 1 ? (
+//                             <div className="relative">
+//                               <img
+//                                 src={item.images[0] || "/default.jpg"}
+//                                 alt={item.name || item.title}
+//                                 className="w-32 h-32 object-cover rounded-lg border"
+//                                 onClick={() =>
+//                                   modalCategory === "showcase"
+//                                     ? openModal(item)
+//                                     : null
+//                                 }
+//                                 style={{
+//                                   cursor:
+//                                     modalCategory === "showcase"
+//                                       ? "pointer"
+//                                       : "default",
+//                                 }}
+//                               />
+//                               <div className="absolute bottom-1 right-1 bg-black bg-opacity-70 text-white text-xs px-1 rounded">
+//                                 +{item.images.length - 1}
+//                               </div>
+//                             </div>
+//                           ) : (
+//                             <img
+//                               src={item.image || item.images?.[0] || "/default.jpg"}
+//                               alt={item.name || item.title}
+//                               className="w-32 h-32 object-cover rounded-lg border"
+//                               onClick={() =>
 //                                 modalCategory === "showcase"
-//                                   ? "pointer"
-//                                   : "default",
-//                             }}
-//                           />
+//                                   ? openModal(item)
+//                                   : null
+//                               }
+//                               style={{
+//                                 cursor:
+//                                   modalCategory === "showcase"
+//                                     ? "pointer"
+//                                     : "default",
+//                               }}
+//                             />
+//                           )}
 //                         </div>
 //                         <div className="flex-1">
 //                           <h4 className="text-lg font-semibold text-gray-900">
@@ -1397,6 +1514,11 @@
 //                           {item.length && (
 //                             <p className="mt-1 text-sm text-gray-500">
 //                               Length: {item.length}
+//                             </p>
+//                           )}
+//                           {item.images && item.images.length > 1 && (
+//                             <p className="mt-1 text-xs text-gray-500">
+//                               {item.images.length} images
 //                             </p>
 //                           )}
 //                           {item.createdAt && (
@@ -1517,11 +1639,24 @@
 //                 rows={3}
 //               />
 //               <div className="flex items-center gap-4">
-//                 <img
-//                   src={editProduct.image}
-//                   alt="Current product"
-//                   className="w-20 h-20 object-cover rounded border"
-//                 />
+//                 {editProduct.images && editProduct.images.length > 0 ? (
+//                   <div className="flex flex-wrap gap-2">
+//                     {editProduct.images.map((img, index) => (
+//                       <img
+//                         key={index}
+//                         src={img}
+//                         alt={`Product ${index + 1}`}
+//                         className="w-16 h-16 object-cover rounded border"
+//                       />
+//                     ))}
+//                   </div>
+//                 ) : (
+//                   <img
+//                     src={editProduct.image}
+//                     alt="Current product"
+//                     className="w-20 h-20 object-cover rounded border"
+//                   />
+//                 )}
 //                 <input
 //                   type="file"
 //                   accept="image/*"
@@ -1796,7 +1931,7 @@ const AdminDashboard = () => {
     price: "",
     description: "",
     category: "shop",
-    imageUrls: [""], // Changed to array for multiple images
+    imageUrls: [""],
   });
   const [homeProductForm, setHomeProductForm] = useState({
     name: "",
@@ -1816,7 +1951,7 @@ const AdminDashboard = () => {
     categoryType: "roll", 
   });
 
-  const [imageFiles, setImageFiles] = useState([]); // Changed to array for multiple files
+  const [imageFiles, setImageFiles] = useState([]);
   const [homeProductImageFile, setHomeProductImageFile] = useState(null);
   const [categoryImageFile, setCategoryImageFile] = useState(null);
 
@@ -1886,12 +2021,13 @@ const AdminDashboard = () => {
     fetchProducts();
   }, []);
 
-  // Check if product with same name already exists
-  const checkDuplicateProduct = async (name, collectionName = "products") => {
+  // Check if product with same name already exists in the same category
+  const checkDuplicateProduct = async (name, category, collectionName = "products") => {
     try {
       const q = query(
         collection(db, collectionName),
-        where("name", "==", name)
+        where("name", "==", name),
+        where("category", "==", category)
       );
       const querySnapshot = await getDocs(q);
       return !querySnapshot.empty;
@@ -1946,10 +2082,9 @@ const AdminDashboard = () => {
       ...prev,
       [e.target.name]: e.target.value,
     }));
-    setDuplicateWarning(""); // Clear warning when user types
+    setDuplicateWarning("");
   };
 
-  // Handle multiple image URL inputs
   const handleImageUrlChange = (index, value) => {
     const newImageUrls = [...formData.imageUrls];
     newImageUrls[index] = value;
@@ -1959,7 +2094,6 @@ const AdminDashboard = () => {
     }));
   };
 
-  // Add a new empty image URL field
   const addImageUrlField = () => {
     setFormData((prev) => ({
       ...prev,
@@ -1967,7 +2101,6 @@ const AdminDashboard = () => {
     }));
   };
 
-  // Remove an image URL field
   const removeImageUrlField = (index) => {
     if (formData.imageUrls.length <= 1) return;
     
@@ -1978,7 +2111,6 @@ const AdminDashboard = () => {
       imageUrls: newImageUrls,
     }));
     
-    // Also remove the corresponding file if it exists
     if (imageFiles[index]) {
       const newImageFiles = [...imageFiles];
       newImageFiles.splice(index, 1);
@@ -1991,7 +2123,7 @@ const AdminDashboard = () => {
       ...prev,
       [e.target.name]: e.target.value,
     }));
-    setDuplicateWarning(""); // Clear warning when user types
+    setDuplicateWarning("");
   };
 
   const handleCategoryChange = (e) => {
@@ -1999,16 +2131,14 @@ const AdminDashboard = () => {
       ...prev,
       [e.target.name]: e.target.value,
     }));
-    setDuplicateWarning(""); // Clear warning when user types
+    setDuplicateWarning("");
   };
 
-  // Handle multiple file selection
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     setImageFiles((prev) => [...prev, ...files]);
   };
 
-  // Remove a selected file
   const removeFile = (index) => {
     const newFiles = [...imageFiles];
     newFiles.splice(index, 1);
@@ -2084,8 +2214,7 @@ const AdminDashboard = () => {
 
   const addToAllProducts = async (productData) => {
     try {
-      // Check if product already exists in allProducts
-      const isDuplicate = await checkDuplicateProduct(productData.name, "allProducts");
+      const isDuplicate = await checkDuplicateProduct(productData.name, "all", "allProducts");
       if (isDuplicate) {
         console.log("Product already exists in allProducts, skipping");
         return;
@@ -2109,17 +2238,16 @@ const AdminDashboard = () => {
     try {
       setUploading(true);
       
-      // Check for duplicate product
-      const isDuplicate = await checkDuplicateProduct(formData.name);
+      // Check for duplicate product in the same category
+      const isDuplicate = await checkDuplicateProduct(formData.name, formData.category);
       if (isDuplicate) {
-        setDuplicateWarning(`A product with the name "${formData.name}" already exists!`);
+        setDuplicateWarning(`A product with the name "${formData.name}" already exists in the ${formData.category} category!`);
         setUploading(false);
         return;
       }
       
       let imageUrls = [];
 
-      // Upload files first
       if (imageFiles.length > 0) {
         for (const file of imageFiles) {
           const imageRef = ref(storage, `products/${uuidv4()}-${file.name}`);
@@ -2129,7 +2257,6 @@ const AdminDashboard = () => {
         }
       }
       
-      // Add any URLs that were manually entered
       if (formData.imageUrls && formData.imageUrls.length > 0) {
         const validUrls = formData.imageUrls.filter(url => url.trim() !== "");
         imageUrls = [...imageUrls, ...validUrls];
@@ -2180,7 +2307,6 @@ const AdminDashboard = () => {
     setUploading(true);
 
     try {
-      // Check for duplicate showcase product
       const isDuplicate = await checkDuplicateShowcase(homeProductForm.name);
       if (isDuplicate) {
         setDuplicateWarning(`A home product with the name "${homeProductForm.name}" already exists!`);
@@ -2276,7 +2402,6 @@ const AdminDashboard = () => {
     setUploading(true);
 
     try {
-      // Check for duplicate category
       const isDuplicate = await checkDuplicateCategory(categoryForm.name);
       if (isDuplicate) {
         setDuplicateWarning(`A category with the name "${categoryForm.name}" already exists!`);
@@ -3553,7 +3678,7 @@ const AdminDashboard = () => {
         </div>
       )}
 
-      {editCategory && (
+     {editCategory && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center p-4">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
             <h2 className="text-xl font-bold mb-4">Edit Category</h2>
