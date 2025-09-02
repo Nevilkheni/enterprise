@@ -4,7 +4,6 @@ import "./index.css";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-// import AdminHeader from "./components/AdminHeader";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Products from "./pages/Products";
