@@ -216,7 +216,7 @@ function Feature() {
 
   return (
     <div
-      className="w-full p-4  bg-cover bg-center bg-no-repeat bg-fixed text-center"
+      className="w-full py-4  bg-cover bg-center bg-no-repeat bg-fixed text-center"
       style={{ backgroundImage: `url(${middleSectionBg})` }}
     >
       <motion.div
@@ -257,7 +257,7 @@ function Feature() {
             transition: { staggerChildren: 0.1 },
           },
         }}
-        className="m-6 max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-6"
+        className="my-8 max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4"
       >
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product, idx) => (

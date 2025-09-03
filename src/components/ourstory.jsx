@@ -60,7 +60,7 @@ function OurStory() {
         </motion.h1>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-2 gap-8 items-center">
+      <div className="max-w-6xl mx-auto px-8 py-10 grid md:grid-cols-2 gap-8 items-center">
         <motion.div className="w-full aspect-video" variants={videoVariants}>
           <iframe
             className="w-full h-full rounded-lg shadow-lg"
