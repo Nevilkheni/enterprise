@@ -1,30 +1,131 @@
-// src/hooks/productHooks.js
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { db } from '../firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 
-export const useProducts = () => {
+const PRODUCTS_CACHE_KEY = 'cached_products';
+const CACHE_EXPIRY_TIME = 5 * 60 * 1000;
+
+export const useProducts = (options = {}) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchProducts = useCallback(async () => {
+    const cachedData = localStorage.getItem(PRODUCTS_CACHE_KEY);
+    const now = Date.now();
+
+    if (cachedData) {
+      const { data, timestamp } = JSON.parse(cachedData);
+      
+      if (now - timestamp < CACHE_EXPIRY_TIME) {
+        setProducts(data);
+        setLoading(false);
+        return; 
+      }
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      let productsQuery = collection(db, 'allProducts');
+      
+      if (options.sortBy) {
+        productsQuery = query(productsQuery, orderBy(options.sortBy, options.sortOrder || 'asc'));
+      }
+      
+      if (options.limit) {
+        productsQuery = query(productsQuery, limit(options.limit));
+      }
+
+      const querySnapshot = await getDocs(productsQuery);
+      const productsData = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      setProducts(productsData);
+      
+      localStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify({
+        data: productsData,
+        timestamp: now
+      }));
+
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      setError(error.message);
+      
+      if (cachedData) {
+        const { data } = JSON.parse(cachedData);
+        setProducts(data);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [options.sortBy, options.sortOrder, options.limit]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    fetchProducts();
+  }, [fetchProducts]);
+
+  const refreshProducts = useCallback(() => {
+    localStorage.removeItem(PRODUCTS_CACHE_KEY); 
+    fetchProducts();
+  }, [fetchProducts]);
+
+  return { 
+    products, 
+    loading, 
+    error,
+    refreshProducts,
+    isEmpty: products.length === 0 && !loading
+  };
+};
+
+export const useProduct = (productId) => {
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      if (!productId) {
+        setLoading(false);
+        return;
+      }
+
       try {
-        const querySnapshot = await getDocs(collection(db, 'allProducts'));
-        const productsData = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        setProducts(productsData);
+        setLoading(true);
+        
+        const cachedProducts = localStorage.getItem(PRODUCTS_CACHE_KEY);
+        if (cachedProducts) {
+          const { data } = JSON.parse(cachedProducts);
+          const cachedProduct = data.find(p => p.id === productId);
+          if (cachedProduct) {
+            setProduct(cachedProduct);
+            setLoading(false);
+            return;
+          }
+        }
+
+        const productsQuery = collection(db, 'allProducts');
+        const querySnapshot = await getDocs(productsQuery);
+        const foundProduct = querySnapshot.docs
+          .map(doc => ({ id: doc.id, ...doc.data() }))
+          .find(p => p.id === productId);
+
+        setProduct(foundProduct || null);
+
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error("Error fetching product:", error);
+        setError(error.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProducts();
-  }, []);
+    fetchProduct();
+  }, [productId]);
 
-  return { products, loading };
+  return { product, loading, error };
 };

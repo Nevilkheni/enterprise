@@ -22,7 +22,6 @@ const VerifyEmail = () => {
       }
 
       try {
-        // Check if this is an unverified user
         const unverifiedDoc = await getDoc(doc(db, "unverified_users", uid));
         if (!unverifiedDoc.exists()) {
           setError("Invalid verification link or account already verified.");
@@ -31,21 +30,17 @@ const VerifyEmail = () => {
 
         const userData = unverifiedDoc.data();
         
-        // Sign in to verify email
         await signInWithEmailAndPassword(auth, userData.email, userData.password);
         
-        // Wait for email verification to be detected
         await auth.currentUser.reload();
         
         if (auth.currentUser.emailVerified) {
-          // Move user from unverified to verified collection
           await setDoc(doc(db, "users", uid), {
             ...userData,
             emailVerified: true,
             verifiedAt: new Date()
           });
           
-          // Delete from unverified collection
           await deleteDoc(doc(db, "unverified_users", uid));
           
           setMessage("Email verified successfully! Redirecting to login...");

@@ -57,6 +57,9 @@
     "webpack-dev-server": "^5.2.2"
   },
   "overrides": {
-    "redbird": "1.0.2"
+    "redbird": "1.0.2",
+    "html2pdf.js": {
+      "source-map-loader": "ignore"
+    }
   }
 }

@@ -2,14 +2,13 @@ import React, { useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import html2pdf from "html2pdf.js";
 import { motion } from "framer-motion";
-import { Download, ArrowLeft, IndianRupee, CheckCircle, Printer, CreditCard, User, MapPin, Mail, Phone } from "lucide-react";
+import { Download, ArrowLeft, IndianRupee, CheckCircle, Printer, CreditCard, Mail, Phone } from "lucide-react";
 
 const Invoice = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const invoiceRef = useRef();
   
-  // Get all data passed from Payment component
   const {
     cart = [],
     customerDetails = {},
@@ -101,7 +100,6 @@ const Invoice = () => {
           ref={invoiceRef}
           className="bg-white rounded-xl shadow-2xl overflow-hidden print:shadow-none print:rounded-none"
         >
-          {/* Watermark */}
           <div className="absolute inset-0 flex items-center justify-center opacity-5 -z-10 print:hidden">
             <div className="text-6xl font-bold text-gray-400 transform rotate-12">PAID</div>
           </div>
