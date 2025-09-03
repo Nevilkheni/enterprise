@@ -1,6 +1,6 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 function OurStory() {
   const navigate = useNavigate();
@@ -11,9 +11,9 @@ function OurStory() {
       opacity: 1,
       transition: {
         staggerChildren: 0.3,
-        when: "beforeChildren"
-      }
-    }
+        when: "beforeChildren",
+      },
+    },
   };
 
   const videoVariants = {
@@ -24,9 +24,9 @@ function OurStory() {
       transition: {
         type: "spring",
         stiffness: 100,
-        damping: 10
-      }
-    }
+        damping: 10,
+      },
+    },
   };
 
   const textVariants = {
@@ -37,20 +37,20 @@ function OurStory() {
       transition: {
         type: "spring",
         stiffness: 100,
-        damping: 10
-      }
-    }
+        damping: 10,
+      },
+    },
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="bg-white"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
       <div className="w-full pt-6 md:pt-10 text-center">
-        <motion.h1 
+        <motion.h1
           className="text-lg md:text-3xl font-michroma  font-bold text-black"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -61,10 +61,7 @@ function OurStory() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-2 gap-8 items-center">
-        <motion.div 
-          className="w-full aspect-video"
-          variants={videoVariants}
-        >
+        <motion.div className="w-full aspect-video" variants={videoVariants}>
           <iframe
             className="w-full h-full rounded-lg shadow-lg"
             src="https://www.youtube.com/embed/VIDEO_ID"
@@ -75,18 +72,22 @@ function OurStory() {
           ></iframe>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="text-center md:text-left"
           variants={textVariants}
         >
-          <h2 className="md:text-2xl font-semibold   text-black mb-4">Simple Beginnings, Clear Vision</h2>
+          <h2 className="md:text-2xl font-semibold   text-black mb-4">
+            Simple Beginnings, Clear Vision
+          </h2>
           <p className="text-gray-800 leading-relaxed mb-6">
-            We started small with one goal: to do work that matters.
-            No fluff, just quality. Every project reflects our commitment
-            to simplicity and effectiveness.
+            "Our mission is to bridge creativity with craftsmanship by offering
+            high-quality sequence designing materials for embroidery. We strive
+            to provide designers and artisans with products that inspire
+            innovation, add elegance to every creation, and deliver reliable
+            quality with exceptional service at every step."
           </p>
           <motion.button
-            onClick={() => navigate('/about')}
+            onClick={() => navigate("/about")}
             className="px-6 py-2 bg-red-600 font-michroma text-sm text-white font-medium rounded hover:bg-red-800 transition"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}

@@ -211,20 +211,26 @@ const About = () => {
         className="mb-20"
       >
         <div className="bg-gray-50 rounded-xl p-8 md:p-10 shadow-sm">
-          <p className="text-gray-700 font-josefin text-lg leading-relaxed mb-4">
-            Welcome to{" "}
+          <p className="text-gray-700 font-josefin text-lg leading-relaxed ">
+            "At{" "}
             <strong className="text-red-600 text-sm font-michroma">
               Jyot Sequence
             </strong>
-            , your premier destination for cutting-edge technology. Founded in
-            2008, we've grown from a small startup to a global leader in tech
-            retail, serving millions of customers worldwide.
+            ,we specialize in crafting premium sequence designing materials used
+            in embroidery and garment decoration. With a passion for creativity
+            and quality, we provide designers and artisans with the finest
+            materials that bring elegance and brilliance to every stitch. Our
+            focus is to deliver innovative designs, durable quality, and
+            reliable service, helping our customers transform their ideas into
+            stunning embroidered creations."
           </p>
+
           <p className="text-gray-600 font-josefin text-sm leading-relaxed">
-            Our mission is to bridge the gap between innovative technology and
-            everyday users. We carefully curate our product selection to bring
-            you the best devices that enhance your life while providing
-            exceptional customer service at every step.
+            "Our mission is to bridge creativity with craftsmanship by offering
+            high-quality sequence designing materials for embroidery. We strive
+            to provide designers and artisans with products that inspire
+            innovation, add elegance to every creation, and deliver reliable
+            quality with exceptional service at every step."
           </p>
         </div>
       </motion.div>
@@ -303,7 +309,7 @@ const About = () => {
         }}
         className="mt-20 bg-red-400 rounded-xl p-8 md:p-10 text-white"
       >
-        <h2 className="text-lg md:text-2xl font-michroma font-bold mb-6">
+        <h2 className="text-lg md:text-2xl font-michroma font-bold ">
           Our Mission
         </h2>
         <p className="font-josefin text-lg leading-relaxed mb-4">

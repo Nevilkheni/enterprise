@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Mail, Phone, Instagram, Youtube, Facebook } from "lucide-react";
 import { motion } from "framer-motion";
@@ -54,7 +53,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto">
         <motion.div
           variants={containerVariants}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8"
+          className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8"
         >
           <motion.div variants={itemVariants} className="space-y-4">
             <h3 className="text-xl font-michroma font-bold text-red-400 mb-4">
@@ -93,7 +92,7 @@ const Footer = () => {
                 { name: "Products", path: "/products" },
                 { name: "About Us", path: "/about" },
                 { name: "Contact", path: "/contact" },
-                { name: "FAQs", path: "/faqs" },
+                { name: "Allproduct", path: "/" },
                 { name: "Privacy Policy", path: "/privacy" },
               ].map((link, index) => (
                 <motion.a
@@ -110,6 +109,31 @@ const Footer = () => {
                 </motion.a>
               ))}
             </div>
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="space-y-4">
+            <h3 className="text-xl font-michroma font-bold text-red-400 mb-4">
+              Business Info
+            </h3>
+            <motion.div
+              whileHover={{ x: 5 }}
+              className="flex items-start"
+            >
+              <div>
+                <p className="font-medium">GSTIN</p>
+                <p className="text-gray-300">24ABCDE1234F1Z5</p>
+              </div>
+            </motion.div>
+            <motion.div
+              whileHover={{ x: 5 }}
+              className="flex items-start"
+            >
+              <div>
+                <p className="font-medium">59-60 Vibhag-2,</p>
+                <p className="text-gray-300">Ghanshyamnagar,Opp Chopati Corner,</p>
+                <p className="text-gray-300">Varachha,Surat,394101</p>
+              </div>
+            </motion.div>
           </motion.div>
 
           <motion.div variants={itemVariants} className="space-y-4">

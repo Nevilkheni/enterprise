@@ -69,7 +69,7 @@ function Home() {
               className="w-full lg:w-2/3 bg-black/70 backdrop-blur-lg rounded-xl p-8 shadow-lg"
             >
               <motion.h2
-                className="text-lg md:text-3xl flex-none  md:flex md:gap-3  font-michroma  font-bold mb-4 text-white"
+                className="text-lg md:text-2xl flex-none  md:flex md:gap-3  font-michroma  font-bold mb-4 text-white"
                 whileHover={{ x: 5 }}
               >
                 <p> Welcome to</p>{" "}
@@ -85,10 +85,14 @@ function Home() {
                 className="text-base text-gray-300 mb-6"
                 whileHover={{ x: 5 }}
               >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-                in dui mauris. Vivamus hendrerit arcu sed erat molestie
-                vehicula. Sed do eiusmod tempor incididunt ut labore et dolore
-                magna aliqua.
+                "At Jyot Sequence,we specialize in crafting premium sequence
+                designing materials used in embroidery and garment decoration.
+                With a passion for creativity and quality, we provide designers
+                and artisans with the finest materials that bring elegance and
+                brilliance to every stitch. Our focus is to deliver innovative
+                designs, durable quality, and reliable service, helping our
+                customers transform their ideas into stunning embroidered
+                creations."
               </motion.p>
               <motion.button
                 variants={buttonVariants}
@@ -124,7 +128,6 @@ function Home() {
             </motion.div>
           </motion.div>
         </div>
-        
       </motion.section>
       <CardShowcase />
       <Feature />
