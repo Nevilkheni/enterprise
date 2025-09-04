@@ -278,7 +278,7 @@ const CardShowcase = () => {
   });
 
   const titleRef = useRef(null);
-  const leftCardsRef = useRef(null); // fix: separate refs
+  const leftCardsRef = useRef(null);
   const rightCardsRef = useRef(null);
   const infoRef = useRef(null);
 
@@ -360,7 +360,7 @@ const CardShowcase = () => {
       </motion.div>
 
       {/* Cards & Info Section */}
-      <div className="flex flex-col lg:flex-row gap-8 items-start justify-center">
+      <div className="flex flex-col sm:flex-row gap-8 items-start justify-center">
         {/* Left Cards */}
         <motion.div
           ref={leftCardsRef}

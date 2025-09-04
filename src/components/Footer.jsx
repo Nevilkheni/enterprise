@@ -365,7 +365,7 @@ const Footer = () => {
             <h3 className="text-xl font-michroma font-bold text-red-400 mb-4">
               Follow Us
             </h3>
-            <div className="flex space-x-4">
+            <div className="flex flex-wrap  space-x-4">
               {[
                 {
                   icon: Instagram,

@@ -280,7 +280,7 @@ function OurStory() {
       </div>
 
       {/* Content */}
-      <div className="max-w-5xl mx-auto py-10 grid md:grid-cols-2 gap-8 items-center">
+      <div className="max-w-5xl p-4 mx-auto py-10 grid md:grid-cols-2 gap-8 items-center">
         {/* Video */}
         <motion.div className="w-full aspect-video" variants={videoVariants}>
           <iframe
