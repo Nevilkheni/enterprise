@@ -194,7 +194,7 @@ function Home() {
         style={{ backgroundImage: `url(${middleSectionBg2})` }}
       >
         {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-black/30" />
 
         <div className="relative w-full mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <motion.div
@@ -243,7 +243,7 @@ function Home() {
                 whileHover="hover"
                 whileTap="tap"
                 onClick={() => navigate("/category")}
-                className="px-6 py-3 font-michroma text-sm bg-gradient-to-r from-red-600 to-indigo-600 text-white font-medium rounded-lg hover:from-red-700 hover:to-indigo-700 transition-all"
+                className="px-4 py-2 font-michroma text-[12px] bg-gradient-to-r from-red-600 to-indigo-600 text-white font-medium rounded-lg hover:from-red-700 hover:to-indigo-700 transition-all"
               >
                 Explore Products
               </motion.button>
