@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -145,46 +146,34 @@ const Category = () => {
       try {
         setLoading(true);
         
-        const allProductsQuery = collection(db, "allProducts");
-        const allProductsSnapshot = await getDocs(allProductsQuery);
-        const allCount = allProductsSnapshot.size;
+        // Fetch all products from categories collection
+        const categoriesQuery = collection(db, "categories");
+        const categoriesSnapshot = await getDocs(categoriesQuery);
+        const allProducts = categoriesSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
         
-        const cdQuery = query(collection(db, "categories"), where("categoryType", "==", "cd"));
-        const cdSnapshot = await getDocs(cdQuery);
-        const cdCount = cdSnapshot.size;
-        
-        const spoolQuery = query(collection(db, "categories"), where("categoryType", "==", "spool"));
-        const spoolSnapshot = await getDocs(spoolQuery);
-        const spoolCount = spoolSnapshot.size;
-        
-        const rollQuery = query(collection(db, "categories"), where("categoryType", "==", "roll"));
-        const rollSnapshot = await getDocs(rollQuery);
-        const rollCount = rollSnapshot.size;
+        // Count products by category
+        const cdCount = allProducts.filter(product => product.categoryType === "cd").length;
+        const spoolCount = allProducts.filter(product => product.categoryType === "spool").length;
+        const rollCount = allProducts.filter(product => product.categoryType === "roll").length;
         
         setProductCounts({
-          all: allCount,
+          all: allProducts.length,
           cd: cdCount,
           spool: spoolCount,
           roll: rollCount
         });
 
         if (categoryType && categoryType !== "all") {
-          const categoryQuery = query(
-            collection(db, "categories"), 
-            where("categoryType", "==", categoryType)
+          // Filter products by category
+          const categoryProducts = allProducts.filter(
+            product => product.categoryType === categoryType
           );
-          const categorySnapshot = await getDocs(categoryQuery);
-          const categoryProducts = categorySnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          }));
           setProducts(categoryProducts);
         } else if (categoryType === "all") {
-          const allProductsSnapshot = await getDocs(collection(db, "allProducts"));
-          const allProducts = allProductsSnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          }));
+          // Show all products
           setProducts(allProducts);
         }
       } catch (error) {

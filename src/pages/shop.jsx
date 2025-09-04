@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
-import ProductCard from "../components/ProductCard";
+import ShopCard from "../components/Shopcard";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { FunnelIcon } from "@heroicons/react/24/solid";
 
@@ -12,6 +12,23 @@ function Shop({ onAddToCart, cart }) {
   const [sortOption, setSortOption] = useState("featured");
   const [showFilters, setShowFilters] = useState(false);
   const [error, setError] = useState(null);
+  const [favorites, setFavorites] = useState([]);
+
+  const toggleFavorite = (product) => {
+    setFavorites(prevFavorites => {
+      const isFavorite = prevFavorites.some(fav => fav.id === product.id);
+      if (isFavorite) {
+        return prevFavorites.filter(fav => fav.id !== product.id);
+      } else {
+        return [...prevFavorites, product];
+      }
+    });
+  };
+
+  // Check if a product is favorite
+  const isFavorite = (productId) => {
+    return favorites.some(fav => fav.id === productId);
+  };
 
   useEffect(() => {
     console.log("Initializing real-time listener for products...");
@@ -221,11 +238,14 @@ function Shop({ onAddToCart, cart }) {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
-              <ProductCard
+            {filteredProducts.map((product, index) => (
+              <ShopCard
                 key={product.id}
                 product={product}
                 onAddToCart={onAddToCart}
+                index={index}
+                onToggleFavorite={toggleFavorite}
+                isFavorite={isFavorite(product.id)}
               />
             ))}
           </div>

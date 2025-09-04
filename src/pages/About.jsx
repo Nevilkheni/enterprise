@@ -1,3 +1,335 @@
+// import React from "react";
+// import { motion } from "framer-motion";
+// import silver from "../assets/image/silver.jpg";
+// import machine from "../assets/image/Sequin-Punching-Machine.avif";
+// import machine1 from "../assets/image/machine.jpg";
+// import Stats from "../components/Stats";
+
+// const companyHistory = [
+//   {
+//     year: "2008",
+//     title: "Milestone 2008",
+//     description: "Description for the year 2008 milestone.",
+//     image: machine,
+//     imagePosition: "left",
+//   },
+//   {
+//     year: "2009",
+//     title: "Milestone 2009",
+//     description: "Description for the year 2009 milestone.",
+//     image: machine1,
+//     imagePosition: "right",
+//   },
+//   {
+//     year: "2010",
+//     title: "Milestone 2010",
+//     description: "Description for the year 2010 milestone.",
+//     image: silver,
+//     imagePosition: "left",
+//   },
+//   {
+//     year: "2011",
+//     title: "Milestone 2011",
+//     description: "Description for the year 2011 milestone.",
+//     image: silver,
+//     imagePosition: "right",
+//   },
+//   {
+//     year: "2012",
+//     title: "Milestone 2012",
+//     description: "Description for the year 2012 milestone.",
+//     image: silver,
+//     imagePosition: "left",
+//   },
+//   {
+//     year: "2013",
+//     title: "Milestone 2013",
+//     description: "Description for the year 2013 milestone.",
+//     image: silver,
+//     imagePosition: "right",
+//   },
+//   {
+//     year: "2014",
+//     title: "Milestone 2014",
+//     description: "Description for the year 2014 milestone.",
+//     image: silver,
+//     imagePosition: "left",
+//   },
+//   {
+//     year: "2015",
+//     title: "Milestone 2015",
+//     description: "Description for the year 2015 milestone.",
+//     image: silver,
+//     imagePosition: "right",
+//   },
+//   {
+//     year: "2016",
+//     title: "Milestone 2016",
+//     description: "Description for the year 2016 milestone.",
+//     image: silver,
+//     imagePosition: "left",
+//   },
+//   {
+//     year: "2017",
+//     title: "Milestone 2017",
+//     description: "Description for the year 2017 milestone.",
+//     image: silver,
+//     imagePosition: "right",
+//   },
+//   {
+//     year: "2018",
+//     title: "Milestone 2018",
+//     description: "Description for the year 2018 milestone.",
+//     image: silver,
+//     imagePosition: "left",
+//   },
+//   {
+//     year: "2019",
+//     title: "Milestone 2019",
+//     description: "Description for the year 2019 milestone.",
+//     image: silver,
+//     imagePosition: "right",
+//   },
+//   {
+//     year: "2020",
+//     title: "Milestone 2020",
+//     description: "Description for the year 2020 milestone.",
+//     image: silver,
+//     imagePosition: "left",
+//   },
+//   {
+//     year: "2021",
+//     title: "Milestone 2021",
+//     description: "Description for the year 2021 milestone.",
+//     image: silver,
+//     imagePosition: "right",
+//   },
+//   {
+//     year: "2022",
+//     title: "Milestone 2022",
+//     description: "Description for the year 2022 milestone.",
+//     image: silver,
+//     imagePosition: "left",
+//   },
+//   {
+//     year: "2023",
+//     title: "Milestone 2023",
+//     description: "Description for the year 2023 milestone.",
+//     image: silver,
+//     imagePosition: "right",
+//   },
+//   {
+//     year: "2024",
+//     title: "Milestone 2024",
+//     description: "Description for the year 2024 milestone.",
+//     image: silver,
+//     imagePosition: "left",
+//   },
+//   {
+//     year: "2025",
+//     title: "Milestone 2025",
+//     description: "Description for the year 2025 milestone.",
+//     image: silver,
+//     imagePosition: "right",
+//   },
+// ];
+
+// const itemVariants = {
+//   hidden: { opacity: 0, y: 50 },
+//   visible: {
+//     opacity: 1,
+//     y: 0,
+//     transition: {
+//       duration: 0.6,
+//       ease: "easeOut",
+//     },
+//   },
+// };
+
+// const imageVariants = {
+//   hidden: { opacity: 0, x: -100 },
+//   visible: {
+//     opacity: 1,
+//     x: 0,
+//     transition: {
+//       duration: 0.8,
+//       ease: "easeOut",
+//     },
+//   },
+// };
+
+// const imageVariantsRight = {
+//   hidden: { opacity: 0, x: 100 },
+//   visible: {
+//     opacity: 1,
+//     x: 0,
+//     transition: {
+//       duration: 0.8,
+//       ease: "easeOut",
+//     },
+//   },
+// };
+
+// const About = () => {
+//   return (
+//     <div className="max-w-5xl mx-auto px-4 py-12 sm:px-6 lg:px-8 overflow-hidden">
+//       <motion.div
+//         initial="hidden"
+//         whileInView="visible"
+//         viewport={{ once: true, margin: "-100px" }}
+//         variants={{
+//           hidden: { opacity: 0, y: 20 },
+//           visible: {
+//             opacity: 1,
+//             y: 0,
+//             transition: { duration: 0.6 },
+//           },
+//         }}
+//         className="text-center mb-16"
+//       >
+//         <h1 className="text-3xl font-michroma md:text-4xl font-bold text-gray-900 mb-6">
+//           About Jyot Sequence
+//         </h1>
+//         <p className="font-josefin text-lx text-gray-600 max-w-3xl mx-auto">
+//           From humble beginnings to global technology leader - our journey of
+//           innovation and customer dedication.
+//         </p>
+//       </motion.div>
+
+//       <motion.div
+//         initial="hidden"
+//         whileInView="visible"
+//         viewport={{ once: true, margin: "-100px" }}
+//         variants={{
+//           hidden: { opacity: 0, y: 20 },
+//           visible: {
+//             opacity: 1,
+//             y: 0,
+//             transition: { duration: 0.6, delay: 0.2 },
+//           },
+//         }}
+//         className="mb-20"
+//       >
+//         <div className="bg-gray-50 rounded-xl p-8 md:p-10 shadow-sm">
+//           <p className="text-gray-700 font-josefin text-lg leading-relaxed ">
+//             "At{" "}
+//             <strong className="text-red-600 text-sm font-michroma">
+//               Jyot Sequence
+//             </strong>
+//             ,we specialize in crafting premium sequence designing materials used
+//             in embroidery and garment decoration. With a passion for creativity
+//             and quality, we provide designers and artisans with the finest
+//             materials that bring elegance and brilliance to every stitch. Our
+//             focus is to deliver innovative designs, durable quality, and
+//             reliable service, helping our customers transform their ideas into
+//             stunning embroidered creations."
+//           </p>
+
+//           <p className="text-gray-600 font-josefin text-sm leading-relaxed">
+//             "Our mission is to bridge creativity with craftsmanship by offering
+//             high-quality sequence designing materials for embroidery. We strive
+//             to provide designers and artisans with products that inspire
+//             innovation, add elegance to every creation, and deliver reliable
+//             quality with exceptional service at every step."
+//           </p>
+//         </div>
+//       </motion.div>
+//       <Stats />
+//       <div className="relative">
+//         <div className="hidden md:block absolute left-1/2 h-full w-1 bg-gray-200 transform -translate-x-1/2"></div>
+
+//         {companyHistory.map((item, index) => (
+//           <motion.div
+//             key={index}
+//             initial="hidden"
+//             whileInView="visible"
+//             viewport={{ once: true, margin: "-50px" }}
+//             variants={itemVariants}
+//             className={`relative mb-16 md:flex ${
+//               index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+//             } items-center justify-between w-full`}
+//           >
+//             <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 top-1/2 w-16 h-16 bg-red-600 rounded-full items-center justify-center z-10 shadow-lg">
+//               <span className="text-white font-bold text-lg">{item.year}</span>
+//             </div>
+
+//             <div className="md:hidden mb-4 flex justify-center">
+//               <span className="inline-block px-4 py-2 bg-red-600 text-white font-bold rounded-full">
+//                 {item.year}
+//               </span>
+//             </div>
+
+//             <motion.div
+//               custom={index}
+//               variants={
+//                 item.imagePosition === "left"
+//                   ? imageVariants
+//                   : imageVariantsRight
+//               }
+//               className={`w-full md:w-5/12 mb-6 md:mb-0 ${
+//                 item.imagePosition === "left" ? "md:pr-8" : "md:pl-8"
+//               }`}
+//             >
+//               <div className="overflow-hidden rounded-xl shadow-lg mx-auto max-w-md">
+//                 <img
+//                   src={item.image}
+//                   alt={item.title}
+//                   className="w-full h-64 object-cover transform hover:scale-105 transition duration-500"
+//                 />
+//               </div>
+//             </motion.div>
+
+//             <div
+//               className={`w-full md:w-5/12 ${
+//                 item.imagePosition === "left" ? "md:text-right" : "md:text-left"
+//               } text-center md:text-left`}
+//             >
+//               <h3 className="font-bold text-lg font-michroma text-gray-900 mb-3">
+//                 {item.title}
+//               </h3>
+//               <p className="text-gray-600 leading-relaxed px-4 md:px-0">
+//                 {item.description}
+//               </p>
+//             </div>
+//           </motion.div>
+//         ))}
+//       </div>
+
+//       <motion.div
+//         initial="hidden"
+//         whileInView="visible"
+//         viewport={{ once: true, margin: "-100px" }}
+//         variants={{
+//           hidden: { opacity: 0, y: 50 },
+//           visible: {
+//             opacity: 1,
+//             y: 0,
+//             transition: { duration: 0.6 },
+//           },
+//         }}
+//         className="mt-20 bg-red-400 rounded-xl p-8 md:p-10 text-white"
+//       >
+//         <h2 className="text-lg md:text-2xl font-michroma font-bold ">
+//           Our Mission
+//         </h2>
+//         <p className="font-josefin text-lg leading-relaxed mb-4">
+//           To empower individuals and businesses through innovative technology
+//           solutions that simplify lives and drive progress.
+//         </p>
+//         <p className="font-josefin text-lg text-red-100 leading-relaxed">
+//           We believe technology should be accessible, intuitive, and
+//           transformative. Every product we offer is carefully selected to meet
+//           our high standards of quality, performance, and value.
+//         </p>
+//       </motion.div>
+//     </div>
+//   );
+// };
+
+// export default About;
+
+
+
 import React from "react";
 import { motion } from "framer-motion";
 import silver from "../assets/image/silver.jpg";
@@ -8,129 +340,42 @@ import Stats from "../components/Stats";
 const companyHistory = [
   {
     year: "2008",
-    title: "Milestone 2008",
-    description: "Description for the year 2008 milestone.",
+    title: "Founded",
+    description:
+      "Jyot Sequence was established with a vision to innovate embroidery materials.",
     image: machine,
     imagePosition: "left",
   },
   {
     year: "2009",
-    title: "Milestone 2009",
-    description: "Description for the year 2009 milestone.",
+    title: "First Expansion",
+    description: "Introduced advanced tools to improve production quality.",
     image: machine1,
     imagePosition: "right",
   },
   {
-    year: "2010",
-    title: "Milestone 2010",
-    description: "Description for the year 2010 milestone.",
-    image: silver,
-    imagePosition: "left",
-  },
-  {
-    year: "2011",
-    title: "Milestone 2011",
-    description: "Description for the year 2011 milestone.",
-    image: silver,
-    imagePosition: "right",
-  },
-  {
-    year: "2012",
-    title: "Milestone 2012",
-    description: "Description for the year 2012 milestone.",
-    image: silver,
-    imagePosition: "left",
-  },
-  {
-    year: "2013",
-    title: "Milestone 2013",
-    description: "Description for the year 2013 milestone.",
-    image: silver,
-    imagePosition: "right",
-  },
-  {
-    year: "2014",
-    title: "Milestone 2014",
-    description: "Description for the year 2014 milestone.",
-    image: silver,
-    imagePosition: "left",
-  },
-  {
     year: "2015",
-    title: "Milestone 2015",
-    description: "Description for the year 2015 milestone.",
-    image: silver,
-    imagePosition: "right",
-  },
-  {
-    year: "2016",
-    title: "Milestone 2016",
-    description: "Description for the year 2016 milestone.",
+    title: "Global Reach",
+    description:
+      "Expanded into international markets, becoming a trusted supplier worldwide.",
     image: silver,
     imagePosition: "left",
-  },
-  {
-    year: "2017",
-    title: "Milestone 2017",
-    description: "Description for the year 2017 milestone.",
-    image: silver,
-    imagePosition: "right",
-  },
-  {
-    year: "2018",
-    title: "Milestone 2018",
-    description: "Description for the year 2018 milestone.",
-    image: silver,
-    imagePosition: "left",
-  },
-  {
-    year: "2019",
-    title: "Milestone 2019",
-    description: "Description for the year 2019 milestone.",
-    image: silver,
-    imagePosition: "right",
   },
   {
     year: "2020",
-    title: "Milestone 2020",
-    description: "Description for the year 2020 milestone.",
-    image: silver,
-    imagePosition: "left",
-  },
-  {
-    year: "2021",
-    title: "Milestone 2021",
-    description: "Description for the year 2021 milestone.",
+    title: "Innovation",
+    description:
+      "Launched modern sequin punching machines to boost design creativity.",
     image: silver,
     imagePosition: "right",
-  },
-  {
-    year: "2022",
-    title: "Milestone 2022",
-    description: "Description for the year 2022 milestone.",
-    image: silver,
-    imagePosition: "left",
-  },
-  {
-    year: "2023",
-    title: "Milestone 2023",
-    description: "Description for the year 2023 milestone.",
-    image: silver,
-    imagePosition: "right",
-  },
-  {
-    year: "2024",
-    title: "Milestone 2024",
-    description: "Description for the year 2024 milestone.",
-    image: silver,
-    imagePosition: "left",
   },
   {
     year: "2025",
-    title: "Milestone 2025",
-    description: "Description for the year 2025 milestone.",
+    title: "Future Vision",
+    description:
+      "Continuing to lead with innovation, quality, and global recognition.",
     image: silver,
-    imagePosition: "right",
+    imagePosition: "left",
   },
 ];
 
@@ -139,10 +384,7 @@ const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.6,
-      ease: "easeOut",
-    },
+    transition: { duration: 0.6, ease: "easeOut" },
   },
 };
 
@@ -151,10 +393,7 @@ const imageVariants = {
   visible: {
     opacity: 1,
     x: 0,
-    transition: {
-      duration: 0.8,
-      ease: "easeOut",
-    },
+    transition: { duration: 0.8, ease: "easeOut" },
   },
 };
 
@@ -163,39 +402,34 @@ const imageVariantsRight = {
   visible: {
     opacity: 1,
     x: 0,
-    transition: {
-      duration: 0.8,
-      ease: "easeOut",
-    },
+    transition: { duration: 0.8, ease: "easeOut" },
   },
 };
 
 const About = () => {
   return (
     <div className="max-w-5xl mx-auto px-4 py-12 sm:px-6 lg:px-8 overflow-hidden">
+      {/* Heading */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={{
           hidden: { opacity: 0, y: 20 },
-          visible: {
-            opacity: 1,
-            y: 0,
-            transition: { duration: 0.6 },
-          },
+          visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
         }}
         className="text-center mb-16"
       >
         <h1 className="text-3xl font-michroma md:text-4xl font-bold text-gray-900 mb-6">
           About Jyot Sequence
         </h1>
-        <p className="font-josefin text-lx text-gray-600 max-w-3xl mx-auto">
-          From humble beginnings to global technology leader - our journey of
+        <p className="font-josefin text-lg text-gray-600 max-w-3xl mx-auto">
+          From humble beginnings to global technology leader – our journey of
           innovation and customer dedication.
         </p>
       </motion.div>
 
+      {/* Intro Paragraph */}
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -211,31 +445,31 @@ const About = () => {
         className="mb-20"
       >
         <div className="bg-gray-50 rounded-xl p-8 md:p-10 shadow-sm">
-          <p className="text-gray-700 font-josefin text-lg leading-relaxed ">
-            "At{" "}
+          <p className="text-gray-700 font-josefin text-lg leading-relaxed mb-4">
+            At{" "}
             <strong className="text-red-600 text-sm font-michroma">
               Jyot Sequence
             </strong>
-            ,we specialize in crafting premium sequence designing materials used
-            in embroidery and garment decoration. With a passion for creativity
-            and quality, we provide designers and artisans with the finest
-            materials that bring elegance and brilliance to every stitch. Our
-            focus is to deliver innovative designs, durable quality, and
-            reliable service, helping our customers transform their ideas into
-            stunning embroidered creations."
+            , we specialize in crafting premium sequence designing materials
+            used in embroidery and garment decoration. With a passion for
+            creativity and quality, we provide designers and artisans with the
+            finest materials that bring elegance and brilliance to every stitch.
           </p>
-
           <p className="text-gray-600 font-josefin text-sm leading-relaxed">
-            "Our mission is to bridge creativity with craftsmanship by offering
+            Our mission is to bridge creativity with craftsmanship by offering
             high-quality sequence designing materials for embroidery. We strive
             to provide designers and artisans with products that inspire
             innovation, add elegance to every creation, and deliver reliable
-            quality with exceptional service at every step."
+            quality with exceptional service at every step.
           </p>
         </div>
       </motion.div>
+
+      {/* Stats Section */}
       <Stats />
-      <div className="relative">
+
+      {/* Timeline */}
+      <div className="relative mt-16">
         <div className="hidden md:block absolute left-1/2 h-full w-1 bg-gray-200 transform -translate-x-1/2"></div>
 
         {companyHistory.map((item, index) => (
@@ -243,28 +477,33 @@ const About = () => {
             key={index}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
+            viewport={{ once: false, amount: 0.2 }}
             variants={itemVariants}
             className={`relative mb-16 md:flex ${
               index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
             } items-center justify-between w-full`}
           >
-            <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 top-1/2 w-16 h-16 bg-red-600 rounded-full items-center justify-center z-10 shadow-lg">
-              <span className="text-white font-bold text-lg">{item.year}</span>
+            {/* Year Circle */}
+            <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 top-1/2">
+              <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center z-10 shadow-lg relative">
+                <span className="text-white font-bold text-lg">
+                  {item.year}
+                </span>
+                <span className="absolute inset-0 rounded-full border-4 border-red-400 animate-ping"></span>
+              </div>
             </div>
 
+            {/* Mobile Year */}
             <div className="md:hidden mb-4 flex justify-center">
               <span className="inline-block px-4 py-2 bg-red-600 text-white font-bold rounded-full">
                 {item.year}
               </span>
             </div>
 
+            {/* Image */}
             <motion.div
-              custom={index}
               variants={
-                item.imagePosition === "left"
-                  ? imageVariants
-                  : imageVariantsRight
+                item.imagePosition === "left" ? imageVariants : imageVariantsRight
               }
               className={`w-full md:w-5/12 mb-6 md:mb-0 ${
                 item.imagePosition === "left" ? "md:pr-8" : "md:pl-8"
@@ -279,6 +518,7 @@ const About = () => {
               </div>
             </motion.div>
 
+            {/* Text */}
             <div
               className={`w-full md:w-5/12 ${
                 item.imagePosition === "left" ? "md:text-right" : "md:text-left"
@@ -295,6 +535,7 @@ const About = () => {
         ))}
       </div>
 
+      {/* Mission Section */}
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -307,20 +548,22 @@ const About = () => {
             transition: { duration: 0.6 },
           },
         }}
-        className="mt-20 bg-red-400 rounded-xl p-8 md:p-10 text-white"
+        className="mt-20 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl p-8 md:p-10 text-white"
       >
-        <h2 className="text-lg md:text-2xl font-michroma font-bold ">
+        <h2 className="text-xl md:text-3xl font-michroma font-bold mb-6">
           Our Mission
         </h2>
-        <p className="font-josefin text-lg leading-relaxed mb-4">
-          To empower individuals and businesses through innovative technology
-          solutions that simplify lives and drive progress.
-        </p>
-        <p className="font-josefin text-lg text-red-100 leading-relaxed">
-          We believe technology should be accessible, intuitive, and
-          transformative. Every product we offer is carefully selected to meet
-          our high standards of quality, performance, and value.
-        </p>
+        <div className="grid md:grid-cols-2 gap-6">
+          <p className="font-josefin text-lg leading-relaxed">
+            To empower individuals and businesses through innovative technology
+            solutions that simplify lives and drive progress.
+          </p>
+          <p className="font-josefin text-lg text-red-100 leading-relaxed">
+            We believe technology should be accessible, intuitive, and
+            transformative. Every product we offer is carefully selected to meet
+            our high standards of quality, performance, and value.
+          </p>
+        </div>
       </motion.div>
     </div>
   );

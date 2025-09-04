@@ -74,3 +74,17 @@ img.lazy.loaded {
     text-shadow: none !important;
   }
 }
+
+
+/* src/index.css (add anywhere after Tailwind directives) */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+  100% { transform: translateX(0); }
+}
+.animate-shake {
+  animation: shake 0.56s cubic-bezier(.36,.07,.19,.97);
+}
