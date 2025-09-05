@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import middleSectionBg2 from "../assets/image/midelimage2.png";
+import middleSectionBg2 from "../assets/image/midelimage2.jpg";
 import submiddleSectionBg from "../assets/image/roll2.png";
 import CardShowcase from "../components/CardShowcase";
 import OurStory from "../components/ourstory";
