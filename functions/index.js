@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: "nevilkheni135@gmail.com",
-    pass: "pwtkieyjxgmperfb" 
+    pass: "pwtkieyjxgmperfb" // Gmail App Password
   }
 });
 
@@ -31,23 +31,15 @@ exports.sendOtp = functions.https.onRequest((req, res) => {
         createdAt: admin.firestore.FieldValue.serverTimestamp()
       });
 
-       const mailOptions = {
-    from: "Your Website <nevilkheni135@gmail.com>",
-    to: email,
-    subject: "Your OTP Code",
-    html: `
-      <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; background: #f9f9f9;">
-        <h2 style="color:#333;">🔐 Your OTP Code</h2>
-        <p style="font-size: 18px;">Use the OTP below to continue:</p>
-        <div style="background:#fff; border:1px solid #ddd; padding:15px; display:inline-block; font-size:22px; font-weight:bold; letter-spacing:3px;">
-          ${otp}
-        </div>
-        <p style="color:#777; margin-top:10px;">This code will expire in <b>5 minutes</b>.</p>
-      </div>
-    `
-  };
+      const mailOptions = {
+        from: "nevilkheni135@gmail.com",
+        to: email,
+        subject: "Your OTP Code",
+        text: `Your OTP code is ${otp}. It will expire in 5 minutes.`
+      };
 
-  await transporter.sendMail(mailOptions);
+      await transporter.sendMail(mailOptions);
+
       return res.status(200).json({ verificationId: email });
     } catch (error) {
       console.error("sendOtp Error:", error);
@@ -96,23 +88,3 @@ exports.verifyOtpAndCreateUser = functions.https.onRequest((req, res) => {
     }
   });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
