@@ -2,64 +2,72 @@
 import React, { useState, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import middleSectionBg from "../assets/image/midellimge1.jpg";
-import silver from "../assets/image/blank.png";
-import glitter from "../assets/image/blank.png";
+import silver from "../assets/image/silver.png";
+import  val  from "../assets/image/val.png";
+import green from "../assets/image/green.png";
+import blue from "../assets/image/bluegreenglas.png";
+import white from "../assets/image/white.png";
+import wd40 from "../assets/image/wd40.png";
+import valsqu from "../assets/image/255.png";
+import slot from "../assets/image/slotpepar.png";
+
+
 
 const products = [
   {
-    name: "item 1",
-    img: glitter,
-    type: "Chewy Candy",
-    size: "100g pack",
+    name: "val",
+    img: val,
+    type: "val squence",
+    size: "2.5mm,5mm",
     length: "500m",
   },
   {
-    name: "item 2",
+    name: "green",
+    img: green,
+    type: "squence",
+    size: "2mm,3mm,4mm,5mm,7mm",
+    length: "500m",
+  },
+  {
+    name: "blueglass",
+    img: blue,
+    type: "squence spool",
+    size:  "2mm,3mm,4mm,5mm,7mm",
+    length: "500m",
+  },
+  {
+    name: "white",
+    img: white,
+    type: "squence spool,cd",
+    size: "2mm,3mm,4mm,5mm,7mm",
+    length: "500m",
+  },
+  {
+    name: "wd40",
+    img: wd40,
+    type: "sprey",
+    size: "400ml",
+    length: ".",
+  },
+  {
+    name: "silver",
     img: silver,
-    type: "Sauce",
-    size: "250g bottle",
+    type: "squence spool,cd",
+    size: "2mm,3mm,4mm,5mm,7mm",
     length: "500m",
   },
   {
-    name: "item 3",
-    img: glitter,
-    type: "Jelly Candy",
-    size: "50g pack",
+    name: "2.5/5 val squence",
+    img: valsqu,
+    type: "val squence",
+    size: "2.5/5mm,5mm",
     length: "500m",
   },
   {
-    name: "item 4",
-    img: silver,
-    type: "Gummy Candy",
-    size: "150g pack",
-    length: "500m",
-  },
-  {
-    name: "item 5",
-    img: glitter,
-    type: "Biscuit",
-    size: "200g pack",
-    length: "500m",
-  },
-  {
-    name: "item 6",
-    img: silver,
-    type: "Herbal Candy",
-    size: "100g pack",
-    length: "500m",
-  },
-  {
-    name: "item 7",
-    img: glitter,
-    type: "Lollipop",
-    size: "Single piece",
-    length: "500m",
-  },
-  {
-    name: "item 8",
-    img: silver,
-    type: "Roll Candy",
-    size: "30g roll",
+    name: "slot peapar",
+    img: slot,
+    type: "patti roll",
+    size: "37mm",
     length: "500m",
   },
 ];
@@ -218,7 +226,7 @@ function Feature() {
               key={idx}
               custom={idx}
               variants={productCardVariants}
-              className="border rounded-lg pb-4 hover:shadow-lg transition-shadow bg-white cursor-pointer flex flex-col"
+              className="border rounded-lg pb-4 p-10 hover:shadow-lg transition-shadow bg-white cursor-pointer flex flex-col"
               onClick={() => openModal(product)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -226,7 +234,7 @@ function Feature() {
               <motion.img
                 src={product.img}
                 alt={product.name}
-                className="w-full h-40 p-4 object-contain mb-3"
+                className="w-full h-40 object-contain mb-3"
                 whileHover={{ scale: 1.1 }}
               />
               <h3 className="text-sm font-semibold text-black px-2">
