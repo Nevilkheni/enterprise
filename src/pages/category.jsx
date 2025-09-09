@@ -7,9 +7,9 @@ import { collection, getDocs } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 
 import allproducts from "../assets/image/allimages.png";
-import cdImage from "../assets/image/img3.jpg"; 
-import spoolImage from "../assets/image//blank.png";
-import rollImage from "../assets/image/roll2.png";
+import cdImage from "../assets/image/CD.png"; 
+import spoolImage from "../assets/image/spool.png";
+import rollImage from "../assets/image/roll.png";
 
 const countries = [
   { name: "Afghanistan", code: "AF", dialCode: "+93" },

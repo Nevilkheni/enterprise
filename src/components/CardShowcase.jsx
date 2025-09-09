@@ -144,7 +144,7 @@ const CardShowcase = () => {
           </ul>
           <motion.button
             className="px-6 py-2 font-michroma text-sm bg-red-600 text-white rounded hover:bg-red-700 mx-auto"
-            onClick={() => navigate("/AllProducts")}
+            onClick={() => navigate("/Category")}
             variants={buttonVariants}
             initial="hidden"
             animate="visible"
