@@ -49,14 +49,14 @@ function Home() {
       <HomeImgSlider />
       <OurStory />
 
-      <motion.section
+      <motion.section  
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-100px" }}
-        className="w-full bg-cover bg-center bg-no-repeat bg-fixed"
+        className="w-full bg-cover hidden sm:block bg-center bg-no-repeat bg-fixed"
         style={{ backgroundImage: `url(${middleSectionBg2})` }}
       >
-        <div className="w-full mx-auto px-4 backdrop-blur-[3px] sm:px-6 lg:px-8 py-12">
+        <div className="w-full mx-auto hidden sm:block px-4 backdrop-blur-[3px] sm:px-6 lg:px-8 py-12">
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -107,7 +107,7 @@ function Home() {
 
             <motion.div
               variants={itemVariants}
-              className="w-full lg:w-1/3 hidden   md:flex justify-center"
+              className="w-full lg:w-1/3 hidden md:flex justify-center"
             >
               <motion.div
                 initial={{ rotate: 0 }}

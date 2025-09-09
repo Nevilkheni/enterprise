@@ -3,9 +3,10 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import silver from "../assets/image/silver.jpg";
 import machine from "../assets/image/Sequin-Punching-Machine.avif";
 import machine1 from "../assets/image/machine.jpg";
+import machine2 from "../assets/image/punchingmachin1.jpg";
+
 import Stats from "../components/Stats";
 
 const companyHistory = [
@@ -25,19 +26,82 @@ const companyHistory = [
     imagePosition: "right",
   },
   {
+    year: "2010",
+    title: "First Expansion",
+    description: "Introduced advanced tools to improve production quality.",
+    image: machine2,
+    imagePosition: "right",
+  },
+  {
+    year: "2011",
+    title: "First Expansion",
+    description: "Introduced advanced tools to improve production quality.",
+    image: machine,
+    imagePosition: "right",
+  },
+  {
+    year: "2012",
+    title: "First Expansion",
+    description: "Introduced advanced tools to improve production quality.",
+    image: machine1,
+    imagePosition: "right",
+  },
+  {
+    year: "2013",
+    title: "First Expansion",
+    description: "Introduced advanced tools to improve production quality.",
+    image: machine2,
+    imagePosition: "right",
+  },
+  {
+    year: "2014",
+    title: "First Expansion",
+    description: "Introduced advanced tools to improve production quality.",
+    image: machine,
+    imagePosition: "right",
+  },
+  {
     year: "2015",
     title: "Global Reach",
     description:
       "Expanded into international markets, becoming a trusted supplier worldwide.",
-    image: silver,
+    image: machine1,
     imagePosition: "left",
+  },
+  {
+    year: "2016",
+    title: "First Expansion",
+    description: "Introduced advanced tools to improve production quality.",
+    image: machine2,
+    imagePosition: "right",
+  },
+  {
+    year: "2017",
+    title: "First Expansion",
+    description: "Introduced advanced tools to improve production quality.",
+    image: machine,
+    imagePosition: "right",
+  },
+  {
+    year: "2018",
+    title: "First Expansion",
+    description: "Introduced advanced tools to improve production quality.",
+    image: machine1,
+    imagePosition: "right",
+  },
+  {
+    year: "2019",
+    title: "First Expansion",
+    description: "Introduced advanced tools to improve production quality.",
+    image: machine2,
+    imagePosition: "right",
   },
   {
     year: "2020",
     title: "Innovation",
     description:
       "Launched modern sequin punching machines to boost design creativity.",
-    image: silver,
+    image: machine,
     imagePosition: "right",
   },
   {
@@ -45,7 +109,7 @@ const companyHistory = [
     title: "Future Vision",
     description:
       "Continuing to lead with innovation, quality, and global recognition.",
-    image: silver,
+    image: machine1,
     imagePosition: "left",
   },
 ];
@@ -93,6 +157,9 @@ const About = () => {
       >
         <h1 className="text-3xl font-michroma md:text-4xl font-bold text-gray-900 mb-6">
           About Jyot Sequence
+        </h1>
+        <h1 className="text-3xl font-michroma md:text-4xl font-bold text-gray-900 mb-6">
+          & Technology
         </h1>
         <p className="font-josefin text-lg text-gray-600 max-w-3xl mx-auto">
           From humble beginnings to global technology leader – our journey of
