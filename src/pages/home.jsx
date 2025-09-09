@@ -133,7 +133,7 @@ function Home() {
       <Feature />
       <Certificate />
       <JobWorkForm />
-      <Reviewe />
+      {/* <Reviewe /> */}
     </div>
   );
 }

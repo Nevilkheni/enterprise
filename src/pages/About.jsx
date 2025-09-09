@@ -150,7 +150,7 @@ const About = () => {
             whileInView="visible"
             viewport={{ once: false, amount: 0.2 }}
             variants={itemVariants}
-            className={`relative mb-16 md:flex ${
+            className={`relative  md:flex ${
               index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
             } items-center justify-between w-full`}
           >
@@ -219,12 +219,12 @@ const About = () => {
             transition: { duration: 0.6 },
           },
         }}
-        className="mt-20 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl p-8 md:p-10 text-white"
+        className="mt-20 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl p-2 md:p-10 text-white"
       >
         <h2 className="text-xl md:text-3xl font-michroma font-bold mb-6">
           Our Mission
         </h2>
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="gap-6">
           <p className="font-josefin text-lg leading-relaxed">
             To empower individuals and businesses through innovative technology
             solutions that simplify lives and drive progress.
