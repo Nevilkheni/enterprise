@@ -6,7 +6,7 @@ import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 
-import allproducts from "../assets/image/allimages.png";
+import allproducts from "../assets/image/allproduct.png";
 import cdImage from "../assets/image/CD.png"; 
 import spoolImage from "../assets/image/spool.png";
 import rollImage from "../assets/image/roll.png";
