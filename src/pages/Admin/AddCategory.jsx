@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { db, storage } from "../../firebase";
 import {
@@ -24,7 +23,6 @@ const AddCategory = ({ fetchProducts, setError }) => {
   const [uploading, setUploading] = useState(false);
   const [duplicateWarning, setDuplicateWarning] = useState("");
 
-  // ✅ check duplicate in both categories and allProducts
   const checkDuplicate = async (name) => {
     try {
       const categoriesQ = query(
@@ -179,6 +177,7 @@ const AddCategory = ({ fetchProducts, setError }) => {
               <option value="roll">Roll</option>
               <option value="cd">CD</option>
               <option value="spool">Spool</option>
+              <option value="other">Other</option>
             </select>
           </div>
 

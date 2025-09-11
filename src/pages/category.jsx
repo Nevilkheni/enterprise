@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,6 +9,7 @@ import allproducts from "../assets/image/allproduct.png";
 import cdImage from "../assets/image/CD.png"; 
 import spoolImage from "../assets/image/spool.png";
 import rollImage from "../assets/image/roll.png";
+import otherImage from "../assets/image/255.png"; 
 
 const countries = [
   { name: "Afghanistan", code: "AF", dialCode: "+93" },
@@ -111,7 +111,6 @@ const countries = [
   { name: "Zimbabwe", code: "ZW", dialCode: "+263" },
 ];
 
-
 const Category = () => {
   const { categoryType } = useParams();
   const [products, setProducts] = useState([]);
@@ -119,7 +118,8 @@ const Category = () => {
     all: 0,
     cd: 0,
     spool: 0,
-    roll: 0
+    roll: 0,
+    other: 0
   });
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -158,20 +158,31 @@ const Category = () => {
         const cdCount = allProducts.filter(product => product.categoryType === "cd").length;
         const spoolCount = allProducts.filter(product => product.categoryType === "spool").length;
         const rollCount = allProducts.filter(product => product.categoryType === "roll").length;
+        const otherCount = allProducts.filter(product => 
+          !["cd", "spool", "roll"].includes(product.categoryType)
+        ).length;
         
         setProductCounts({
           all: allProducts.length,
           cd: cdCount,
           spool: spoolCount,
-          roll: rollCount
+          roll: rollCount,
+          other: otherCount
         });
 
         if (categoryType && categoryType !== "all") {
           // Filter products by category
-          const categoryProducts = allProducts.filter(
-            product => product.categoryType === categoryType
-          );
-          setProducts(categoryProducts);
+          if (categoryType === "other") {
+            const otherProducts = allProducts.filter(product => 
+              !["cd", "spool", "roll"].includes(product.categoryType)
+            );
+            setProducts(otherProducts);
+          } else {
+            const categoryProducts = allProducts.filter(
+              product => product.categoryType === categoryType
+            );
+            setProducts(categoryProducts);
+          }
         } else if (categoryType === "all") {
           // Show all products
           setProducts(allProducts);
@@ -312,6 +323,14 @@ Please provide more details about pricing and availability.`;
       path: "/category/roll",
       count: productCounts.roll,
       description: "Check out our roll products"
+    },
+    {
+      id: "other",
+      name: "Other Products",
+      image: otherImage,
+      path: "/category/other",
+      count: productCounts.other,
+      description: "Explore our other product offerings"
     }
   ];
 
@@ -321,6 +340,7 @@ Please provide more details about pricing and availability.`;
       case "cd": return "bg-green-100";
       case "spool": return "bg-purple-100";
       case "roll": return "bg-orange-100";
+      case "other": return "bg-pink-100";
       default: return "bg-gray-100";
     }
   };
@@ -331,6 +351,7 @@ Please provide more details about pricing and availability.`;
       case "cd": return "text-green-800";
       case "spool": return "text-purple-800";
       case "roll": return "text-orange-800";
+      case "other": return "text-pink-800";
       default: return "text-gray-800";
     }
   };
@@ -341,6 +362,7 @@ Please provide more details about pricing and availability.`;
       case "cd": return "border-green-200";
       case "spool": return "border-purple-200";
       case "roll": return "border-orange-200";
+      case "other": return "border-pink-200";
       default: return "border-gray-200";
     }
   };
@@ -767,8 +789,8 @@ Please provide more details about pricing and availability.`;
           <h1 className="text-3xl font-bold text-gray-900 mb-4">Shop Categories</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">Loading product categories...</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[...Array(4)].map((_, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+          {[...Array(5)].map((_, i) => (
             <div key={i} className="animate-pulse bg-gray-200 rounded-xl h-80"></div>
           ))}
         </div>
@@ -785,7 +807,7 @@ Please provide more details about pricing and availability.`;
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         {categories.map((category) => (
           <motion.div
             key={category.id}

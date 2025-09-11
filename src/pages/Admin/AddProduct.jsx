@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { db, storage } from "../../firebase";
 import {
@@ -17,6 +16,7 @@ const AddProduct = ({ fetchProducts, setError }) => {
     price: "",
     description: "",
     category: "shop",
+    categoryType: "roll", // New field for category type
     imageUrls: [""],
     length: "",
     thickness: "",
@@ -60,6 +60,36 @@ const AddProduct = ({ fetchProducts, setError }) => {
       });
     } catch (err) {
       console.error("Error adding to all products:", err);
+    }
+  };
+
+  const addToCategories = async (productData) => {
+    try {
+      // Check if product already exists in categories
+      const categoriesQ = query(
+        collection(db, "categories"),
+        where("name", "==", productData.name)
+      );
+      const categoriesSnap = await getDocs(categoriesQ);
+      
+      if (!categoriesSnap.empty) {
+        console.log("Product already exists in categories, skipping");
+        return;
+      }
+      
+      // Add to categories collection
+      await addDoc(collection(db, "categories"), {
+        name: productData.name,
+        description: productData.description,
+        image: productData.images && productData.images.length > 0 ? productData.images[0] : "",
+        categoryType: productData.categoryType,
+        material: productData.material || "",
+        thickness: productData.thickness || "",
+        length: productData.length || "",
+        createdAt: new Date().toISOString(),
+      });
+    } catch (err) {
+      console.error("Error adding to categories:", err);
     }
   };
 
@@ -163,6 +193,7 @@ const AddProduct = ({ fetchProducts, setError }) => {
       if (formData.thickness) productData.thickness = formData.thickness;
       if (formData.width) productData.width = formData.width;
       if (formData.material) productData.material = formData.material;
+      if (formData.categoryType) productData.categoryType = formData.categoryType;
 
       if (formData.category !== "product") {
         productData.price = Number(formData.price);
@@ -170,6 +201,11 @@ const AddProduct = ({ fetchProducts, setError }) => {
 
       await addDoc(collection(db, "products"), productData);
       await addToAllProducts(productData);
+      
+      // If this is a shop product, also add to categories
+      if (formData.category === "shop") {
+        await addToCategories(productData);
+      }
 
       alert("Product added successfully!");
       setFormData({
@@ -177,6 +213,7 @@ const AddProduct = ({ fetchProducts, setError }) => {
         price: "",
         description: "",
         category: "shop",
+        categoryType: "roll",
         imageUrls: [""],
         length: "",
         thickness: "",
@@ -245,6 +282,26 @@ const AddProduct = ({ fetchProducts, setError }) => {
               </select>
             </div>
           </div>
+
+          {formData.category === "shop" && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Category Type
+              </label>
+              <select
+                name="categoryType"
+                value={formData.categoryType}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+              >
+                <option value="roll">Roll</option>
+                <option value="cd">CD</option>
+                <option value="spool">Spool</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          )}
 
           {formData.category !== "product" && (
             <div>
