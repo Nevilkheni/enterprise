@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 import { db, storage } from "../../firebase";
-import {
-  collection,
-  addDoc,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
+import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 
@@ -16,18 +10,22 @@ const AddProduct = ({ fetchProducts, setError }) => {
     price: "",
     description: "",
     category: "shop",
-    categoryType: "roll", // New field for category type
+    categoryType: "roll",
     imageUrls: [""],
     length: "",
     thickness: "",
     width: "",
-    material: ""
+    material: "",
   });
   const [imageFiles, setImageFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [duplicateWarning, setDuplicateWarning] = useState("");
 
-  const checkDuplicateProduct = async (name, category, collectionName = "products") => {
+  const checkDuplicateProduct = async (
+    name,
+    category,
+    collectionName = "products"
+  ) => {
     try {
       const q = query(
         collection(db, collectionName),
@@ -44,16 +42,23 @@ const AddProduct = ({ fetchProducts, setError }) => {
 
   const addToAllProducts = async (productData) => {
     try {
-      const isDuplicate = await checkDuplicateProduct(productData.name, "all", "allProducts");
+      const isDuplicate = await checkDuplicateProduct(
+        productData.name,
+        "all",
+        "allProducts"
+      );
       if (isDuplicate) {
         console.log("Product already exists in allProducts, skipping");
         return;
       }
-      
+
       await addDoc(collection(db, "allProducts"), {
         name: productData.name,
         description: productData.description,
-        image: productData.images && productData.images.length > 0 ? productData.images[0] : "",
+        image:
+          productData.images && productData.images.length > 0
+            ? productData.images[0]
+            : "",
         images: productData.images || [],
         category: "all",
         createdAt: new Date().toISOString(),
@@ -71,17 +76,20 @@ const AddProduct = ({ fetchProducts, setError }) => {
         where("name", "==", productData.name)
       );
       const categoriesSnap = await getDocs(categoriesQ);
-      
+
       if (!categoriesSnap.empty) {
         console.log("Product already exists in categories, skipping");
         return;
       }
-      
+
       // Add to categories collection
       await addDoc(collection(db, "categories"), {
         name: productData.name,
         description: productData.description,
-        image: productData.images && productData.images.length > 0 ? productData.images[0] : "",
+        image:
+          productData.images && productData.images.length > 0
+            ? productData.images[0]
+            : "",
         categoryType: productData.categoryType,
         material: productData.material || "",
         thickness: productData.thickness || "",
@@ -119,14 +127,14 @@ const AddProduct = ({ fetchProducts, setError }) => {
 
   const removeImageUrlField = (index) => {
     if (formData.imageUrls.length <= 1) return;
-    
+
     const newImageUrls = [...formData.imageUrls];
     newImageUrls.splice(index, 1);
     setFormData((prev) => ({
       ...prev,
       imageUrls: newImageUrls,
     }));
-    
+
     if (imageFiles[index]) {
       const newImageFiles = [...imageFiles];
       newImageFiles.splice(index, 1);
@@ -149,15 +157,20 @@ const AddProduct = ({ fetchProducts, setError }) => {
     e.preventDefault();
     try {
       setUploading(true);
-      
+
       // Check for duplicate product in the same category
-      const isDuplicate = await checkDuplicateProduct(formData.name, formData.category);
+      const isDuplicate = await checkDuplicateProduct(
+        formData.name,
+        formData.category
+      );
       if (isDuplicate) {
-        setDuplicateWarning(`A product with the name "${formData.name}" already exists in the ${formData.category} category!`);
+        setDuplicateWarning(
+          `A product with the name "${formData.name}" already exists in the ${formData.category} category!`
+        );
         setUploading(false);
         return;
       }
-      
+
       let imageUrls = [];
 
       if (imageFiles.length > 0) {
@@ -168,14 +181,16 @@ const AddProduct = ({ fetchProducts, setError }) => {
           imageUrls.push(url);
         }
       }
-      
+
       if (formData.imageUrls && formData.imageUrls.length > 0) {
-        const validUrls = formData.imageUrls.filter(url => url.trim() !== "");
+        const validUrls = formData.imageUrls.filter((url) => url.trim() !== "");
         imageUrls = [...imageUrls, ...validUrls];
       }
-      
+
       if (imageUrls.length === 0) {
-        alert("Please upload at least one image or paste at least one image URL.");
+        alert(
+          "Please upload at least one image or paste at least one image URL."
+        );
         setUploading(false);
         return;
       }
@@ -193,7 +208,8 @@ const AddProduct = ({ fetchProducts, setError }) => {
       if (formData.thickness) productData.thickness = formData.thickness;
       if (formData.width) productData.width = formData.width;
       if (formData.material) productData.material = formData.material;
-      if (formData.categoryType) productData.categoryType = formData.categoryType;
+      if (formData.categoryType)
+        productData.categoryType = formData.categoryType;
 
       if (formData.category !== "product") {
         productData.price = Number(formData.price);
@@ -201,7 +217,7 @@ const AddProduct = ({ fetchProducts, setError }) => {
 
       await addDoc(collection(db, "products"), productData);
       await addToAllProducts(productData);
-      
+
       // If this is a shop product, also add to categories
       if (formData.category === "shop") {
         await addToCategories(productData);
@@ -218,7 +234,7 @@ const AddProduct = ({ fetchProducts, setError }) => {
         length: "",
         thickness: "",
         width: "",
-        material: ""
+        material: "",
       });
       setImageFiles([]);
       setDuplicateWarning("");
@@ -237,7 +253,7 @@ const AddProduct = ({ fetchProducts, setError }) => {
         <h3 className="text-lg font-medium text-gray-900 mb-6 border-b pb-2">
           Add New Product
         </h3>
-        
+
         {duplicateWarning && (
           <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative mb-4">
             {duplicateWarning}
@@ -249,7 +265,7 @@ const AddProduct = ({ fetchProducts, setError }) => {
             </button>
           </div>
         )}
-        
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
@@ -402,7 +418,9 @@ const AddProduct = ({ fetchProducts, setError }) => {
                   <input
                     type="text"
                     value={url}
-                    onChange={(e) => handleImageUrlChange(index, e.target.value)}
+                    onChange={(e) =>
+                      handleImageUrlChange(index, e.target.value)
+                    }
                     className="flex-1 border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     placeholder="Paste image URL here"
                   />
@@ -453,10 +471,15 @@ const AddProduct = ({ fetchProducts, setError }) => {
                 </p>
                 {imageFiles.length > 0 && (
                   <div className="mt-2">
-                    <p className="text-sm font-medium text-gray-700">Selected files:</p>
+                    <p className="text-sm font-medium text-gray-700">
+                      Selected files:
+                    </p>
                     <ul className="text-sm text-green-600">
                       {imageFiles.map((file, index) => (
-                        <li key={index} className="flex items-center justify-between">
+                        <li
+                          key={index}
+                          className="flex items-center justify-between"
+                        >
                           <span>{file.name}</span>
                           <button
                             type="button"

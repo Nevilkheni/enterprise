@@ -8,12 +8,12 @@ const images = [image1, image2, image3];
 
 function HomeImgSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [fade, setFade] = useState(true); // fix: fade animation state
+  const [fade, setFade] = useState(true); 
 
   useEffect(() => {
     const interval = setInterval(() => {
       goToNext();
-    }, 4000); // perf: thoda zyada smooth feel ke liye delay 4s
+    }, 4000);
     return () => clearInterval(interval);
   }, [currentIndex]);
 
@@ -24,7 +24,7 @@ function HomeImgSlider() {
         prevIndex === 0 ? images.length - 1 : prevIndex - 1
       );
       setFade(true);
-    }, 200); // smooth fade switch
+    }, 200); 
   };
 
   const goToNext = () => {
@@ -46,7 +46,6 @@ function HomeImgSlider() {
         <div className="absolute inset-0 bg-black/20"></div>
       </div>
 
-      {/* prev btn */}
       <button
         onClick={goToPrev}
         aria-label="Previous slide"
@@ -54,7 +53,6 @@ function HomeImgSlider() {
       >
         &lt;
       </button>
-      {/* next btn */}
       <button
         onClick={goToNext}
         aria-label="Next slide"
@@ -63,7 +61,6 @@ function HomeImgSlider() {
         &gt;
       </button>
 
-      {/* dots */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
         {images.map((_, index) => (
           <button
