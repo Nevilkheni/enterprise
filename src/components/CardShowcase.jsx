@@ -85,7 +85,6 @@ const CardShowcase = () => {
 
   return (
     <div className="container mx-auto max-w-5xl py-8">
-      {/* Title */}
       <motion.div
         ref={titleRef}
         initial="hidden"
@@ -97,7 +96,6 @@ const CardShowcase = () => {
         </h1>
       </motion.div>
 
-      {/* Cards & Info Section */}
       <div className="flex flex-col sm:flex-row gap-8 items-start justify-center">
         {/* Left Cards */}
         <motion.div
@@ -118,7 +116,7 @@ const CardShowcase = () => {
             >
               {positions[pos] ? (
                 <motion.img
-                  src={positions[pos].image || "/placeholder.png"} // fix: placeholder image
+                  src={positions[pos].image || "/placeholder.png"}
                   alt={positions[pos].title || "Product Image"}
                   className="w-auto h-full object-cover transition-transform duration-300 hover:scale-110"
                 />
@@ -211,7 +209,7 @@ const CardShowcase = () => {
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="md:w-1/2">
                   <img
-                    src={selectedCard.image || "/placeholder.png"} // fix: placeholder image
+                    src={selectedCard.image || "/placeholder.png"} 
                     alt={selectedCard.title || "Product Image"}
                     className="w-full h-64 md:h-80 object-cover rounded-lg"
                   />
